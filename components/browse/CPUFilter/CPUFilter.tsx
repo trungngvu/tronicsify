@@ -2,12 +2,11 @@ import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import ParentCategory from "./ParentCategory";
 
-const CategoriesFilter = ({
+const CPUFilter = ({
   categories,
   subCategories,
   categoryHandler,
   replaceQuery,
-  title,
 }: any) => {
   const [show, setShow] = useState(true);
 
@@ -16,7 +15,7 @@ const CategoriesFilter = ({
       <h3
         className={`cursor-pointer my-4 flex items-center justify-between font-semibold `}
       >
-        {title}
+        Bộ vi xử lý
         <span>
           {show ? (
             <MinusIcon
@@ -45,4 +44,4 @@ const CategoriesFilter = ({
   );
 };
 
-export default CategoriesFilter;
+export default CPUFilter;

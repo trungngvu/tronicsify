@@ -48,23 +48,17 @@ const ParentCategory = ({
       {show && subCategories.length > 0 && (
         <div className="my-1 ml-5">
           {selectSubCategory.map((sc: any) => {
-            const check = replaceQuery(
-              sc.gpu ? "card" : sc.cpu ? "processor" : "",
-              sc.keyword
-            );
+            const check = replaceQuery("card", sc.keyword);
             return (
               <h5
                 key={sc._id}
-                onClick={() => {
-                  console.log(sc);
-                  categoryHandler(check.result);
-                }}
+                onClick={() => categoryHandler(check.result)}
                 className={`flex items-center cursor-pointer hover:font-semibold hover:text-yellow-500 ${
                   check.active && "text-yellow-500"
                 }`}
               >
                 <EllipsisHorizontalIcon className="w-4 h-4 mr-2" />
-                <span>{sc.gpu || sc.cpu}</span>
+                <span>{sc.cpu}</span>
               </h5>
             );
           })}

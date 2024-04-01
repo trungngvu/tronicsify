@@ -34,7 +34,7 @@ export const getServerSideProps = async (context: any) => {
   const productPromises = categories.map((category) =>
     Product.find({ category, imgs: { $ne: [] }, availability: true })
       .limit(10)
-      .select("title imgs slug category")
+      .select("title imgs slug category price")
   );
 
   // Wait for all promises to resolve using Promise.all()

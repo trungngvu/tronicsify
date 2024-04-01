@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import ProductSwiper from "./ProductSwiper";
 
 const ProductCard = ({ product }: any) => {
@@ -12,15 +10,21 @@ const ProductCard = ({ product }: any) => {
       <Link href={`/product/${product.slug}`}>
         <ProductSwiper images={images} />
       </Link>
-      <div className="mt-2 ">
+      <div className="mt-2 truncate">
         <Link href={`/product/${product.slug}`}>
-          <h3>
-            {product.title.length > 45
-              ? `${product.title.substring(0, 45)}`
-              : product.title}
+          <h3
+            style={{
+              whiteSpace: "normal",
+              display: "-webkit-box" /* For webkit browsers */,
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {product.title}
           </h3>
         </Link>
-        <span className="text-xs text-red-500">{price}</span>
+        <span className="text-red-500 \ ">{price?.toLocaleString()}₫</span>
         <div className="flex mt-1 space-x-2"></div>
       </div>
     </div>

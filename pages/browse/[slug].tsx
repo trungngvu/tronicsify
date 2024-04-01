@@ -1,23 +1,29 @@
-import Category from "@/models/Category";
 import Product from "@/models/Product";
-import SubCategory from "@/models/SubCategory";
+import GPUCategory from "@/models/GPU_category";
+import CPUCategory from "@/models/CPU_category";
+
 import db from "@/utils/db";
-import { removeDuplicates, randomize } from "@/utils/array_utils";
 import Header from "@/components/Header/Header";
 import ProductCard from "@/components/Home/productCard/ProductCard";
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ChevronRightIcon, FunnelIcon } from "@heroicons/react/24/solid";
+
 import BrandsFilter from "@/components/browse/brandsFilter/BrandsFilter";
+import CategoriesFilter from "@/components/browse/categoriesFilter/CategoriesFilter";
 import HeadingFilter from "@/components/browse/headingFilter/HeadingFilter";
+import SliderRangeFilter from "@/components/browse/SliderRangeFilter";
+
 import { useRouter } from "next/router";
 import { Pagination } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { generateRegexFromKeywordArrays } from "@/utils/array_utils";
 // import DotLoaderSpinner from "@/components/loaders/dotLoader/DotLoaderSpinner";
 
 const Browse = ({
   categories,
-  subCategories,
+  manufacturers,
   products,
   brands,
+  graphics,
+  processors,
   paginationCount,
 }: any) => {
   const router = useRouter();
@@ -27,10 +33,18 @@ const Browse = ({
     search,
     category,
     brand,
+    manufacturer,
     price,
     rating,
+    line,
     sort,
     page,
+    core,
+    thread,
+    stock,
+    processor,
+    clock,
+    card,
   }: any) => {
     const path = router.pathname;
     const { query } = router;
@@ -38,11 +52,19 @@ const Browse = ({
     if (search) query.search = search;
     if (category) query.category = category;
     if (brand) query.brand = brand;
+    if (line) query.line = line;
     if (price) query.price = price;
+    if (core) query.core = core;
+    if (thread) query.thread = thread;
+    if (clock) query.clock = clock;
     if (rating) query.rating = rating;
     if (sort) query.sort = sort;
     if (page) query.page = page;
-    console.log("price > ", price);
+    if (stock) query.stock = stock;
+    if (card) query.card = card;
+    if (processor) query.processor = processor;
+    if (manufacturer) query.manufacturer = manufacturer;
+
     router.push({
       pathname: path,
       query: query,
@@ -61,6 +83,29 @@ const Browse = ({
   };
   const brandHandler = (brand: any) => {
     filter({ brand });
+  };
+  const lineHandler = (line: any) => {
+    filter({ line });
+  };
+  const manufacturerHandler = (manufacturer: any) => {
+    filter({ manufacturer });
+  };
+  const cardHandler = (card: any) => {
+    filter({ card });
+  };
+
+  //cpu
+  const processorHandler = (processor: any) => {
+    filter({ processor });
+  };
+  const coreHandler = (min: any, max: any) => {
+    filter({ core: `${min}_${max}` });
+  };
+  const threadHandler = (min: any, max: any) => {
+    filter({ thread: `${min}_${max}` });
+  };
+  const clockHandler = (min: any, max: any) => {
+    filter({ clock: `${min}_${max}` });
   };
 
   function debounce(fn: any, delay: any) {
@@ -94,6 +139,10 @@ const Browse = ({
   const ratingHandler = (rating: any) => {
     filter({ rating });
   };
+
+  const stockHandler = (stock: any) => {
+    filter({ stock });
+  };
   const sortHandler = (sort: any) => {
     if (sort == "") {
       filter({ sort: {} });
@@ -107,27 +156,33 @@ const Browse = ({
 
   const replaceQuery = (queryName: any, value: any) => {
     const existedQuery = router.query[queryName];
-    const valueCheck = existedQuery?.search(value);
-    const _check = existedQuery?.search(`_${value}`);
+    const valueCheck = existedQuery
+      ? new RegExp(`(^|_)${value}(?:_|$)`).test(existedQuery)
+      : false;
+    const _check = existedQuery
+      ? new RegExp(`(^|_)_${value}(?:_|$)`).test(existedQuery)
+      : false;
     let result = null;
     if (existedQuery) {
       if (existedQuery == value) {
         result = {};
       } else {
-        if (valueCheck !== -1) {
+        if (valueCheck) {
           // if filtered value is in query & we want to remove it.
-          if (_check !== -1) {
+          if (_check) {
             // last
-            result = existedQuery?.replace(`_${value}`, "");
-          } else if (valueCheck == 0) {
+            result = existedQuery.replace(`_${value}`, "");
+          } else if (existedQuery.startsWith(`${value}_`)) {
             // first
-            result = existedQuery?.replace(`${value}_`, "");
+            result = existedQuery.replace(`${value}_`, "");
           } else {
             // middle
-            result = existedQuery?.replace(value, "");
+            result = existedQuery
+              .replace(`_${value}`, "")
+              .replace(`${value}_`, "");
           }
         } else {
-          // if filtered value doesn't exist in Query & we wan to add it.
+          // if filtered value doesn't exist in Query & we want to add it.
           result = `${existedQuery}_${value}`;
         }
       }
@@ -137,35 +192,16 @@ const Browse = ({
 
     return {
       result,
-      active: existedQuery && valueCheck !== -1 ? true : false,
+      active: existedQuery && valueCheck ? true : false,
     };
   };
-  // ----------------------------------------
-  const [scrollY, setScrollY] = useState(0);
-  const [height, setHeight] = useState(0);
-  const headerRef = useRef(null);
-  const el = useRef(null);
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    setHeight(headerRef.current?.offsetHeight + el.current?.offsetHeight + 50);
-
-    return () => {
-      {
-        window.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
 
   return (
     <>
       {/* {loading && <DotLoaderSpinner loading={loading} />} */}
       <Header title={"Browse Products"} searchHandler={searchHandler} />
       <div className="gap-2 p-1 mx-auto max-w-screen-2xl bg-slate-100 md:p-6">
-        <div ref={headerRef}>
+        <div>
           <div className="flex items-center text-sm">
             <span className="text-slate-700">Home</span>
             <ChevronRightIcon className="w-4 h-4 mx-1 fill-slate-600 " />
@@ -183,7 +219,7 @@ const Browse = ({
             )}
           </div>
 
-          <div ref={el} className="flex flex-wrap gap-3 mt-2">
+          <div className="flex flex-wrap gap-3 mt-2">
             {categories?.map((c: any) => (
               <span
                 onClick={() => categoryHandler(c._id)}
@@ -197,35 +233,92 @@ const Browse = ({
         </div>
 
         <div className="relative grid grid-cols-5 gap-1 mt-4 md:gap-5">
-          <div
-            className={`h-[680px] col-span-5 md:col-span-1 flex flex-col md:items-center  overflow-y-auto overflow-x-hidden ${
-              scrollY >= height ? "md:fixed md:w-[274px] md:top-2" : ""
-            }`}
-          >
+          <div className="flex flex-col col-span-5 md:col-span-1 md:items-center">
             <button
-              onClick={() => router.push("/browse")}
+              onClick={() => {
+                router.push(
+                  `${router.pathname.split("[slug]")[0]}/${router.query.slug}`
+                );
+              }}
               className={`flex items-center justify-center w-56 md:w-full py-2 rounded transition-all duration-300 bg-amazon-blue_light text-white hover:scale-95 border-amazon-blue_dark`}
             >
-              Clear All ({Object.keys(router.query).length})
+              <FunnelIcon className="w-4 h-4 mr-3" />
+              Xóa tất cả ({Object.keys(router.query).length - 1})
             </button>
-            {/* <CategoriesFilter
-              categories={categories}
-              subCategories={subCategories}
-              categoryHandler={categoryHandler}
-              replaceQuery={replaceQuery}
-            /> */}
             <BrandsFilter
+              filter={{ title: "Thương hiệu", key: "brand" }}
               brands={brands}
               brandHandler={brandHandler}
               replaceQuery={replaceQuery}
             />
+            {router.query.slug === "gpu" && (
+              <>
+                <CategoriesFilter
+                  title="Nhân đồ họa"
+                  categories={brands}
+                  subCategories={graphics}
+                  categoryHandler={cardHandler}
+                  replaceQuery={replaceQuery}
+                />
+                <BrandsFilter
+                  filter={{ title: "Nhà sản xuất", key: "manufacturer" }}
+                  defaultState={false}
+                  brands={manufacturers}
+                  brandHandler={manufacturerHandler}
+                  replaceQuery={replaceQuery}
+                />
+              </>
+            )}
+            {router.query.slug === "cpu" && (
+              <>
+                <BrandsFilter
+                  filter={{ title: "Dòng CPU", key: "line" }}
+                  brands={[
+                    "Core i9",
+                    "Core i7",
+                    "Core i5",
+                    "Core i3",
+                    "Ryzen Threadripper",
+                    "Ryzen 9",
+                    "Ryzen 7",
+                    "Ryzen 5",
+                    "Ryzen 3",
+                    "Athlon",
+                    "Pentium",
+                  ]}
+                  brandHandler={lineHandler}
+                  replaceQuery={replaceQuery}
+                />
+                <CategoriesFilter
+                  title="Bộ vi xử lý"
+                  categories={brands}
+                  subCategories={processors}
+                  categoryHandler={processorHandler}
+                  replaceQuery={replaceQuery}
+                />
+                <SliderRangeFilter
+                  title="Số nhân"
+                  range={[2, 64]}
+                  onChange={coreHandler}
+                  defaultValue={router.query.core?.split("_") || [2, 64]}
+                />
+                <SliderRangeFilter
+                  title="Số luồng"
+                  range={[2, 192]}
+                  onChange={threadHandler}
+                  defaultValue={router.query.thread?.split("_") || [2, 192]}
+                />
+                <SliderRangeFilter
+                  title="Xung nhịp"
+                  range={[2.4, 6.2]}
+                  step={0.1}
+                  valueLabelFormat={(value: any) => `${value} GHz`}
+                  onChange={clockHandler}
+                  defaultValue={router.query.clock?.split("_") || [2.4, 6.2]}
+                />
+              </>
+            )}
           </div>
-
-          <div
-            className={`${
-              scrollY >= height ? "md:block" : "hidden"
-            } max-md:hidden md:col-span-1`}
-          ></div>
 
           <div className="flex flex-col content-start col-span-5 md:col-span-4">
             <HeadingFilter
@@ -234,6 +327,7 @@ const Browse = ({
               ratingHandler={ratingHandler}
               sortHandler={sortHandler}
               replaceQuery={replaceQuery}
+              stockHandler={stockHandler}
             />
             <div className="flex flex-wrap items-start gap-4 mt-6">
               {products.map((product: any) => (
@@ -262,16 +356,44 @@ export async function getServerSideProps(context: any) {
   const { query } = context;
   const category = query.slug;
   const searchQuery = query.search || "";
-  const subCategoryQuery = query.category || "";
+  const subCategoryQuery = query.subCategory || "";
   const priceQuery = query.price?.split("_") || "";
+  const coreQuery = query.core?.split("_") || "";
+  const threadQuery = query.thread?.split("_") || "";
+  const clockQuery = query.clock?.split("_") || "";
   const ratingQuery = query.rating || "";
+  const stockQuery = query.stock || "";
   const sortQuery = query.sort || "";
-  const pageSize = 10;
+  const pageSize = 15;
   const page = query.page || 1;
   // --------------------------------------------------
   const brandQuery = query.brand?.split("_") || "";
   const brandRegex = `^${brandQuery[0]}`;
   const brandSearchRegex = createRegex(brandQuery, brandRegex);
+  // --------------------------------------------------
+  const lineQuery = query.line?.split("_") || [];
+  const lineSearchRegex = generateRegexFromKeywordArrays(lineQuery, []);
+  // --------------------------------------------------
+  const processorQuery = query.processor?.split("_") || [];
+  const processorSearchRegex = generateRegexFromKeywordArrays(
+    processorQuery,
+    []
+  );
+  // --------------------------------------------------
+  const manufacturerQuery = query.manufacturer?.split("_") || "";
+  const manufacturerRegex = `^${manufacturerQuery[0]}`;
+  const manufacturerSearchRegex = createRegex(
+    manufacturerQuery,
+    manufacturerRegex
+  );
+  // --------------------------------------------------
+  const cardQuery = query.card?.split("_") || [];
+  const cardSearchRegex = generateRegexFromKeywordArrays(cardQuery, [
+    "Super",
+    "Ti",
+    "XT",
+    "GRE",
+  ]);
   // --------------------------------------------------
   const search =
     searchQuery && searchQuery !== ""
@@ -282,9 +404,10 @@ export async function getServerSideProps(context: any) {
           },
         }
       : {};
+  const stock = stockQuery && stockQuery !== "" ? { availability: true } : {};
   const subCategory =
     subCategoryQuery && subCategoryQuery !== ""
-      ? { category: subCategoryQuery }
+      ? { subCategory: subCategoryQuery }
       : {};
   // const brand = brandQuery && brandQuery !== "" ? { brand: brandQuery } : {};
   const brand =
@@ -293,6 +416,39 @@ export async function getServerSideProps(context: any) {
           brand: {
             $regex: brandSearchRegex,
             $options: "i",
+          },
+        }
+      : {};
+  const line =
+    lineQuery && lineQuery.length > 0
+      ? {
+          title: {
+            $regex: lineSearchRegex,
+          },
+        }
+      : {};
+  const processor =
+    processorQuery && processorQuery.length > 0
+      ? {
+          title: {
+            $regex: processorSearchRegex,
+          },
+        }
+      : {};
+  const manufacturer =
+    manufacturerQuery && manufacturerQuery !== ""
+      ? {
+          manufacturer: {
+            $regex: manufacturerSearchRegex,
+            $options: "i",
+          },
+        }
+      : {};
+  const card =
+    cardQuery && cardQuery.length > 0
+      ? {
+          title: {
+            $regex: cardSearchRegex,
           },
         }
       : {};
@@ -305,6 +461,44 @@ export async function getServerSideProps(context: any) {
           },
         }
       : {};
+  const core =
+    coreQuery && coreQuery !== ""
+      ? {
+          core: {
+            $gte: Number(coreQuery[0]) || 0,
+            $lte: Number(coreQuery[1]) || Infinity,
+          },
+        }
+      : null;
+  const thread =
+    threadQuery && threadQuery !== ""
+      ? {
+          thread: {
+            $gte: Number(threadQuery[0]) || 0,
+            $lte: Number(threadQuery[1]) || Infinity,
+          },
+        }
+      : null;
+  const clock =
+    clockQuery && clockQuery !== ""
+      ? {
+          $or: [
+            {
+              boost_clock: {
+                $exists: true,
+                $gte: Number(clockQuery[0]) || 0,
+                $lte: Number(clockQuery[1]) || Infinity,
+              },
+            },
+            {
+              base_clock: {
+                $gte: Number(clockQuery[0]) || 0,
+                $lte: Number(clockQuery[1]) || Infinity,
+              },
+            },
+          ],
+        }
+      : null;
   const rating =
     ratingQuery && ratingQuery !== ""
       ? {
@@ -317,18 +511,16 @@ export async function getServerSideProps(context: any) {
   const sort =
     sortQuery == ""
       ? {}
-      : sortQuery == "popular"
-      ? { rating: -1, "subProducts.sold": -1 }
       : sortQuery == "newest"
-      ? { createdAt: -1 }
+      ? { updatedAt: -1 }
       : sortQuery == "topSelling"
       ? { "subProducts.sold": -1 }
       : sortQuery == "topReviewed"
       ? { rating: -1 }
       : sortQuery == "priceHighToLow"
-      ? { "subProducts.sizes.price": -1 }
+      ? { price: -1 }
       : sortQuery == "priceLowToHight"
-      ? { "subProducts.sizes.price": 1 }
+      ? { price: 1 }
       : {};
   // --------------------------------------------------
   function createRegex(data: any, styleRegex: any) {
@@ -341,38 +533,70 @@ export async function getServerSideProps(context: any) {
   }
   // --------------------------------------------------
   db.connectDb();
-  let productsDb = await Product.find({
+
+  let filteredProcessors;
+  if (core || thread || clock) {
+    filteredProcessors = await CPUCategory.find({
+      ...core,
+      ...thread,
+      ...clock,
+    }).select("keyword");
+    filteredProcessors = {
+      title: {
+        $in: filteredProcessors.map(
+          (item: any) => new RegExp(item.keyword, "i")
+        ),
+      },
+    };
+    console.log(filteredProcessors);
+  }
+
+  const sum_queries = {
     category,
     ...search,
     ...subCategory,
+    ...manufacturer,
     ...brand,
     ...price,
     ...rating,
-  })
+    ...stock,
+    ...line,
+    ...card,
+    ...processor,
+    ...filteredProcessors,
+  };
+  console.log(sum_queries);
+  let products = await Product.find(sum_queries)
+    .select("title imgs slug price")
     .skip(pageSize * (page - 1))
     .limit(pageSize)
     .sort(sort)
     .allowDiskUse(true)
     .lean();
-  let products =
-    sortQuery && sortQuery !== "" ? productsDb : randomize(productsDb);
 
-  let brandsDb = await Product.find({ category }).distinct("brand");
+  const brands = await Product.find({ category }).distinct("brand");
 
-  let brands = removeDuplicates(brandsDb);
-  let totalProducts = await Product.countDocuments({
-    category,
-    ...search,
-    ...subCategory,
-    ...brand,
-    ...price,
-    ...rating,
-  });
+  let manufacturers;
+  let graphics;
+  if (category === "gpu") {
+    manufacturers = await Product.find({ category }).distinct("manufacturer");
+    graphics = await GPUCategory.find();
+  }
+
+  let processors;
+  if (category === "cpu") {
+    processors = await CPUCategory.find();
+  }
+
+  const totalProducts = await Product.countDocuments(sum_queries);
 
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
       brands,
+      graphics: graphics ? JSON.parse(JSON.stringify(graphics)) : null,
+      processors: processors ? JSON.parse(JSON.stringify(processors)) : null,
+      manufacturers: manufacturers ? manufacturers : null,
       paginationCount: Math.ceil(totalProducts / pageSize),
     },
   };
