@@ -14,7 +14,7 @@ const ParentCategory = ({
 }: any) => {
   const [show, setShow] = useState(false);
 
-  const selectSubCategory = subCategories.filter(
+  const selectSubCategory = subCategories?.filter(
     (c: any) => c.brand == category
   );
 
@@ -35,7 +35,7 @@ const ParentCategory = ({
           <EllipsisHorizontalIcon className="w-4 h-4 mr-2" />
           {category}
         </span>
-        {selectSubCategory.length > 0 && (
+        {selectSubCategory?.length > 0 && (
           <span>
             {show ? (
               <MinusIcon className="w-4 h-4" onClick={(e) => showSub(e)} />
@@ -47,16 +47,18 @@ const ParentCategory = ({
       </h4>
       {show && subCategories.length > 0 && (
         <div className="my-1 ml-5">
-          {selectSubCategory.map((sc: any) => {
+          {selectSubCategory?.map((sc: any, i) => {
             const check = replaceQuery(
-              sc.gpu ? "card" : sc.cpu ? "processor" : "",
-              sc.keyword
+              sc.gpu ? "card" : sc.cpu ? "processor" : sc.bus ? "bus" : "",
+              sc.bus
+                ? `${sc.brand} ${sc.bus.match(/\d+/g).map(Number)}`
+                : sc.keyword
             );
             return (
               <h5
-                key={sc._id}
+                key={sc._id || i}
                 onClick={() => {
-                  console.log(sc);
+                  console.log(check);
                   categoryHandler(check.result);
                 }}
                 className={`flex items-center cursor-pointer hover:font-semibold hover:text-yellow-500 ${
@@ -64,7 +66,7 @@ const ParentCategory = ({
                 }`}
               >
                 <EllipsisHorizontalIcon className="w-4 h-4 mr-2" />
-                <span>{sc.gpu || sc.cpu}</span>
+                <span>{sc.gpu || sc.cpu || sc.bus}</span>
               </h5>
             );
           })}

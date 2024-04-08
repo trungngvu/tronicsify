@@ -5,37 +5,32 @@ import Empty from "@/components/CartPage/Empty";
 import { useAppSelector } from "@/redux/hooks";
 import { getSession } from "next-auth/react";
 
-
 const Cart = () => {
-    const { cart } = useAppSelector((state: any) => ({ ...state }));
-    // console.log('cart > ', cart);
-    return (
-        <>
-            <Header />
-            <main className="w-full h-screen">
-                {cart.cartItems.length > 0 ? (
-                    <CartPage cart={cart}/>
-                ) : (
-                    <Empty />
-                )}
-            </main>
-            <MenuSideBar />
-        </>
-    );
+  const { cart } = useAppSelector((state: any) => ({ ...state }));
+  // console.log('cart > ', cart);
+  return (
+    <>
+      <Header />
+      <main className="w-full bg-slate-100">
+        {cart.cartItems ? <CartPage cart={cart} /> : <Empty />}
+      </main>
+      <MenuSideBar />
+    </>
+  );
 };
 
 export default Cart;
 
 export async function getServerSideProps(context: any) {
-    const session = await getSession(context);
-    if (!session) {
-        return {
-            redirect: {
-                destination: "/auth/signin",
-            },
-        };
-    }
+  const session = await getSession(context);
+  if (!session) {
     return {
-        props: {},
+      redirect: {
+        destination: "/auth/signin",
+      },
     };
+  }
+  return {
+    props: {},
+  };
 }

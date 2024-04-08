@@ -14,7 +14,11 @@ import SliderRangeFilter from "@/components/browse/SliderRangeFilter";
 
 import { useRouter } from "next/router";
 import { Pagination } from "@mui/material";
-import { generateRegexFromKeywordArrays } from "@/utils/array_utils";
+import {
+  generateRegexFromKeywordArrays,
+  generateRAMCapacityRegex,
+  createBusRegex,
+} from "@/utils/array_utils";
 // import DotLoaderSpinner from "@/components/loaders/dotLoader/DotLoaderSpinner";
 
 const Browse = ({
@@ -29,41 +33,17 @@ const Browse = ({
   const router = useRouter();
   // const [loading, setloading] = useState(false);
 
-  const filter = ({
-    search,
-    category,
-    brand,
-    manufacturer,
-    price,
-    rating,
-    line,
-    sort,
-    page,
-    core,
-    thread,
-    stock,
-    processor,
-    clock,
-    card,
-  }: any) => {
+  const filter = (options: any) => {
     const path = router.pathname;
     const { query } = router;
 
-    if (search) query.search = search;
-    if (category) query.category = category;
-    if (brand) query.brand = brand;
-    if (line) query.line = line;
-    if (price) query.price = price;
-    if (core) query.core = core;
-    if (thread) query.thread = thread;
-    if (clock) query.clock = clock;
-    if (rating) query.rating = rating;
-    if (sort) query.sort = sort;
-    if (page) query.page = page;
-    if (stock) query.stock = stock;
-    if (card) query.card = card;
-    if (processor) query.processor = processor;
-    if (manufacturer) query.manufacturer = manufacturer;
+    // Iterate over each property in options
+    Object.entries(options).forEach(([key, value]) => {
+      // Only update query if the value is truthy
+      if (value) {
+        query[key] = value;
+      }
+    });
 
     router.push({
       pathname: path,
@@ -98,6 +78,9 @@ const Browse = ({
   const processorHandler = (processor: any) => {
     filter({ processor });
   };
+  const busHandler = (bus: any) => {
+    filter({ bus });
+  };
   const coreHandler = (min: any, max: any) => {
     filter({ core: `${min}_${max}` });
   };
@@ -106,6 +89,12 @@ const Browse = ({
   };
   const clockHandler = (min: any, max: any) => {
     filter({ clock: `${min}_${max}` });
+  };
+  const ramCapHandler = (min: any, max: any) => {
+    filter({ ram_cap: `${2 ** min}_${2 ** max}` });
+  };
+  const wattageHandler = (min: any, max: any) => {
+    filter({ wattage: `${min}_${max}` });
   };
 
   function debounce(fn: any, delay: any) {
@@ -155,7 +144,7 @@ const Browse = ({
   };
 
   const replaceQuery = (queryName: any, value: any) => {
-    const existedQuery = router.query[queryName];
+    const existedQuery: any = router.query[queryName];
     const valueCheck = existedQuery
       ? new RegExp(`(^|_)${value}(?:_|$)`).test(existedQuery)
       : false;
@@ -245,6 +234,71 @@ const Browse = ({
               <FunnelIcon className="w-4 h-4 mr-3" />
               Xóa tất cả ({Object.keys(router.query).length - 1})
             </button>
+            {router.query.slug === "ram" && (
+              <>
+                <SliderRangeFilter
+                  scale={(val: number) => 2 ** val}
+                  title="Dung lượng"
+                  range={[2, 8]}
+                  valueLabelFormat={(value: any) => `${value} GB`}
+                  onChange={ramCapHandler}
+                  defaultValue={
+                    router.query.ram_cap
+                      ?.split("_")
+                      .map((val: number) => Math.log2(val)) || [2, 8]
+                  }
+                />
+                <CategoriesFilter
+                  title="Bus"
+                  categories={["DDR3", "DDR4", "DDR5"]}
+                  subCategories={[
+                    { brand: "DDR3", bus: "1066 MHz" },
+                    { brand: "DDR3", bus: "1333 MHz" },
+                    { brand: "DDR3", bus: "1600 MHz" },
+
+                    { brand: "DDR4", bus: "2133 MHz" },
+                    { brand: "DDR4", bus: "2400 MHz" },
+                    { brand: "DDR4", bus: "2666 MHz" },
+                    { brand: "DDR4", bus: "2933 MHz" },
+                    { brand: "DDR4", bus: "3000 MHz" },
+                    { brand: "DDR4", bus: "3200 MHz" },
+                    { brand: "DDR4", bus: "3600 MHz" },
+                    { brand: "DDR4", bus: "4000 MHz" },
+                    { brand: "DDR4", bus: "4800 MHz" },
+                    { brand: "DDR4", bus: "6000 MHz" },
+                    { brand: "DDR4", bus: "6200 MHz" },
+
+                    { brand: "DDR5", bus: "4800 MHz" },
+                    { brand: "DDR5", bus: "5200 MHz" },
+                    { brand: "DDR5", bus: "5600 MHz" },
+                    { brand: "DDR5", bus: "6000 MHz" },
+                    { brand: "DDR5", bus: "6200 MHz" },
+                    { brand: "DDR5", bus: "6400 MHz" },
+                    { brand: "DDR5", bus: "7200 MHz" },
+                  ]}
+                  categoryHandler={busHandler}
+                  replaceQuery={replaceQuery}
+                />
+                <BrandsFilter
+                  filter={{ title: "Thế hệ", key: "line" }}
+                  brands={["DDR3", "DDR4", "DDR5"]}
+                  brandHandler={lineHandler}
+                  replaceQuery={replaceQuery}
+                />
+              </>
+            )}
+            {router.query.slug === "psu" && (
+              <>
+                <SliderRangeFilter
+                  title="Công suất"
+                  range={[250, 1000]}
+                  onChange={wattageHandler}
+                  step={10}
+                  valueLabelFormat={(value: any) => `${value}W`}
+                  defaultValue={router.query.wattage?.split("_") || [250, 1000]}
+                />
+              </>
+            )}
             <BrandsFilter
               filter={{ title: "Thương hiệu", key: "brand" }}
               brands={brands}
@@ -358,6 +412,7 @@ export async function getServerSideProps(context: any) {
   const searchQuery = query.search || "";
   const subCategoryQuery = query.subCategory || "";
   const priceQuery = query.price?.split("_") || "";
+  const wattageQuery = query.wattage?.split("_") || "";
   const coreQuery = query.core?.split("_") || "";
   const threadQuery = query.thread?.split("_") || "";
   const clockQuery = query.clock?.split("_") || "";
@@ -373,6 +428,12 @@ export async function getServerSideProps(context: any) {
   // --------------------------------------------------
   const lineQuery = query.line?.split("_") || [];
   const lineSearchRegex = generateRegexFromKeywordArrays(lineQuery, []);
+  // --------------------------------------------------
+  const ramCapQuery = query.ram_cap?.split("_") || [];
+  const ramCapSearchRegex = generateRAMCapacityRegex(ramCapQuery);
+  // --------------------------------------------------
+  const ramBusQuery = query.bus?.split("_") || [];
+  const ramBusSearchRegex = generateRegexFromKeywordArrays(ramBusQuery, []);
   // --------------------------------------------------
   const processorQuery = query.processor?.split("_") || [];
   const processorSearchRegex = generateRegexFromKeywordArrays(
@@ -452,6 +513,22 @@ export async function getServerSideProps(context: any) {
           },
         }
       : {};
+  const ram_cap =
+    ramCapQuery && ramCapQuery.length > 0
+      ? {
+          title: {
+            $regex: ramCapSearchRegex,
+          },
+        }
+      : {};
+  const ram_bus =
+    ramBusQuery && ramBusQuery.length > 0
+      ? {
+          title: {
+            $regex: ramBusSearchRegex,
+          },
+        }
+      : {};
   const price =
     priceQuery && priceQuery !== ""
       ? {
@@ -461,6 +538,7 @@ export async function getServerSideProps(context: any) {
           },
         }
       : {};
+  const wattage = wattageQuery && wattageQuery !== "" ? {} : {};
   const core =
     coreQuery && coreQuery !== ""
       ? {
@@ -548,7 +626,6 @@ export async function getServerSideProps(context: any) {
         ),
       },
     };
-    console.log(filteredProcessors);
   }
 
   const sum_queries = {
@@ -563,11 +640,14 @@ export async function getServerSideProps(context: any) {
     ...line,
     ...card,
     ...processor,
+    ...ram_cap,
+    ...ram_bus,
     ...filteredProcessors,
+    ...wattage,
   };
   console.log(sum_queries);
   let products = await Product.find(sum_queries)
-    .select("title imgs slug price")
+    .select("title imgs slug price availability")
     .skip(pageSize * (page - 1))
     .limit(pageSize)
     .sort(sort)

@@ -7,8 +7,7 @@ const SliderRangeFilter = ({
   onChange,
   range,
   title,
-  step,
-  valueLabelFormat,
+  ...props
 }: any) => {
   const [show, setShow] = useState(true);
   const [value, setValue] = useState<number[]>(defaultValue);
@@ -45,8 +44,7 @@ const SliderRangeFilter = ({
             min={range[0]}
             max={range[1]}
             style={{ color: "#febd69" }}
-            step={step}
-            valueLabelFormat={valueLabelFormat}
+            {...props}
           />
         </div>
       )}

@@ -22,7 +22,9 @@ const HeaderBottom = ({ handleOpenMenu }: any) => {
                     <li className=""><Link href="/browse/main">Bo mạch chủ</Link></li>
                     <li className=""><Link href="/browse/ram">RAM </Link></li>
                     <li className=""><Link href="/browse/psu">Nguồn máy tính</Link></li>
+                    <li className=""><Link href="/browse/disk">Ổ cứng</Link></li>
                     <li className=""><Link href="/browse/cooler">Tản nhiệt</Link></li>
+                    <li className=""><Link href="/browse/case">Case máy tính</Link></li>
                 </ul>
             </div>
             <div className="hidden text-sm md:inline">
