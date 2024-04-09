@@ -647,7 +647,7 @@ export async function getServerSideProps(context: any) {
   };
   console.log(sum_queries);
   let products = await Product.find(sum_queries)
-    .select("title imgs slug price availability")
+    .select("title imgs slug price availability category")
     .skip(pageSize * (page - 1))
     .limit(pageSize)
     .sort(sort)

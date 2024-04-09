@@ -4,7 +4,6 @@ import {
   WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { useRouter } from "next/router";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
@@ -29,7 +28,7 @@ const AccountButtons = () => {
           Chào, {session ? session.user?.name : "đăng nhập ngay"}
         </p>
         <p className="flex text-sm font-bold">
-          Cài đặt tài khoản
+          Trung tâm tài khoản
           <ChevronDownIcon className="self-end h-4 ml-1" />
         </p>
 
@@ -107,7 +106,7 @@ const AccountButtons = () => {
         <div className="relative pt-2 pr-2">
           <WrenchScrewdriverIcon className="h-10" />
           <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 font-semibold rounded-full bg-amazon-orange text-amazon-blue_dark">
-            {cart.length}
+            {cart?.length}
           </span>
         </div>
         <p className="hidden w-20 mt-2 text-sm font-bold md:inline">
