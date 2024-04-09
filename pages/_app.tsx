@@ -12,7 +12,7 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps) {
   return (
-    <SessionProvider session={session} basePath="/api/auth">
+    <SessionProvider session={session}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <div className={inter.className}>
