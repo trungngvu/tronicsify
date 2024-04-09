@@ -8,18 +8,18 @@ import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 export default function App({
-    Component,
-    pageProps: { session, ...pageProps },
+  Component,
+  pageProps: { session, ...pageProps },
 }: AppProps) {
-    return (
-        <SessionProvider session={session}>
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <div className={inter.className}>
-                        <Component {...pageProps} />
-                    </div>
-                </PersistGate>
-            </Provider>
-        </SessionProvider>
-    );
+  return (
+    <SessionProvider session={session} basePath="/api/auth">
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <div className={inter.className}>
+            <Component {...pageProps} />
+          </div>
+        </PersistGate>
+      </Provider>
+    </SessionProvider>
+  );
 }
