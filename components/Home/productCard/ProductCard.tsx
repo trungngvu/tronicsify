@@ -33,7 +33,6 @@ const ProductCard = ({ product }: any) => {
       dispatch(addToCart(product));
     }
   };
-  console.log(cart);
 
   return (
     <div className="flex flex-col relative w-[215px] rounded p-1">
