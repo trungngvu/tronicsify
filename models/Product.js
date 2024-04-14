@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import reviewSchema from "./Review";
+const { ObjectId } = mongoose.Schema;
 
 const productSchema = new mongoose.Schema({
   title: {
@@ -44,6 +45,14 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   updatedAt: { type: String, required: true },
+  cpu: {
+    type: ObjectId,
+    ref: "CPUCategory",
+  },
+  gpu: {
+    type: ObjectId,
+    ref: "GPUCategory",
+  },
 });
 
 const Product =

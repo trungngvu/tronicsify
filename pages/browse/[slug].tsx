@@ -14,11 +14,7 @@ import SliderRangeFilter from "@/components/browse/SliderRangeFilter";
 
 import { useRouter } from "next/router";
 import { Pagination } from "@mui/material";
-import {
-  generateRegexFromKeywordArrays,
-  generateRAMCapacityRegex,
-  createBusRegex,
-} from "@/utils/array_utils";
+import { generateRegexFromKeywordArrays } from "@/utils/array_utils";
 // import DotLoaderSpinner from "@/components/loaders/dotLoader/DotLoaderSpinner";
 
 const Browse = ({
@@ -42,6 +38,8 @@ const Browse = ({
       // Only update query if the value is truthy
       if (value) {
         query[key] = value;
+        if (Object.keys(value).length === 0 && value.constructor === Object)
+          delete query[key];
       }
     });
 
@@ -67,11 +65,17 @@ const Browse = ({
   const lineHandler = (line: any) => {
     filter({ line });
   };
+  const sizeHandler = (size: any) => {
+    filter({ size });
+  };
   const manufacturerHandler = (manufacturer: any) => {
     filter({ manufacturer });
   };
   const cardHandler = (card: any) => {
     filter({ card });
+  };
+  const sub_categoryHandler = (sub_category: any) => {
+    filter({ sub_category });
   };
 
   //cpu
@@ -80,6 +84,9 @@ const Browse = ({
   };
   const busHandler = (bus: any) => {
     filter({ bus });
+  };
+  const socketHandler = (socket: any) => {
+    filter({ socket });
   };
   const coreHandler = (min: any, max: any) => {
     filter({ core: `${min}_${max}` });
@@ -178,7 +185,6 @@ const Browse = ({
     } else {
       result = value;
     }
-
     return {
       result,
       active: existedQuery && valueCheck ? true : false,
@@ -234,6 +240,81 @@ const Browse = ({
               <FunnelIcon className="w-4 h-4 mr-3" />
               Xóa tất cả ({Object.keys(router.query).length - 1})
             </button>
+            {router.query.slug === "disk" && (
+              <>
+                <SliderRangeFilter
+                  scale={(val: number) => 2 ** val}
+                  title="Dung lượng"
+                  range={[7, 15]}
+                  valueLabelFormat={(value: any) => {
+                    if (value > 1000) {
+                      return Math.floor(value / 1000) + "TB";
+                    } else {
+                      return value + "GB";
+                    }
+                  }}
+                  onChange={ramCapHandler}
+                  defaultValue={
+                    router.query.ram_cap
+                      ?.split("_")
+                      .map((val: number) => Math.log2(val)) || [7, 15]
+                  }
+                />
+                <BrandsFilter
+                  filter={{ title: "Loại ổ cứng", key: "sub_category" }}
+                  brands={["ssd", "hdd"]}
+                  brandHandler={sub_categoryHandler}
+                  replaceQuery={replaceQuery}
+                />
+              </>
+            )}
+            {router.query.slug === "cooler" && (
+              <BrandsFilter
+                filter={{ title: "Loại tản nhiệt", key: "sub_category" }}
+                brands={["air", "aio"]}
+                brandHandler={sub_categoryHandler}
+                replaceQuery={replaceQuery}
+              />
+            )}
+            {router.query.slug === "case" && (
+              <BrandsFilter
+                filter={{ title: "Kích cỡ", key: "size" }}
+                brands={["E-ATX", "M-ATX", "ATX", "ITX"]}
+                brandHandler={sizeHandler}
+                replaceQuery={replaceQuery}
+              />
+            )}
+
+            {router.query.slug === "main" && (
+              <>
+                <CategoriesFilter
+                  title="Socket"
+                  categories={["Intel", "AMD"]}
+                  subCategories={[
+                    { brand: "Intel", socket: "LGA 1150" },
+                    { brand: "Intel", socket: "LGA 1151" },
+                    { brand: "Intel", socket: "LGA 1155" },
+                    { brand: "Intel", socket: "LGA 1200" },
+                    { brand: "Intel", socket: "LGA 1700" },
+                    { brand: "Intel", socket: "LGA 2011" },
+                    { brand: "Intel", socket: "LGA 2066" },
+
+                    { brand: "AMD", socket: "AM4" },
+                    { brand: "AMD", socket: "AM5" },
+                    { brand: "AMD", socket: "sTR5" },
+                    { brand: "AMD", socket: "sTRX4" },
+                  ]}
+                  categoryHandler={socketHandler}
+                  replaceQuery={replaceQuery}
+                />
+                <BrandsFilter
+                  filter={{ title: "Kích cỡ", key: "size" }}
+                  brands={["E-ATX", "M-ATX", "ATX", "ITX"]}
+                  brandHandler={sizeHandler}
+                  replaceQuery={replaceQuery}
+                />
+              </>
+            )}
             {router.query.slug === "ram" && (
               <>
                 <SliderRangeFilter
@@ -252,14 +333,12 @@ const Browse = ({
                   title="Bus"
                   categories={["DDR3", "DDR4", "DDR5"]}
                   subCategories={[
-                    { brand: "DDR3", bus: "1066 MHz" },
                     { brand: "DDR3", bus: "1333 MHz" },
                     { brand: "DDR3", bus: "1600 MHz" },
 
                     { brand: "DDR4", bus: "2133 MHz" },
                     { brand: "DDR4", bus: "2400 MHz" },
                     { brand: "DDR4", bus: "2666 MHz" },
-                    { brand: "DDR4", bus: "2933 MHz" },
                     { brand: "DDR4", bus: "3000 MHz" },
                     { brand: "DDR4", bus: "3200 MHz" },
                     { brand: "DDR4", bus: "3600 MHz" },
@@ -426,20 +505,26 @@ export async function getServerSideProps(context: any) {
   const brandRegex = `^${brandQuery[0]}`;
   const brandSearchRegex = createRegex(brandQuery, brandRegex);
   // --------------------------------------------------
+  const sub_categoryQuery = query.sub_category?.split("_") || "";
+  const sub_categoryRegex = `^${sub_categoryQuery[0]}`;
+  const sub_categorySearchRegex = createRegex(
+    sub_categoryQuery,
+    sub_categoryRegex
+  );
+  // --------------------------------------------------
   const lineQuery = query.line?.split("_") || [];
   const lineSearchRegex = generateRegexFromKeywordArrays(lineQuery, []);
   // --------------------------------------------------
   const ramCapQuery = query.ram_cap?.split("_") || [];
-  const ramCapSearchRegex = generateRAMCapacityRegex(ramCapQuery);
+  // --------------------------------------------------
+  const socketQuery = query.socket?.split("_") || "";
+  // --------------------------------------------------
+  const sizeQuery = query.size?.split("_") || "";
   // --------------------------------------------------
   const ramBusQuery = query.bus?.split("_") || [];
   const ramBusSearchRegex = generateRegexFromKeywordArrays(ramBusQuery, []);
   // --------------------------------------------------
   const processorQuery = query.processor?.split("_") || [];
-  const processorSearchRegex = generateRegexFromKeywordArrays(
-    processorQuery,
-    []
-  );
   // --------------------------------------------------
   const manufacturerQuery = query.manufacturer?.split("_") || "";
   const manufacturerRegex = `^${manufacturerQuery[0]}`;
@@ -449,12 +534,6 @@ export async function getServerSideProps(context: any) {
   );
   // --------------------------------------------------
   const cardQuery = query.card?.split("_") || [];
-  const cardSearchRegex = generateRegexFromKeywordArrays(cardQuery, [
-    "Super",
-    "Ti",
-    "XT",
-    "GRE",
-  ]);
   // --------------------------------------------------
   const search =
     searchQuery && searchQuery !== ""
@@ -480,6 +559,30 @@ export async function getServerSideProps(context: any) {
           },
         }
       : {};
+  const sub_category =
+    sub_categoryQuery && sub_categoryQuery !== ""
+      ? {
+          sub_category: {
+            $in: sub_categoryQuery,
+          },
+        }
+      : {};
+  const socket =
+    socketQuery && socketQuery !== ""
+      ? {
+          socket: {
+            $in: socketQuery,
+          },
+        }
+      : {};
+  const size =
+    sizeQuery && sizeQuery !== ""
+      ? {
+          size: {
+            $in: sizeQuery,
+          },
+        }
+      : {};
   const line =
     lineQuery && lineQuery.length > 0
       ? {
@@ -491,8 +594,8 @@ export async function getServerSideProps(context: any) {
   const processor =
     processorQuery && processorQuery.length > 0
       ? {
-          title: {
-            $regex: processorSearchRegex,
+          cpu: {
+            $in: processorQuery,
           },
         }
       : {};
@@ -508,16 +611,17 @@ export async function getServerSideProps(context: any) {
   const card =
     cardQuery && cardQuery.length > 0
       ? {
-          title: {
-            $regex: cardSearchRegex,
+          gpu: {
+            $in: cardQuery,
           },
         }
       : {};
   const ram_cap =
     ramCapQuery && ramCapQuery.length > 0
       ? {
-          title: {
-            $regex: ramCapSearchRegex,
+          capacity: {
+            $gte: Number(ramCapQuery[0]) || 0,
+            $lte: Number(ramCapQuery[1]) || Infinity,
           },
         }
       : {};
@@ -644,8 +748,12 @@ export async function getServerSideProps(context: any) {
     ...ram_bus,
     ...filteredProcessors,
     ...wattage,
+    ...sub_category,
+    ...socket,
+    ...size,
   };
   console.log(sum_queries);
+
   let products = await Product.find(sum_queries)
     .select("title imgs slug price availability category")
     .skip(pageSize * (page - 1))
@@ -660,12 +768,34 @@ export async function getServerSideProps(context: any) {
   let graphics;
   if (category === "gpu") {
     manufacturers = await Product.find({ category }).distinct("manufacturer");
-    graphics = await GPUCategory.find();
+    await Product.distinct("gpu")
+      .then((distinctGPUs) => {
+        // Step 2: Query CPUCategory collection to populate CPU documents
+        return GPUCategory.find({ _id: { $in: distinctGPUs } });
+      })
+      .then((gpuDocuments) => {
+        // cpuDocuments contains an array of CPU documents
+        graphics = gpuDocuments;
+      })
+      .catch((err) => {
+        // Handle error
+      });
   }
 
   let processors;
   if (category === "cpu") {
-    processors = await CPUCategory.find();
+    await Product.distinct("cpu")
+      .then((distinctCPUs) => {
+        // Step 2: Query CPUCategory collection to populate CPU documents
+        return CPUCategory.find({ _id: { $in: distinctCPUs } });
+      })
+      .then((cpuDocuments) => {
+        // cpuDocuments contains an array of CPU documents
+        processors = cpuDocuments;
+      })
+      .catch((err) => {
+        // Handle error
+      });
   }
 
   const totalProducts = await Product.countDocuments(sum_queries);

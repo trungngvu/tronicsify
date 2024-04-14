@@ -49,10 +49,20 @@ const ParentCategory = ({
         <div className="my-1 ml-5">
           {selectSubCategory?.map((sc: any, i) => {
             const check = replaceQuery(
-              sc.gpu ? "card" : sc.cpu ? "processor" : sc.bus ? "bus" : "",
+              sc.gpu
+                ? "card"
+                : sc.cpu
+                ? "processor"
+                : sc.bus
+                ? "bus"
+                : sc.socket
+                ? "socket"
+                : "",
               sc.bus
                 ? `${sc.brand} ${sc.bus.match(/\d+/g).map(Number)}`
-                : sc.keyword
+                : sc.socket
+                ? sc.socket.replace(/LGA /g, "")
+                : sc._id
             );
             return (
               <h5
@@ -66,7 +76,7 @@ const ParentCategory = ({
                 }`}
               >
                 <EllipsisHorizontalIcon className="w-4 h-4 mr-2" />
-                <span>{sc.gpu || sc.cpu || sc.bus}</span>
+                <span>{sc.gpu || sc.cpu || sc.bus || sc.socket}</span>
               </h5>
             );
           })}
