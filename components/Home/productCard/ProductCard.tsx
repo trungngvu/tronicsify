@@ -43,16 +43,25 @@ const ProductCard = ({ product }: any) => {
             <button className="flex items-center p-2 space-x-2 duration-500 ease-in-out rounded hover:text-red-500 transition-200 text-slate-500 bg-opacity-10 bg-amazon-blue_light max-md:mt-3">
               <HeartIcon className="fill-current w-7 h-7 " />
             </button>
-            <button
-              className={`flex items-center p-2 space-x-2 duration-500 ease-in-out rounded ${
-                cart?.find((item: any) => item._id === product._id)
-                  ? "text-amazon-orange"
-                  : "text-slate-500"
-              } hover:text-amazon-orange transition-200  bg-opacity-10 bg-amazon-blue_light max-md:mt-3`}
-              onClick={handleCart}
-            >
-              <WrenchIcon className="fill-current w-7 h-7 " />
-            </button>
+            {(product.cpu ||
+              product.gpu ||
+              (product.socket && product.size && product.ram) ||
+              (product.ram && product.capacity) ||
+              product.wattage ||
+              (product.capacity && product.category === "disk") ||
+              product.category === "cooler" ||
+              (product.size && product.category === "case")) && (
+              <button
+                className={`flex items-center p-2 space-x-2 duration-500 ease-in-out rounded ${
+                  cart?.find((item: any) => item._id === product._id)
+                    ? "text-amazon-orange"
+                    : "text-slate-500"
+                } hover:text-amazon-orange transition-200  bg-opacity-10 bg-amazon-blue_light max-md:mt-3`}
+                onClick={handleCart}
+              >
+                <WrenchIcon className="fill-current w-7 h-7 " />
+              </button>
+            )}
           </div>
         </div>
       </Link>

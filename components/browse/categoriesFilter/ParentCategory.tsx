@@ -60,7 +60,7 @@ const ParentCategory = ({
                 : "",
               sc.bus
                 ? `${sc.brand} ${sc.bus.match(/\d+/g).map(Number)}`
-                : sc.socket
+                : sc.socket && !sc.cpu
                 ? sc.socket.replace(/LGA /g, "")
                 : sc._id
             );

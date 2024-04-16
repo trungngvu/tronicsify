@@ -3,20 +3,17 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import Checkout from "./Checkout";
-import PaymentMethods from "./PaymentMethods";
+import ConstrainCheck from "./ConstrainCheck";
 import Product from "./Product";
 import Category from "./Category";
 import { saveCart } from "../../request/users";
 import axios from "axios";
-import { useAppDispatch } from "@/redux/hooks";
-import { useAppSelector } from "@/redux/hooks";
 import DotLoaderSpinner from "../loaders/dotLoader/DotLoaderSpinner";
 
-const CartPage = () => {
+const CartPage = ({ cart }: any) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const cart = useAppSelector((state: any) => state.cart.cartItems);
 
   //   useEffect(() => {
   //     if (session) {
@@ -76,9 +73,9 @@ const CartPage = () => {
         </div>
         <div className="md:w-1/4">
           <Checkout
-            total={cart?.reduce((acc: any, item: any) => acc + item.price, 0)}
+            cart={cart}
           />
-          <PaymentMethods />
+          <ConstrainCheck cart={cart} />
         </div>
       </div>
     </>

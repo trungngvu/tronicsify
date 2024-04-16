@@ -6,13 +6,14 @@ import { useAppSelector } from "@/redux/hooks";
 import { getSession } from "next-auth/react";
 
 const Cart = () => {
-  const { cart } = useAppSelector((state: any) => ({ ...state }));
+  const cart = useAppSelector((state: any) => state.cart.cartItems);
+
   // console.log('cart > ', cart);
   return (
     <>
       <Header />
       <main className="w-full bg-slate-100">
-        {cart.cartItems ? <CartPage cart={cart} /> : <Empty />}
+        {cart ? <CartPage cart={cart} /> : <Empty />}
       </main>
       <MenuSideBar />
     </>
