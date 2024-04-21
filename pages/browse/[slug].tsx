@@ -12,9 +12,13 @@ import CategoriesFilter from "@/components/browse/categoriesFilter/CategoriesFil
 import HeadingFilter from "@/components/browse/headingFilter/HeadingFilter";
 import SliderRangeFilter from "@/components/browse/SliderRangeFilter";
 
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Pagination } from "@mui/material";
-import { generateRegexFromKeywordArrays } from "@/utils/array_utils";
+import {
+  generateRegexFromKeywordArrays,
+  categoryName,
+} from "@/utils/array_utils";
 // import DotLoaderSpinner from "@/components/loaders/dotLoader/DotLoaderSpinner";
 
 const Browse = ({
@@ -49,13 +53,6 @@ const Browse = ({
     });
   };
 
-  const searchHandler = (search: any) => {
-    if (search == "") {
-      filter({ search: {} });
-    } else {
-      filter({ search });
-    }
-  };
   const categoryHandler = (category: any) => {
     filter({ category });
   };
@@ -194,36 +191,18 @@ const Browse = ({
   return (
     <>
       {/* {loading && <DotLoaderSpinner loading={loading} />} */}
-      <Header title={"Browse Products"} searchHandler={searchHandler} />
+      <Header title={"Browse Products"} />
       <div className="gap-2 p-1 mx-auto max-w-screen-2xl bg-slate-100 md:p-6">
         <div>
           <div className="flex items-center text-sm">
-            <span className="text-slate-700">Home</span>
-            <ChevronRightIcon className="w-4 h-4 mx-1 fill-slate-600 " />
-            <span className="text-slate-700">Browse</span>
-            {router.query?.category !== "" && (
-              <>
-                <ChevronRightIcon className="w-4 h-4 mx-1 fill-slate-600 " />
-                <span className="text-slate-700">
-                  {
-                    categories?.find((x: any) => x._id == router.query.category)
-                      ?.name
-                  }
-                </span>
-              </>
-            )}
-          </div>
+            <Link className="hover:underline" href="/">
+              Trang chủ
+            </Link>
 
-          <div className="flex flex-wrap gap-3 mt-2">
-            {categories?.map((c: any) => (
-              <span
-                onClick={() => categoryHandler(c._id)}
-                className={`cursor-pointer flex items-center justify-center w-40 md:w-56 h-10 border bg-white rounded  transition-all duration-300 hover:bg-amazon-blue_light hover:text-white hover:scale-95 hover:border-amazon-blue_dark`}
-                key={c._id}
-              >
-                {c.name}
-              </span>
-            ))}
+            <ChevronRightIcon className="w-4 h-4 mx-1 " />
+            <span className="text-slate-700">
+              {categoryName(router.query.slug)}
+            </span>
           </div>
         </div>
 
@@ -488,7 +467,6 @@ export default Browse;
 export async function getServerSideProps(context: any) {
   const { query } = context;
   const category = query.slug;
-  const searchQuery = query.search || "";
   const subCategoryQuery = query.subCategory || "";
   const priceQuery = query.price?.split("_") || "";
   const wattageQuery = query.wattage?.split("_") || "";
@@ -535,15 +513,6 @@ export async function getServerSideProps(context: any) {
   // --------------------------------------------------
   const cardQuery = query.card?.split("_") || [];
   // --------------------------------------------------
-  const search =
-    searchQuery && searchQuery !== ""
-      ? {
-          name: {
-            $regex: searchQuery,
-            $options: "i",
-          },
-        }
-      : {};
   const stock = stockQuery && stockQuery !== "" ? { availability: true } : {};
   const subCategory =
     subCategoryQuery && subCategoryQuery !== ""
@@ -734,7 +703,6 @@ export async function getServerSideProps(context: any) {
 
   const sum_queries = {
     category,
-    ...search,
     ...subCategory,
     ...manufacturer,
     ...brand,

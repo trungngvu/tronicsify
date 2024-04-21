@@ -115,7 +115,7 @@ const HeadingFilter = ({
             type="checkbox"
             name="stock"
             id="stock"
-            checked={router.query.stock == "0"}
+            defaultChecked={router.query.stock == "0"}
           />
           Còn hàng
         </label>

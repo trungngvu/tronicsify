@@ -100,3 +100,32 @@ export function generateRegexFromKeywordArrays(keywords, specialKeywords) {
   // Construct regex
   return new RegExp(pattern, "i"); // 'i' flag for case-insensitive matching
 }
+
+export const categoryName = (cat) => {
+  switch (cat) {
+    case "cpu":
+      return "CPU";
+    case "gpu":
+      return "Card đồ họa";
+    case "ram":
+      return "RAM";
+    case "psu":
+      return "Nguồn máy tính";
+    case "disk":
+      return "Ổ cứng";
+    case "cooler":
+      return "Tản nhiệt";
+    case "case":
+      return "Case máy tính";
+    case "aio":
+      return "Tản nhiệt nước AIO";
+    case "air":
+      return "Tản nhiệt khí";
+    case "ssd":
+      return "SSD";
+    case "hdd":
+      return "HDD";
+    default:
+      return null;
+  }
+};

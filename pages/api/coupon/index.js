@@ -14,7 +14,7 @@ handler.post(async (req, res) => {
         if (test) {
             return res.status(400).json({
                 message:
-                    "this Coupon nam already exists, try with a different name.",
+                    "this Coupon name already exists, try with a different name.",
             });
         }
         await new Coupon({
@@ -26,7 +26,7 @@ handler.post(async (req, res) => {
 
         db.disconnectDb();
         return res.json({
-            message: "Coupont created successfully",
+            message: "Coupon created successfully",
             coupons: await Coupon.find({})
         });
     } catch (error) {

@@ -11,7 +11,7 @@ import Language from "./Language";
 import HeaderBottom from "./HeaderBottom";
 import Link from "next/link";
 
-const Header = ({ title, searchHandler }: any) => {
+const Header = ({ title }: any) => {
   const dispatch = useAppDispatch();
 
   const openMenuHandler = () => {
@@ -48,7 +48,7 @@ const Header = ({ title, searchHandler }: any) => {
 
             {/* Search Desktop*/}
             <div className="flex-grow hidden md:px-10 md:flex">
-              <Search searchHandler={searchHandler} />
+              <Search />
             </div>
 
             {/* <Language /> */}
