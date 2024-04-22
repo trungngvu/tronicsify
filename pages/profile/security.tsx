@@ -25,16 +25,16 @@ const Security = ({ user, tab, orders }: any) => {
 
   const validation = Yup.object({
     current_password: Yup.string()
-      .required("Please enter a current password.")
-      .min(6, "Password must be atleast 6 characters.")
-      .max(36, "password can't be more than 36 characters."),
+      .required("Vui lòng nhập mật khẩu hiện tại")
+      .min(6, "Mật khẩu phải nhiều hơn 6 ký tự")
+      .max(36, "Mật khẩu phải ít hơn 36 ký tự"),
     new_password: Yup.string()
-      .required("Please enter a New password.")
-      .min(6, "Password must be atleast 6 characters.")
-      .max(36, "password can't be more than 36 characters."),
+      .required("Vui lòng nhập mật khẩu mới")
+      .min(6, "Mật khẩu mới phải nhiều hơn 6 ký tự")
+      .max(36, "Mật khẩu mới phải ít hơn 36 ký tự"),
     conf_password: Yup.string()
-      .required("Confirm our New password.")
-      .oneOf([Yup.ref("new_password")], "Passwords must match."),
+      .required("Vui lòng xác nhận lại mật khẩu")
+      .oneOf([Yup.ref("new_password")], "Mật khẩu không trùng khớp"),
   });
 
   const handleChange = (e: any) => {
@@ -76,9 +76,9 @@ const Security = ({ user, tab, orders }: any) => {
   return (
     <>
       {loading && <DotLoaderSpinner loading={loading} />}
-      <Layout user={user} tab={tab} title={`Profile - Security`}>
+      <Layout user={user} tab={tab} title={`Đổi mật khẩu`}>
         <div className="text-center">
-          <h2 className="mb-6 text-4xl font-bold">Profile - Security</h2>
+          <h2 className="mb-6 text-4xl font-bold">Đổi mật khẩu</h2>
         </div>
         <div className="mx-auto md:w-1/3">
           <Formik
@@ -98,7 +98,7 @@ const Security = ({ user, tab, orders }: any) => {
                   type="password"
                   icon="password"
                   name="current_password"
-                  placeholder="Current password"
+                  placeholder="Mật khẩu hiện tại"
                   onChange={handleChange}
                 />
 
@@ -107,7 +107,7 @@ const Security = ({ user, tab, orders }: any) => {
                   type="password"
                   icon="password"
                   name="new_password"
-                  placeholder="New Password"
+                  placeholder="Mật khẩu mới"
                   onChange={handleChange}
                 />
                 <LoginInput
@@ -115,10 +115,10 @@ const Security = ({ user, tab, orders }: any) => {
                   type="password"
                   icon="password"
                   name="conf_password"
-                  placeholder="Re-type New Password"
+                  placeholder="Mật khẩu mới"
                   onChange={handleChange}
                 />
-                <ButtonInput type="submit" text="Change Password" />
+                <ButtonInput type="submit" text="Đổi mật khẩu" />
               </Form>
             )}
           </Formik>

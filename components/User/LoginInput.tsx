@@ -17,17 +17,17 @@ const LoginInput = ({ icon, placeholder, type, ...props }: any) => {
           <div className="flex items-center mb-1">
             <LockClosedIcon className="h-4 mr-1" />
             {field.name === "conf_password"
-              ? "Confirm Password"
+              ? "Xác nhận mật khẩu mới"
               : field.name === "current_password"
-              ? "Current Password"
+              ? "Mật khẩu hiện tại"
               : field.name === "new_password"
-              ? "New Password"
+              ? "Mật khẩu mới"
               : "Password"}
           </div>
         ) : icon === "user" ? (
           <div className="flex items-center mb-1">
             <UserIcon className="h-4 mr-1" />
-            Full Name
+            Họ và tên
           </div>
         ) : (
           ""
