@@ -22,8 +22,6 @@ const Header = ({ title }: any) => {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="description" content="full amazon clone React" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <header>
         <div className="flex flex-col bg-amazon-blue_dark md:flex-row">

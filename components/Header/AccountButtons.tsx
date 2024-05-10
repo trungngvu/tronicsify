@@ -2,9 +2,11 @@ import {
   ChevronDownIcon,
   UserIcon,
   WrenchScrewdriverIcon,
+  ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useSession, signIn, signOut } from "next-auth/react";
+import AskAIButton from "./AskAI";
 import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
 
@@ -102,17 +104,22 @@ const AccountButtons = () => {
         </div>
       </div>
 
-      <Link href="/cart" className="relative flex items-center link">
-        <div className="relative pt-2 pr-2">
-          <WrenchScrewdriverIcon className="h-10" />
-          <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 font-semibold rounded-full bg-amazon-orange text-amazon-blue_dark">
-            {cart?.length}
-          </span>
-        </div>
-        <p className="hidden w-20 mt-2 text-sm font-bold md:inline">
-          Xây dựng cấu hình
-        </p>
-      </Link>
+      <div className="flex">
+        <Link href="/cart" className="relative flex items-center link">
+          <div className="relative pt-2 pr-2">
+            <WrenchScrewdriverIcon className="h-10" />
+            <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 font-semibold rounded-full bg-amazon-orange text-amazon-blue_dark">
+              {cart?.length}
+            </span>
+          </div>
+          <p className="hidden w-20 mt-2 text-sm font-bold md:inline">
+            Xây dựng cấu hình
+          </p>
+        </Link>
+        <Link href="/AI">
+          <AskAIButton />
+        </Link>
+      </div>
     </div>
   );
 };
