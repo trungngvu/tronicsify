@@ -91,7 +91,7 @@ const Search = () => {
         <div className="absolute z-20 w-full h-auto bg-white border rounded-sm shadow-md top-11">
           <ul className="text-black">
             {results.map((res: any) => (
-              <Link href={`product/${res.slug}`} key={res._id}>
+              <Link href={`/product/${res.slug}`} key={res._id}>
                 <li className="flex gap-5 px-3 py-2 font-semibold border-b cursor-pointer hover:bg-gray-100">
                   <img src={res.imgs[0]} alt="img" className="w-12" />
                   <div>

@@ -16,7 +16,6 @@ const ListShipping = ({
   addresses,
   setAddresses,
   user,
-  profile,
 }: any) => {
   const changeActiveHandler = async (id: any) => {
     const res = await changeActiveAddress(id);
@@ -50,15 +49,6 @@ const ListShipping = ({
             ""
           )}
           <div className="grid justify-center grid-cols-2">
-            <div className="mb-4">
-              <Image
-                src={profile && user.image}
-                alt={address._id}
-                width={60}
-                height={60}
-                className="rounded-full"
-              />
-            </div>
             <div className="flex flex-col md:justify-center">
               <span className="flex items-center">
                 <UserIcon className="w-4 h-4 mr-1" />

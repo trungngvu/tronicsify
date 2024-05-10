@@ -13,6 +13,7 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "hoanghapccdn.com",
       "nguyencongpc.vn",
+      "upload.wikimedia.org",
     ],
   },
   typescript: {

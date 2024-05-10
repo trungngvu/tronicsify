@@ -33,12 +33,12 @@ const AccountButtons = () => {
         </p>
 
         {/* popOver Account */}
-        <div className="absolute z-20 h-auto mt-1 bg-white border rounded-sm shadow-md show-account-popup w-96 -right-14">
+        <div className="absolute z-20 w-auto h-auto mt-1 bg-white border rounded-sm shadow show-account-popup -right-14">
           <div className="absolute h-3 w-3 bg-white rotate-45 -mt-1 right-[3.85rem] "></div>
           {session ? (
-            <div className="flex items-center justify-between p-3 pb-2 border-b">
+            <div className="flex items-center justify-between gap-2 p-3 pb-2 border-b">
               <p className="text-xl text-amazon-blue_light">
-                Hi,{" "}
+                Chào,{" "}
                 <Link href="/profile">
                   <b>{session.user?.name}</b>
                 </Link>
@@ -46,7 +46,7 @@ const AccountButtons = () => {
               <div className="flex space-x-2">
                 <Link href="/profile">
                   <div className="button-orange px-6 py-[0.3rem] text-sm text-gray-900">
-                    Profile
+                    Hồ sơ
                   </div>
                 </Link>
                 <button

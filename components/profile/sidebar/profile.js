@@ -3,10 +3,6 @@ export const profile = [
     heading: "Tài khoản của tôi",
     links: [
       {
-        name: "Hồ sơ tài khoản",
-        link: "/profile",
-      },
-      {
         name: "Sổ địa chỉ",
         link: "/profile/address",
       },

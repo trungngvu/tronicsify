@@ -76,9 +76,6 @@ const userSchema = new mongoose.Schema(
           type: ObjectId,
           ref: "Product",
         },
-        style: {
-          type: String,
-        },
       },
     ],
   },

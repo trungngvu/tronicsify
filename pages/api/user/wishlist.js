@@ -13,7 +13,7 @@ handler.put(async (req, res) => {
         const user = await User.findById(req.user);
         const exist = user.whishlist.find((x) => x.product == product_id && x.style == style);
         if(exist) {
-            return res.status(400).json({ message: "Product already exists in your wishlist" })
+            return res.status(400).json({ message: "Sản phẩm đã có trong danh sách yêu thích" })
         }
         await user.updateOne({
             $push:{
@@ -24,7 +24,7 @@ handler.put(async (req, res) => {
             }
         })
         db.disconnectDb();
-        return res.status(200).json({ message: "Product successfully added to your wishlist." });
+        return res.status(200).json({ message: "Thêm vào danh sách yêu thích thành công" });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

@@ -69,11 +69,10 @@ const Infos = ({ product }: any) => {
       }
       const { data } = await axios.put("/api/user/wishlist", {
         product_id: product._id,
-        style: product.style,
       });
       dispatch(
         showDialog({
-          header: "Product added to wishlist successfully.",
+          header: "Thành công",
           msgs: [
             {
               msg: data.message,
@@ -85,7 +84,7 @@ const Infos = ({ product }: any) => {
     } catch (error: any) {
       dispatch(
         showDialog({
-          header: "wishlist Error",
+          header: "Lỗi",
           msgs: [
             {
               msg: error.response.data.message,
