@@ -2,11 +2,9 @@ import {
   ChevronDownIcon,
   UserIcon,
   WrenchScrewdriverIcon,
-  ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useSession, signIn, signOut } from "next-auth/react";
-import AskAIButton from "./AskAI";
 import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
 
@@ -35,10 +33,10 @@ const AccountButtons = () => {
         </p>
 
         {/* popOver Account */}
-        <div className="absolute z-20 w-auto h-auto mt-1 bg-white border rounded-sm shadow show-account-popup -right-14">
+        <div className="absolute z-20 mt-1 bg-white border rounded-sm shadow whitespace-nowrap show-account-popup -right-14">
           <div className="absolute h-3 w-3 bg-white rotate-45 -mt-1 right-[3.85rem] "></div>
           {session ? (
-            <div className="flex items-center justify-between gap-2 p-3 pb-2 border-b">
+            <div className="flex flex-col items-center justify-between gap-2 p-3 pb-2 border-b">
               <p className="text-xl text-amazon-blue_light">
                 Chào,{" "}
                 <Link href="/profile">
@@ -55,7 +53,7 @@ const AccountButtons = () => {
                   onClick={() => signOut()}
                   className="button-orange px-2 py-[0.3rem] text-sm text-gray-900"
                 >
-                  Sign Out
+                  Đăng xuất
                 </button>
               </div>
             </div>
@@ -65,42 +63,19 @@ const AccountButtons = () => {
                 onClick={() => signIn()}
                 className="button-orange px-16 py-[0.3rem] text-sm text-gray-900"
               >
-                Sign in
+                Đăng nhập
               </button>
               <p className="mt-2 text-xs text-gray-900">
-                New customer?{" "}
+                Khách hàng mới?{" "}
                 <Link
                   href="/auth/register"
                   className="text-[#05a] hover:text-amazon-orange hover:underline"
                 >
-                  start here
+                  Đăng ký tại đây
                 </Link>
               </p>
             </div>
           )}
-
-          <div className="flex m-3">
-            <div className="flex flex-col w-1/2">
-              <h4 className="mb-2 text-base font-bold text-black">Your List</h4>
-              <ul className="text-xs text-gray-900">
-                <li>Create a list</li>
-                <li>Find a list or Registry</li>
-              </ul>
-            </div>
-
-            <div className="flex flex-col w-1/2 pl-4 border-l">
-              <h4 className="mb-2 text-base font-bold text-black">
-                Your Account
-              </h4>
-              <ul className="text-xs text-gray-900">
-                <li>Account</li>
-                <li>Orders</li>
-                <li>Registry</li>
-                <li>Recommendations</li>
-                <li>Browsing History</li>
-              </ul>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -115,9 +90,6 @@ const AccountButtons = () => {
           <p className="hidden w-20 mt-2 text-sm font-bold md:inline">
             Xây dựng cấu hình
           </p>
-        </Link>
-        <Link href="/AI">
-          <AskAIButton />
         </Link>
       </div>
     </div>

@@ -8,7 +8,6 @@ import Reviews from "./reviews/Reviews";
 import SimilarSwiper from "./SimilarSwiper";
 
 const ProductPage = ({ product }: any) => {
-
   return (
     <div className="w-full h-auto px-3 mb-6 bg-white md:px-2">
       <BreadCrumb
@@ -31,7 +30,7 @@ const ProductPage = ({ product }: any) => {
       <Specs product={product} />
 
       <div className="w-full p-2 mx-auto mt-2 border rounded-lg md:w-4/5">
-        <SimilarSwiper />
+        <SimilarSwiper title="Sản phẩm tương tự" />
       </div>
       <Reviews product={product} />
     </div>

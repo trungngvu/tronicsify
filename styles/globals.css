@@ -197,7 +197,7 @@
 		),
 		hsl(260 calc(var(--active) * 97%) calc((var(--active) * 44%) + 12%));
 	background: var(--bg);
-	font-size: 14px;
+	font-size: 18px;
 	font-weight: 500;
 	border: 0;
 	cursor: pointer;
@@ -341,7 +341,7 @@ svg {
 
 .bodydrop {
 	background: hsl(
-		260
+		50
 		calc(var(--active) * 97%)
 		6%
 	);
@@ -354,7 +354,7 @@ svg {
 
 .ask-ai:is(:hover, :focus-visible) {
 	--active: 1;
-	--play-state: runnin;
+	--play-state: running;
 }
 
 

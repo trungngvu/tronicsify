@@ -1,6 +1,7 @@
 import nc from "next-connect";
 import db from "../../../utils/db";
 import Product from "../../../models/Product";
+// import { AutoTokenizer } from "@xenova/transformers";
 
 const handler = nc();
 
@@ -31,6 +32,11 @@ handler.get(async (req, res) => {
         })
           .limit(10)
           .select("title slug price imgs");
+        // let tokenizer = await AutoTokenizer.from_pretrained(
+        //   "sentence-transformers/all-MiniLM-L6-v2"
+        // );
+        // let inputs = await tokenizer("I love transformers!");
+        // console.log(inputs);
 
         return results;
       } catch (error) {
