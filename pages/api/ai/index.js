@@ -46,7 +46,7 @@ handler.post(async (req, res) => {
 
     const handleAI = async (search) => {
       const { data } = await axios.post(
-        "https://tronicsify-rag.purpledesert-aa2e765c.westus2.azurecontainerapps.io/tronicsify/invoke",
+        process.env.AI_ENDPOINT,
         {
           input: {
             question: search,
