@@ -2,6 +2,7 @@ import nc from "next-connect";
 import db from "../../../utils/db";
 import Product from "../../../models/Product";
 import axios from "axios";
+import mongoose from "mongoose";
 
 const handler = nc();
 
@@ -45,14 +46,11 @@ handler.post(async (req, res) => {
     };
 
     const handleAI = async (search) => {
-      const { data } = await axios.post(
-        process.env.AI_ENDPOINT,
-        {
-          input: {
-            question: search,
-          },
-        }
-      );
+      const { data } = await axios.post(process.env.AI_ENDPOINT, {
+        input: {
+          question: search,
+        },
+      });
       return formatText(data.output.content);
     };
 
@@ -60,9 +58,9 @@ handler.post(async (req, res) => {
     db.connectDb;
     const prods =
       result[1].length > 0
-        ? await Product.find({ _id: { $in: result[1] } }).select(
-            "imgs price slug title availability"
-          )
+        ? await Product.find({
+            _id: { $in: result[1].map((item) => new mongoose.Types.ObjectId(item)) },
+          }).select("imgs price slug title availability")
         : [];
     db.disconnectDb();
     return res.json({
