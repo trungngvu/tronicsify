@@ -8,7 +8,7 @@ const handler = nc();
 handler.post(async (req, res) => {
   try {
     const { q: query } = req.body;
-    
+
     const formatText = (text) => {
       // Extract MongoDB document IDs
       if (text === "") return "";
@@ -20,10 +20,10 @@ handler.post(async (req, res) => {
       }
       // Remove "id:<mongo_id>" from the text
       let formattedText = text.replace(/id:[0-9a-f]{24}/g, "");
-      
+
       // Replace * with bullet points
       formattedText = formattedText.replace(/\*/g, "&nbsp;&nbsp;&nbsp;•");
-      
+
       formattedText = formattedText.replace(/(\d+)(₫|đ|VND)/g, (match) => {
         // Remove any non-numeric characters
         const numericValue = match.replace(/[^\d]/g, "");
@@ -32,7 +32,7 @@ handler.post(async (req, res) => {
         // Add the currency symbol
         return `${formattedValue}₫`;
       });
-      
+
       // Replace **word** with bold text
       formattedText = formattedText.replace(
         /\*\*(.*?)\*\*/g,
@@ -40,10 +40,10 @@ handler.post(async (req, res) => {
       );
       // Replace \n with <br> for new lines
       formattedText = formattedText.replace(/\n/g, "<br>");
-      
+
       return [formattedText, ids];
     };
-    
+
     const handleAI = async (search) => {
       const { data } = await axios.post(
         "https://tronicsify-rag.purpledesert-aa2e765c.westus2.azurecontainerapps.io/tronicsify/invoke",
@@ -55,14 +55,15 @@ handler.post(async (req, res) => {
       );
       return formatText(data.output.content);
     };
-    
+
     const result = await handleAI(query);
     db.connectDb;
-    const prods = await Product.aggregate([
-      { $match: { _id: { $in: result[1] } } },
-      { $project: { imgs: 1, price: 1, slug: 1, title: 1, availability: 1 } }
-    ]);
-
+    const prods =
+      result[1].length > 0
+        ? await Product.find({ _id: { $in: result[1] } }).select(
+            "imgs price slug title availability"
+          )
+        : [];
     db.disconnectDb();
     return res.json({
       res: result[0],
