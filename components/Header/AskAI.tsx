@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Link from "next/link";
 
 const AskAIButton = () => {
   useEffect(() => {
@@ -26,10 +27,9 @@ const AskAIButton = () => {
   }, []);
 
   return (
-    <div className="sparkle-button ">
-      <button className="ask-ai">
+    <div className="sparkle-button">
+      <Link href="/AI" className="ask-ai">
         <span className="spark"></span>
-        <span className="backdrop"></span>
         <svg
           className="sparkle"
           viewBox="0 0 24 24"
@@ -59,7 +59,7 @@ const AskAIButton = () => {
           />
         </svg>
         <span className="text">AI Builder</span>
-      </button>
+      </Link>
       {/* <div className="bodydrop"></div> */}
       <span aria-hidden="true" className="particle-pen">
         <svg
