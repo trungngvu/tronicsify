@@ -1,6 +1,5 @@
 import Footer from "@/components/Footer"
 import Header from "@/components/Header/Header"
-import MenuSideBar from "@/components/Header/MenuSidebar"
 import ResetPage from "@/components/User/ResetPage"
 import jwt from "jsonwebtoken"
 import { getSession } from "next-auth/react"
@@ -13,7 +12,6 @@ const Reset = ({ userId }) => {
         <ResetPage userId={userId} />
       </main>
       <Footer />
-      <MenuSideBar />
     </>
   )
 }

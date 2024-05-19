@@ -1,18 +1,18 @@
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid"
-import { useState } from "react"
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 const BrandsFilter = ({
   brands,
   brandHandler,
   replaceQuery,
   filter,
-  defaultState = true
+  defaultState = true,
 }) => {
-  const [show, setShow] = useState(defaultState)
+  const [show, setShow] = useState(defaultState);
   return (
     <div className="w-full">
       <h3
-        onClick={() => setShow(prev => !prev)}
+        onClick={() => setShow((prev) => !prev)}
         className={`cursor-pointer my-4 flex items-center justify-between font-semibold `}
       >
         {filter.title}
@@ -27,7 +27,7 @@ const BrandsFilter = ({
       {show && (
         <div className="grid grid-cols-2 gap-3">
           {brands.map((brand, i) => {
-            const check = replaceQuery(filter.key, brand)
+            const check = replaceQuery(filter.key, brand.name);
             return (
               <button
                 key={i}
@@ -36,14 +36,14 @@ const BrandsFilter = ({
                   check.active ? "border-slate-500 bg-orange-300" : ""
                 } flex justify-center rounded border bg-white py-5 hover:border-slate-500 uppercase`}
               >
-                {brand}
+                {`${brand.name} ${brand.count ? `(${brand.count})` : ""}`}
               </button>
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default BrandsFilter
+export default BrandsFilter;

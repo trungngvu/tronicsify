@@ -9,6 +9,12 @@ import { HeartIcon, WrenchIcon } from "@heroicons/react/24/outline";
 
 const ProductCard = ({ product }) => {
   const images = product?.imgs;
+  if (images && images.length === 0)
+    images.push(
+      `/assets/images/generic/${product?.category}${
+        product?.sub_category ? product?.sub_category : ""
+      }.jpg`
+    );
   const price = product?.price;
   const dispatch = useDispatch();
   const cart = useAppSelector((state) => state.cart.cartItems);

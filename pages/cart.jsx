@@ -1,5 +1,4 @@
 import Header from "@/components/Header/Header";
-import MenuSideBar from "@/components/Header/MenuSidebar";
 import CartPage from "@/components/CartPage/CartPage";
 import { useAppSelector } from "@/redux/hooks";
 import { getSession } from "next-auth/react";
@@ -14,7 +13,6 @@ const Cart = () => {
       <main className="w-full bg-slate-100">
         <CartPage cart={cart} />
       </main>
-      <MenuSideBar />
     </>
   );
 };

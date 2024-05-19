@@ -1,6 +1,5 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
-import MenuSideBar from "@/components/Header/MenuSidebar";
 import RegisterPage from "@/components/User/RegisterPage";
 
 import { getProviders } from "next-auth/react";
@@ -14,7 +13,6 @@ const Register = ({ providers }) => {
         <RegisterPage providers={providers} />
       </main>
       <Footer />
-      <MenuSideBar />
     </>
   );
 };

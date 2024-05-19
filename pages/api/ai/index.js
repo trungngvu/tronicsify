@@ -60,7 +60,7 @@ handler.post(async (req, res) => {
       result[1].length > 0
         ? await Product.find({
             _id: { $in: result[1].map((item) => new mongoose.Types.ObjectId(item)) },
-          }).select("imgs price slug title availability")
+          }).select("imgs price slug title availability category sub_category")
         : [];
     db.disconnectDb();
     return res.json({

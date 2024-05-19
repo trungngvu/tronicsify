@@ -1,6 +1,5 @@
 import Footer from "@/components/Footer"
 import Header from "@/components/Header/Header"
-import MenuSideBar from "@/components/Header/MenuSidebar"
 import ProductPage from "@/components/ProductPage/ProductPage"
 import db from "@/utils/db"
 import Product from "@/models/Product"
@@ -15,7 +14,6 @@ const SingleProduct = ({ product }) => {
         <ProductPage product={product} />
       </main>
       <Footer />
-      <MenuSideBar />
     </>
   )
 }

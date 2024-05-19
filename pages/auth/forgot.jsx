@@ -1,6 +1,5 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
-import MenuSideBar from "@/components/Header/MenuSidebar";
 import ForgotPage from "@/components/User/ForgotPage";
 
 const Forgot = () => {
@@ -11,7 +10,6 @@ const Forgot = () => {
                     <ForgotPage />
                 </main>
             <Footer />
-            <MenuSideBar />
         </>
      );
 }

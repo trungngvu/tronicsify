@@ -1,7 +1,6 @@
 import CarouselContainer from "@/components/Home/CarouselContainer"
 import Footer from "@/components/Footer"
 import Header from "@/components/Header/Header"
-import MenuSideBar from "@/components/Header/MenuSidebar"
 import Product from "@/models/Product"
 import HomeProductSwiper from "@/components/Home/HomeProductSwiper"
 import CategoriesProduct from "@/components/Home/CategoriesProduct/CategoriesProducts"
@@ -20,7 +19,6 @@ export default function Home({ products }) {
         </div>
       </main>
       <Footer />
-      <MenuSideBar />
     </>
   )
 }

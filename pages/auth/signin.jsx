@@ -1,6 +1,5 @@
 import Footer from "@/components/Footer"
 import Header from "@/components/Header/Header"
-import MenuSideBar from "@/components/Header/MenuSidebar"
 import SignInPage from "@/components/User/SignInPage"
 
 import { getProviders, getCsrfToken, getSession } from "next-auth/react"
@@ -19,7 +18,6 @@ const SignIn = ({ providers, csrfToken, callbackUrl }) => {
         />
       </main>
       <Footer />
-      <MenuSideBar />
     </>
   )
 }

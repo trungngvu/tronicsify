@@ -4,7 +4,6 @@ import Image from "next/image"
 
 import Footer from "@/components/Footer"
 import Header from "@/components/Header/Header"
-import MenuSideBar from "@/components/Header/MenuSidebar"
 import { useState } from "react"
 import axios from "axios"
 import { CircleLoader } from "react-spinners"
@@ -81,7 +80,6 @@ const AIPage = () => {
           ))}
       </main>
       <Footer />
-      <MenuSideBar />
     </>
   )
 }

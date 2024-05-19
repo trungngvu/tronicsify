@@ -1,30 +1,30 @@
 import {
   EllipsisHorizontalIcon,
   MinusIcon,
-  PlusIcon
-} from "@heroicons/react/24/solid"
-import { useState } from "react"
+  PlusIcon,
+} from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 const ParentCategory = ({
   category,
   subCategories,
   categoryHandler,
-  replaceQuery
+  replaceQuery,
 }) => {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
 
-  const selectSubCategory = subCategories?.filter(c => c.brand == category)
+  const selectSubCategory = subCategories?.filter((c) => c.brand == category);
 
-  const showSub = e => {
-    e.stopPropagation()
-    setShow(prev => !prev)
-  }
+  const showSub = (e) => {
+    e.stopPropagation();
+    setShow((prev) => !prev);
+  };
 
   return (
     <div>
       <h4
         onClick={() => {
-          setShow(prev => !prev)
+          setShow((prev) => !prev);
         }}
         className="flex items-center justify-between my-2 font-semibold cursor-pointer"
       >
@@ -35,9 +35,9 @@ const ParentCategory = ({
         {selectSubCategory?.length > 0 && (
           <span>
             {show ? (
-              <MinusIcon className="w-4 h-4" onClick={e => showSub(e)} />
+              <MinusIcon className="w-4 h-4" onClick={(e) => showSub(e)} />
             ) : (
-              <PlusIcon className="w-4 h-4" onClick={e => showSub(e)} />
+              <PlusIcon className="w-4 h-4" onClick={(e) => showSub(e)} />
             )}
           </span>
         )}
@@ -60,26 +60,29 @@ const ParentCategory = ({
                 : sc.socket && !sc.cpu
                 ? sc.socket.replace(/LGA /g, "")
                 : sc._id
-            )
+            );
             return (
               <h5
                 key={sc._id || i}
                 onClick={() => {
-                  console.log(check)
-                  categoryHandler(check.result)
+                  console.log(check);
+                  categoryHandler(check.result);
                 }}
-                className={`flex items-center cursor-pointer hover:font-semibold hover:text-yellow-500 ${check.active &&
-                  "text-yellow-500"}`}
+                className={`flex items-center cursor-pointer hover:font-semibold hover:text-yellow-500 ${
+                  check.active && "text-yellow-500"
+                }`}
               >
                 <EllipsisHorizontalIcon className="w-4 h-4 mr-2" />
-                <span>{sc.gpu || sc.cpu || sc.bus || sc.socket}</span>
+                <span>{`${sc.gpu || sc.cpu || sc.bus || sc.socket} ${
+                  sc.count ? `(${sc.count})` : ""
+                }`}</span>
               </h5>
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ParentCategory
+export default ParentCategory;
