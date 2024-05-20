@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import Head from "next/head";
 import Search from "./Search";
 
-import amazonLogo from "../../public/assets/images/amazon-logo.png";
+import amazonLogo from "../../public/assets/images/tronicsify.png";
 import AccountButtons from "./AccountButtons";
 import HeaderBottom from "./HeaderBottom";
 import Link from "next/link";
@@ -21,7 +21,6 @@ const Header = ({ title }) => {
           <div className="flex items-center flex-grow p-3 text-white md:space-x-5 md:px-4">
             {/* Menu Icon Mobile */}
             <div className="flex items-center justify-center">
-            
               {/* Logo */}
               <Link href="/">
                 <Image

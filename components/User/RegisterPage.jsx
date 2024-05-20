@@ -3,7 +3,6 @@ import { Form, Formik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import amazonLogoDark from "../../public/assets/images/amazon-dark.png";
 import LoginInput from "./LoginInput";
 import * as Yup from "yup";
 import ButtonInput from "./ButtonInput";
@@ -38,20 +37,19 @@ const RegisterPage = ({ providers }) => {
 
   const registerValidation = Yup.object({
     name: Yup.string()
-      .required("What's your name?")
-      .min(2, "First name must be between 2 and 16 characters.")
-      .max(16, "First name must be between 2 and 16 characters.")
-      .matches(/^[aA-zZ]/, "Numbers and Special characters are not allowed"),
+      .required("Vui lòng nhập tên của bạn.")
+      .min(2, "Tên phải nằm trong khoảng 2 và 16 ký tự.")
+      .max(16, "Tên phải nằm trong khoảng 2 và 16 ký tự."),
     email: Yup.string()
-      .required("Email address is required.")
-      .email("Please enter a valid address"),
+      .required("Vui lòng nhập địa chỉ Email.")
+      .email("Địa chỉ email không đúng định dạng."),
     password: Yup.string()
-      .required("Please enter a password.")
-      .min(6, "Password must be atleast 6 characters.")
-      .max(36, "password can't be more than 36 characters."),
+      .required("Vui lòng nhập mật khẩu.")
+      .min(6, "Mật khẩu phải chứa ít nhất 6 ký tự.")
+      .max(36, "Mật khẩu phải chứa ít hơn 36 ký tự."),
     conf_password: Yup.string()
-      .required("Confirm our password.")
-      .oneOf([Yup.ref("password")], "Passwords must match."),
+      .required("Xác nhận lại mật khẩu.")
+      .oneOf([Yup.ref("password")], "Mật khẩu không trùng khớp."),
   });
 
   const signUpHandler = async () => {
@@ -95,17 +93,8 @@ const RegisterPage = ({ providers }) => {
     <>
       {loading && <DotLoaderSpinner loading={loading} />}
       <div className="flex flex-col w-full px-4 pt-8 pb-16 mx-auto sm:w-3/5 md:w-3/5 lg:w-2/5">
-        <div className="mx-auto my-2">
-          <Link href="/">
-            <Image
-              src={amazonLogoDark}
-              alt="amazon-logo"
-              className="object-contain pt-2 w-28 md:w-48"
-            />
-          </Link>
-        </div>
         <div className="flex flex-col p-4 my-4 space-y-4 bg-white border rounded">
-          <h3 className="text-xl font-bold">Sign Up</h3>
+          <h3 className="text-xl font-bold">Đăng ký</h3>
           <Formik
             enableReinitialize
             initialValues={{
@@ -124,7 +113,6 @@ const RegisterPage = ({ providers }) => {
                   type="text"
                   icon="user"
                   name="name"
-                  placeholder="your Name"
                   onChange={handleChange}
                 />
                 <LoginInput
@@ -132,7 +120,6 @@ const RegisterPage = ({ providers }) => {
                   type="text"
                   icon="email"
                   name="email"
-                  placeholder="Email Address"
                   onChange={handleChange}
                 />
 
@@ -141,7 +128,6 @@ const RegisterPage = ({ providers }) => {
                   type="password"
                   icon="password"
                   name="password"
-                  placeholder="Password"
                   onChange={handleChange}
                 />
                 <LoginInput
@@ -149,7 +135,6 @@ const RegisterPage = ({ providers }) => {
                   type="password"
                   icon="password"
                   name="conf_password"
-                  placeholder="Re-type Password"
                   onChange={handleChange}
                 />
                 <ButtonInput type="submit" text="Sign up" />
@@ -167,18 +152,12 @@ const RegisterPage = ({ providers }) => {
             )}
           </div>
 
-          <p className="my-2 text-xs">
-            {
-              "By continuing, you agree to Amazon's Conditions of Use and Privacy Notice."
-            }
-          </p>
-
           <span
             className="pt-1 relative flex justify-center text-sm 
               before:left-1 before:top-[50%] before:absolute before:bg-slate-200 before:h-[1px] before:w-[10%] sm:before:w-[18%] md:before:w-[22%]
               after:right-1 after:top-[50%] after:absolute after:bg-slate-200 after:h-[1px] after:w-[10%] sm:after:w-[18%] md:after:w-[22%]"
           >
-            sign up with another Accounts
+            Đăng nhập với tài khoản bên thứ ba
           </span>
 
           <div className="flex flex-col lg:flex-row">
@@ -193,13 +172,13 @@ const RegisterPage = ({ providers }) => {
                   className="flex items-center w-full p-2 mx-2 mt-3 bg-white border cursor-pointer rounded-xl lg:mt-1"
                 >
                   <Image
-                    src={`/../public/assets/images/${provider.id}.png`}
+                    src={`/assets/images/${provider.id}.png`}
                     alt={provider.name}
                     width={28}
                     height={28}
                   />
                   <div className="w-full ml-2 text-sm font-semibold">
-                    Sign in with {provider.name}
+                    Đăng nhập với {provider.name}
                   </div>
                 </div>
               );
@@ -207,12 +186,12 @@ const RegisterPage = ({ providers }) => {
           </div>
 
           <div className="flex items-center pt-4 text-sm">
-            <span className="ml-1 text-black">Already have an account?</span>
+            <span className="ml-1 text-black">Đã có tài khoản?</span>
             <Link
               className="flex items-center ml-2 text-blue-500 hover:text-amazon-orange hover:underline"
               href="/auth/signin"
             >
-              Sign In
+              Đăng nhập
               <ChevronRightIcon className="h-3 text-gray-500" />
             </Link>
           </div>

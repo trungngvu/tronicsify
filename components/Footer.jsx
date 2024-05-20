@@ -2,7 +2,7 @@ import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 
-import amazonLogo from "../public/assets/images/amazon-logo.png";
+import amazonLogo from "../public/assets/images/tronicsify.png";
 import enFlag from "../public/assets/images/vietnam.jpg";
 
 const Footer = () => {

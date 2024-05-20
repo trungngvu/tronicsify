@@ -1,5 +1,8 @@
-import { UserIcon } from "@heroicons/react/24/outline";
-import { LockClosedIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import {
+  LockClosedIcon,
+  PaperAirplaneIcon,
+  UserIcon,
+} from "@heroicons/react/24/solid";
 import { ErrorMessage, useField } from "formik";
 const LoginInput = ({ icon, placeholder, type, ...props }) => {
   const [field, meta] = useField(props);
@@ -17,12 +20,12 @@ const LoginInput = ({ icon, placeholder, type, ...props }) => {
           <div className="flex items-center mb-1">
             <LockClosedIcon className="h-4 mr-1" />
             {field.name === "conf_password"
-              ? "Xác nhận mật khẩu mới"
+              ? "Xác nhận mật khẩu"
               : field.name === "current_password"
               ? "Mật khẩu hiện tại"
               : field.name === "new_password"
               ? "Mật khẩu mới"
-              : "Password"}
+              : "Mật khẩu"}
           </div>
         ) : icon === "user" ? (
           <div className="flex items-center mb-1">

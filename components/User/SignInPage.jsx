@@ -3,7 +3,6 @@ import { Form, Formik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import amazonLogoDark from "../../public/assets/images/amazon-dark.png";
 import LoginInput from "./LoginInput";
 import * as Yup from "yup";
 import ButtonInput from "./ButtonInput";
@@ -69,15 +68,6 @@ const SignInPage = ({ providers, csrfToken, callbackUrl }) => {
     <>
       {loading && <DotLoaderSpinner loading={loading} />}
       <div className="flex flex-col w-full px-4 pt-8 pb-16 mx-auto sm:w-3/5 md:w-3/5 lg:w-2/5">
-        <div className="mx-auto my-2">
-          <Link href="/">
-            <Image
-              src={amazonLogoDark}
-              alt="amazon-logo"
-              className="object-contain pt-2 w-28 md:w-48"
-            />
-          </Link>
-        </div>
         <div className="flex flex-col p-4 my-4 space-y-4 bg-white border rounded">
           <h3 className="text-xl font-bold">Sign in</h3>
           <Formik
