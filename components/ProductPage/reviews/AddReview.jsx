@@ -7,37 +7,34 @@ import { Rating } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import ImagesReview from "./Images";
-import Select from "./Select";
 
-let fits = ["Small", "True to size", "Large"];
-
-const AddReview = ({ product, setReviews }: any) => {
+const AddReview = ({ product, setReviews }) => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState([]);
-  let uploaded_images: any = [];
+  let uploaded_images = [];
 
   const handleSubmit = async () => {
     setLoading(true);
     let msgs = [];
     if (rating < 0.4) {
       msgs.push({
-        msg: "Please select a rating!",
+        msg: "Vui lòng chọn số sao!",
         type: "error",
       });
     }
     if (!review) {
       msgs.push({
-        msg: "Please add a review!",
+        msg: "Vui lòng nhập đánh giá!",
         type: "error",
       });
     }
     if (msgs.length > 0) {
       dispatch(
         showDialog({
-          header: "Adding review error!",
+          header: "Lỗi thêm đánh giá mới!",
           msgs,
         })
       );
@@ -45,14 +42,14 @@ const AddReview = ({ product, setReviews }: any) => {
       return;
     }
     if (images.length > 0) {
-      let temp: any = [];
+      let temp = [];
       if (images.length > 0) {
-        temp = images.map((img: any) => dataURItoBlob(img));
+        temp = images.map((img) => dataURItoBlob(img));
       }
-      const path: any = "review images";
+      const path = "review images";
       let formData = new FormData();
       formData.append("path", path);
-      temp.forEach((img: any) => {
+      temp.forEach((img) => {
         formData.append("file", img);
       });
       uploaded_images = await uploadImages(formData);
@@ -66,10 +63,10 @@ const AddReview = ({ product, setReviews }: any) => {
       setReviews(data.reviews);
       dispatch(
         showDialog({
-          header: "Adding review Successfully!",
+          header: "Thêm đánh giá mới thành công!",
           msgs: [
             {
-              msg: "Adding review Successfully.",
+              msg: "Thêm đánh giá mới thành công.",
               type: "success",
             },
           ],
@@ -100,7 +97,7 @@ const AddReview = ({ product, setReviews }: any) => {
           defaultValue={0}
           value={rating}
           precision={0.5}
-          onChange={(e: any) => setRating(parseInt(e.target.value))}
+          onChange={(e) => setRating(parseInt(e.target.value))}
           style={{ color: "#FACF19", fontSize: "3rem" }}
         />
         <button

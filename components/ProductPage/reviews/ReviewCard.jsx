@@ -2,7 +2,7 @@ import { HandThumbUpIcon } from "@heroicons/react/24/outline";
 import { Rating } from "@mui/material";
 import Image from "next/image";
 
-const ReviewCard = ({ review }: any) => {
+const ReviewCard = ({ review }) => {
   const { name, image } = review.reviewBy;
   return (
     <div className="grid mb-4 md:grid-cols-10">
@@ -63,7 +63,7 @@ const ReviewCard = ({ review }: any) => {
             </div>
             <span className="flex justify-end m-4 space-x-5 w-52">
               {review.images &&
-                review.images.map((img: any, i: any) => (
+                review.images.map((img, i) => (
                   <Image
                     key={i}
                     src={img.url}

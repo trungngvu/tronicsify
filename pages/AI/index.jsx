@@ -1,29 +1,29 @@
-import db from "@/utils/db"
-import { getSession } from "next-auth/react"
-import Image from "next/image"
+import db from "@/utils/db";
+import { getSession } from "next-auth/react";
+import Image from "next/image";
 
-import Footer from "@/components/Footer"
-import Header from "@/components/Header/Header"
-import { useState } from "react"
-import axios from "axios"
-import { CircleLoader } from "react-spinners"
-import SimilarSwiper from "@/components/ProductPage/SimilarSwiper"
+import Footer from "@/components/Footer";
+import Header from "@/components/Header/Header";
+import { useState } from "react";
+import axios from "axios";
+import { CircleLoader } from "react-spinners";
+import SimilarSwiper from "@/components/ProductPage/SimilarSwiper";
 
 const AIPage = () => {
-  const [search, setSearch] = useState("")
-  const [response, setResponse] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [search, setSearch] = useState("");
+  const [response, setResponse] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleAI = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const { data } = await axios.post("api/ai", { q: search })
-      setResponse(data)
+      const { data } = await axios.post("api/ai", { q: search });
+      setResponse(data);
     } catch {
-      setResponse({ res: "error" })
+      setResponse({ res: "error" });
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <>
@@ -40,9 +40,9 @@ const AIPage = () => {
           <input
             className="h-10 px-3 border-2 rounded-lg border-amazon-orange focus:outline-none grow"
             placeholder="PC chơi Cyberpunk 2077 1080p, dựng phim, lập trình,..."
-            onChange={e => setSearch(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === "Enter" && !loading) handleAI()
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !loading) handleAI();
             }}
           />
           <button
@@ -81,30 +81,35 @@ const AIPage = () => {
       </main>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default AIPage
+export default AIPage;
 
 export async function getServerSideProps(context) {
-  db.connectDb()
-  const { query } = context
-  const session = await getSession(context)
-  const user = session?.user
-  const tab = query.tab || 0
-
+  db.connectDb();
+  const { query } = context;
+  const session = await getSession(context);
+  const user = session?.user;
+  const tab = query.tab || 0;
   if (!session) {
     return {
       redirect: {
-        destination: "/auth/signin"
-      }
-    }
+        destination: "/auth/signin",
+      },
+    };
   }
-
+  if (!session.user.emailVerified) {
+    return {
+      redirect: {
+        destination: "/auth/activate",
+      },
+    };
+  }
   return {
     props: {
       user,
-      tab
-    }
-  }
+      tab,
+    },
+  };
 }

@@ -16,11 +16,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: "Vui lòng nhập mật khẩu",
-    },
-    role: {
-      type: String,
-      default: "user",
     },
     image: {
       type: String,
@@ -78,6 +73,11 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
   },
   {
     timestamps: true,

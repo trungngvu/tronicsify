@@ -1,32 +1,27 @@
-import Layout from "@/components/profile/layout/Layout"
-import ButtonInput from "@/components/User/ButtonInput"
-import LoginInput from "@/components/User/LoginInput"
-import db from "@/utils/db"
-import axios from "axios"
-import { Form, Formik } from "formik"
-import { getSession } from "next-auth/react"
-import { useState } from "react"
-import * as Yup from "yup"
-import DotLoaderSpinner from "../../components/loaders/dotLoader/DotLoaderSpinner"
+import Layout from "@/components/profile/layout/Layout";
+import ButtonInput from "@/components/User/ButtonInput";
+import LoginInput from "@/components/User/LoginInput";
+import db from "@/utils/db";
+import axios from "axios";
+import { Form, Formik } from "formik";
+import { getSession } from "next-auth/react";
+import { useState } from "react";
+import * as Yup from "yup";
+import DotLoaderSpinner from "../../components/loaders/dotLoader/DotLoaderSpinner";
 
 const initialPassword = {
   current_password: "",
   new_password: "",
   conf_password: "",
   success: "",
-  error: ""
-}
+  error: "",
+};
 
 const Security = ({ user, tab, orders }) => {
-  const [loading, setLoading] = useState(false)
-  const [newPassword, setNewPassword] = useState(initialPassword)
-  const {
-    current_password,
-    new_password,
-    conf_password,
-    success,
-    error
-  } = newPassword
+  const [loading, setLoading] = useState(false);
+  const [newPassword, setNewPassword] = useState(initialPassword);
+  const { current_password, new_password, conf_password, success, error } =
+    newPassword;
 
   const validation = Yup.object({
     current_password: Yup.string()
@@ -39,24 +34,24 @@ const Security = ({ user, tab, orders }) => {
       .max(36, "Mật khẩu mới phải ít hơn 36 ký tự"),
     conf_password: Yup.string()
       .required("Vui lòng xác nhận lại mật khẩu")
-      .oneOf([Yup.ref("new_password")], "Mật khẩu không trùng khớp")
-  })
+      .oneOf([Yup.ref("new_password")], "Mật khẩu không trùng khớp"),
+  });
 
-  const handleChange = e => {
-    const { name, value } = e.target
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setNewPassword({
       ...newPassword,
-      [name]: value
-    })
-  }
+      [name]: value,
+    });
+  };
 
   const changePasswordHandler = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const { data } = await axios.put("/api/user/changepassword", {
         current_password,
-        new_password
-      })
+        new_password,
+      });
       // console.log(data)
 
       setNewPassword({
@@ -64,20 +59,20 @@ const Security = ({ user, tab, orders }) => {
         current_password: "",
         conf_password: "",
         success: data.message,
-        error: ""
-      })
-      setLoading(false)
+        error: "",
+      });
+      setLoading(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       setNewPassword({
         new_password: "",
         current_password: "",
         conf_password: "",
         success: "",
-        error: error.response.data.message
-      })
+        error: error.response.data.message,
+      });
     }
-  }
+  };
   return (
     <>
       {loading && <DotLoaderSpinner loading={loading} />}
@@ -91,12 +86,12 @@ const Security = ({ user, tab, orders }) => {
             initialValues={{
               current_password,
               new_password,
-              conf_password
+              conf_password,
             }}
             validationSchema={validation}
             onSubmit={() => changePasswordHandler()}
           >
-            {form => (
+            {(form) => (
               <Form>
                 <LoginInput
                   id="current_password"
@@ -139,29 +134,36 @@ const Security = ({ user, tab, orders }) => {
         </div>
       </Layout>
     </>
-  )
-}
+  );
+};
 
-export default Security
+export default Security;
 
 export async function getServerSideProps(context) {
-  db.connectDb()
-  const { query } = context
-  const session = await getSession(context)
-  const tab = query.tab || 0
+  db.connectDb();
+  const { query } = context;
+  const session = await getSession(context);
+  const tab = query.tab || 0;
 
   if (!session) {
     return {
       redirect: {
-        destination: "/"
-      }
-    }
+        destination: "/",
+      },
+    };
   }
-  db.disconnectDb()
+  if (!session.user.emailVerified) {
+    return {
+      redirect: {
+        destination: "/auth/activate",
+      },
+    };
+  }
+  db.disconnectDb();
   return {
     props: {
       user: session?.user,
-      tab
-    }
-  }
+      tab,
+    },
+  };
 }

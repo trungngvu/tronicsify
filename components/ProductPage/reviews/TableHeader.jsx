@@ -1,11 +1,7 @@
 import { useState } from "react";
 import TableSelect from "./TableSelect";
 
-const TableHeader = ({ reviews }: any) => {
-  const [size, setSize] = useState("");
-  const [style, setStyle] = useState("");
-  const [fit, setFit] = useState("");
-  const [review, setReview] = useState("");
+const TableHeader = ({ reviews }) => {
   const [rating, setRating] = useState("");
   const [order, setOrder] = useState("");
 
@@ -15,13 +11,13 @@ const TableHeader = ({ reviews }: any) => {
         <TableSelect
           property={rating}
           text="rating"
-          data={ratings.filter((item: any) => item.value !== rating)}
+          data={ratings.filter((item) => item.value !== rating)}
           handleChange={setRating}
         />
         <TableSelect
           property={order}
           text="order"
-          data={orderOptions.filter((item: any) => item.value !== order)}
+          data={orderOptions.filter((item) => item.value !== order)}
           handleChange={setOrder}
         />
       </div>
@@ -34,46 +30,46 @@ export default TableHeader;
 
 const ratings = [
   {
-    text: "All",
+    text: "Tất cả",
     value: "",
   },
   {
-    text: "5 Star",
+    text: "5 Sao",
     value: 5,
   },
   {
-    text: "4 Star",
+    text: "4 Sao",
     value: 4,
   },
   {
-    text: "3 Star",
+    text: "3 Sao",
     value: 3,
   },
   {
-    text: "2 Star",
+    text: "2 Sao",
     value: 2,
   },
   {
-    text: "1 Star",
+    text: "1 Sao",
     value: 1,
   },
 ];
 
 const orderOptions = [
   {
-    text: "All",
+    text: "Tất cả",
     value: "All",
   },
   {
-    text: "Recomended",
+    text: "Được khuyến nghị",
     value: "Recomended",
   },
   {
-    text: "Most Recent to Oldest",
+    text: "Mới nhất",
     value: "Most Recent to Oldest",
   },
   {
-    text: "Oldest to Most Recent",
+    text: "Cũ nhất",
     value: "Oldest to Most Recent",
   },
 ];

@@ -33,12 +33,12 @@ const ResetPage = ({ userId }) => {
 
   const passwordValidation = Yup.object({
     password: Yup.string()
-      .required("Please enter a new password.")
-      .min(6, "Password must be atleast 6 characters.")
-      .max(36, "password can't be more than 36 characters."),
+      .required("Vui lòng nhập mật khẩu mới.")
+      .min(6, "Mật khẩu mới phải chứa ít nhất 6 ký tự.")
+      .max(36, "Mật khẩu mới phải chứa ít hơn 36 ký tự."),
     conf_password: Yup.string()
-      .required("Confirm your new password.")
-      .oneOf([Yup.ref("password")], "Passwords must match."),
+      .required("Xác nhận lại mật khẩu.")
+      .oneOf([Yup.ref("password")], "Mật khẩu không trùng khớp."),
   });
 
   const resetHandler = async () => {
@@ -100,7 +100,6 @@ const ResetPage = ({ userId }) => {
                   type="password"
                   icon="password"
                   name="password"
-                  placeholder="new password"
                   onChange={handleChange}
                 />
                 <LoginInput
@@ -108,10 +107,9 @@ const ResetPage = ({ userId }) => {
                   type="password"
                   icon="password"
                   name="conf_password"
-                  placeholder="Re-Type new password"
                   onChange={handleChange}
                 />
-                <ButtonInput type="submit" text="change password" />
+                <ButtonInput type="submit" text="Đổi mật khẩu" />
               </Form>
             )}
           </Formik>
@@ -127,12 +125,12 @@ const ResetPage = ({ userId }) => {
           </div>
 
           <div className="flex items-center pt-4 text-sm">
-            <span className="ml-1 text-black">Already have an account?</span>
+            <span className="ml-1 text-black">Đã có tài khoản?</span>
             <Link
               className="flex items-center ml-2 text-blue-500 hover:text-amazon-orange hover:underline"
               href="/auth/signin"
             >
-              Sign In
+              Đăng nhập
               <ChevronRightIcon className="h-3 text-gray-500" />
             </Link>
           </div>

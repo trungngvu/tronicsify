@@ -108,7 +108,7 @@ cellspacing="0"><tr><td style="width:270px" valign="top"><![endif]-->
 <td class="es-m-p20b" align="left" style="padding:0;Margin:0;width:270px">
 <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
 <tr style="border-collapse:collapse">
-<td class="es-m-p0l es-m-txt-c" align="left" style="padding:0;Margin:0;font-size:0px"><a href="https://viewstripo.email" target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#1376C8;font-size:14px"><img src="https://gotilo.stripocdn.email/content/guids/CABINET_41442d8b45e5aa7a3177ff2f8ae9719b5b942fbd7b005c1c2a90113aa8338c7c/images/amazondark.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic" width="183"></a></td>
+<td class="es-m-p0l es-m-txt-c" align="left" style="padding:0;Margin:0;font-size:0px"><a href="https://viewstripo.email" target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;color:#1376C8;font-size:14px"><img src="https://res.cloudinary.com/dghodzx4x/image/upload/v1716301172/tronicsify_vscd7u.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic" width="183"></a></td>
 </tr>
 </table></td>
 </tr>

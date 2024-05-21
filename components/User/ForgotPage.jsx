@@ -31,8 +31,8 @@ const ForgotPage = ({ providers }) => {
 
   const emailValidation = Yup.object({
     email: Yup.string()
-      .required("Email address is required.")
-      .email("Please enter a valid address"),
+      .required("Vui lòng nhập email.")
+      .email("Email không đúng định dạng."),
   });
 
   const forgotHandler = async () => {
@@ -64,9 +64,9 @@ const ForgotPage = ({ providers }) => {
   return (
     <>
       {loading && <DotLoaderSpinner loading={loading} />}
-      <div className="flex flex-col w-full px-4 pt-8 pb-16 mx-auto sm:w-3/5 md:w-3/5 lg:w-2/5">
+      <div className="flex flex-col w-full px-4 pt-8 pb-16 mx-auto sm:w-3/5 md:w-3/5 lg:w-2/5 min-h-[65vh]">
         <div className="flex flex-col p-4 my-4 space-y-4 bg-white border rounded">
-          <h3 className="text-xl font-bold">Forgot Password</h3>
+          <h3 className="text-xl font-bold">Quên mật khẩu</h3>
           <Formik
             enableReinitialize
             initialValues={{
@@ -82,10 +82,9 @@ const ForgotPage = ({ providers }) => {
                   type="text"
                   icon="email"
                   name="email"
-                  placeholder="Email Address"
                   onChange={handleChange}
                 />
-                <ButtonInput type="submit" text="Send Link" />
+                <ButtonInput type="submit" text="Xác nhận" />
               </Form>
             )}
           </Formik>
@@ -101,12 +100,12 @@ const ForgotPage = ({ providers }) => {
           </div>
 
           <div className="flex items-center pt-4 text-sm">
-            <span className="ml-1 text-black">Already have an account?</span>
+            <span className="ml-1 text-black">Đã có tài khoản?</span>
             <Link
               className="flex items-center ml-2 text-blue-500 hover:text-amazon-orange hover:underline"
               href="/auth/signin"
             >
-              Sign In
+              Đăng nhập
               <ChevronRightIcon className="h-3 text-gray-500" />
             </Link>
           </div>

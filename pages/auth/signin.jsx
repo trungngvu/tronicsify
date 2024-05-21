@@ -1,11 +1,11 @@
-import Footer from "@/components/Footer"
-import Header from "@/components/Header/Header"
-import SignInPage from "@/components/User/SignInPage"
+import Footer from "@/components/Footer";
+import Header from "@/components/Header/Header";
+import SignInPage from "@/components/User/SignInPage";
 
-import { getProviders, getCsrfToken, getSession } from "next-auth/react"
+import { getProviders, getCsrfToken, getSession } from "next-auth/react";
 
 const SignIn = ({ providers, csrfToken, callbackUrl }) => {
-  providers = Object.values(providers)
+  providers = Object.values(providers);
 
   return (
     <>
@@ -19,33 +19,32 @@ const SignIn = ({ providers, csrfToken, callbackUrl }) => {
       </main>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;
 
-export const getServerSideProps = async context => {
-  const { req, query } = context
-  const { callbackUrl = null } = query || null
-  // console.log('call:',callbackUrl, query, context)
+export const getServerSideProps = async (context) => {
+  const { req, query } = context;
+  const { callbackUrl = null } = query || null;
 
-  const session = await getSession({ req })
+  const session = await getSession({ req });
 
   if (session) {
     return {
       redirect: {
-        destination: callbackUrl || "/"
-      }
-    }
+        destination: callbackUrl || "/",
+      },
+    };
   }
-  const csrfToken = await getCsrfToken(context)
-  const providers = await getProviders()
+  const csrfToken = await getCsrfToken(context);
+  const providers = await getProviders();
 
   return {
     props: {
       providers,
       csrfToken,
-      callbackUrl
-    }
-  }
-}
+      callbackUrl,
+    },
+  };
+};

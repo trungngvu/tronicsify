@@ -65,7 +65,6 @@ const ParentCategory = ({
               <h5
                 key={sc._id || i}
                 onClick={() => {
-                  console.log(check);
                   categoryHandler(check.result);
                 }}
                 className={`flex items-center cursor-pointer hover:font-semibold hover:text-yellow-500 ${

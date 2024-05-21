@@ -137,7 +137,7 @@ const RegisterPage = ({ providers }) => {
                   name="conf_password"
                   onChange={handleChange}
                 />
-                <ButtonInput type="submit" text="Sign up" />
+                <ButtonInput type="submit" text="Đăng ký" />
               </Form>
             )}
           </Formik>

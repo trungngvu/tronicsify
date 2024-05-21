@@ -25,7 +25,7 @@ handler.post(async (req, res) => {
         if (user) {
             return res
                 .status(400)
-                .json({ message: "this email already exits." });
+                .json({ message: "Tài khoản đã tồn tại." });
         }
         if (password.length < 6) {
             return res
@@ -46,10 +46,10 @@ handler.post(async (req, res) => {
 
         const url = `${process.env.BASE_URL}/activate/${activation_token}`;
 
-        sendEmail(email, url,"", "Activate your account", activateEmailTemplate);
+        sendEmail(email, url,"", "Kích hoạt tài khoản tronicsify.com", activateEmailTemplate);
 
         await db.disconnectDb();
-        res.json({ message: "Register success! please activate your email to start."})
+        res.json({ message: "Hãy kiểm tra thư xác nhận trong email của bạn."})
 
     } catch (error) {
         res.status(500).json({ message: error.message });

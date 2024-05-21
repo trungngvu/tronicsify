@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -22,27 +21,50 @@ export const authOptions = {
         if (user) {
           return signInUser({ password, user });
         } else {
-          throw new Error("This email does not exist.");
+          throw new Error("Tài khoản không tồn tại trong hệ thống.");
         }
       },
-    }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
-    // ...add more providers here
   ],
   callbacks: {
+    async jwt({ token, user, account, profile }) {
+      // Handle initial sign in
+      if (account && user) {
+        token.id = user.id;
+        token.emailVerified = user.emailVerified;
+      }
+      return token;
+    },
     async session({ session, token }) {
-      let user = await User.findById(token.sub);
-      session.user.id = user.token || user.id.toString();
-      session.user.role = user.role || "user";
-      token.role = user.role || "user";
+      session.user.id = token.id;
+      session.user.emailVerified = token.emailVerified;
       return session;
+    },
+    async signIn({ user, account, profile }) {
+      if (account.provider === "google") {
+        const email = profile.email;
+        let existingUser = await User.findOne({ email });
+
+        if (!existingUser) {
+          existingUser = await User.create({
+            name: profile.name,
+            email: profile.email,
+            image: profile.picture,
+            googleId: profile.sub,
+            emailVerified: true,
+            // password: null, // Password not needed for OAuth users
+          });
+        }
+
+        user.id = existingUser._id.toString();
+        user.emailVerified = existingUser.emailVerified;
+      }
+
+      return true;
     },
   },
   pages: {
@@ -58,11 +80,11 @@ export default NextAuth(authOptions);
 
 export const signInUser = async ({ password, user }) => {
   if (!password) {
-    throw new Error("Please enter your password.");
+    throw new Error("Vui lòng nhập mật khẩu.");
   }
   const testPassword = await bcrypt.compare(password, user.password);
   if (!testPassword) {
-    throw new Error("Email or Password is Wrong!");
+    throw new Error("Email hoặc mật khẩu không chính xác!");
   } else {
     return user;
   }

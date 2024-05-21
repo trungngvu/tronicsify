@@ -4,7 +4,7 @@ import { useState } from "react";
 import AddReview from "./AddReview";
 import Table from "./Table";
 
-const Reviews = ({ product }: any) => {
+const Reviews = ({ product }) => {
   const { data: session } = useSession();
   const [reviews, setReviews] = useState(product.reviews);
   // console.log('product review: ',reviews);
@@ -32,7 +32,7 @@ const Reviews = ({ product }: any) => {
           </div>
         </div>
         <div className="flex flex-col mt-4">
-          {product.ratings.map((rating: any, i: any) => (
+          {product.ratings.map((rating, i) => (
             <div className="flex items-center space-x-4 max-md:mb-3" key={i}>
               <Rating
                 name="half-rating-react"
@@ -65,11 +65,7 @@ const Reviews = ({ product }: any) => {
           Login to add review
         </button>
       )}
-      {reviews?.length > 0 && (
-        <Table
-          reviews={reviews}
-        />
-      )}
+      {reviews?.length > 0 && <Table reviews={reviews} />}
     </div>
   );
 };

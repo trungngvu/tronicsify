@@ -12,12 +12,12 @@ handler.post( async (req, res) => {
         await db.connectDb();
         const { email } = req.body;
         if( !email ) {
-            return res.status(400).send({ message: "please enter a email."})
+            return res.status(400).send({ message: "Vui lòng nhập Email."})
         }
 
         const user = await User.findOne({ email });
         if( !user ) {
-            return res.status(401).send({ message: "This email does not exist."})
+            return res.status(401).send({ message: "Email không tồn tại."})
         }
             
         const userId = passwordResetToken({
@@ -25,9 +25,9 @@ handler.post( async (req, res) => {
         });
         const url = `${process.env.BASE_URL}/auth/reset/${userId}`;
 
-        sendEmail(email, url, "", "Reset your Password Account", passwordResetTemplate);
+        sendEmail(email, url, "", "Đặt lại mật khẩu tronicsify.com", passwordResetTemplate);
 
-        res.send({ message: "Reset Link has been send to your account. please use it for reset your password."})
+        res.send({ message: "Đường dẫn đổi mật khẩu đã được gửi tới email của bạn."})
 
         await db.disconnectDb();
     } catch(error) {

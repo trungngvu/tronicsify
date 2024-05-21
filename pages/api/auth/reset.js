@@ -12,7 +12,7 @@ handler.put( async (req, res) => {
         // console.log(userId)
         const user = await User.findById(userId);
         if( !userId ){
-            res.status(400).json({ message: "this account doesn't exist."})
+            res.status(400).json({ message: "Tài khoản không tồn tại."})
         }
 
         const cryptedPassword = await bcrypt.hash(password, 12);
@@ -20,7 +20,7 @@ handler.put( async (req, res) => {
             password: cryptedPassword
         });
 
-        res.json({ email: user.email, message: "password successfully reset." });
+        res.json({ email: user.email, message: "Đổi mật khẩu thành công." });
 
         await db.disconnectDb();
     } catch (error) {

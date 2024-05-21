@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const BreadCrumb = ({ category, subCategories }) => {
-  console.log(subCategories);
   return (
     <div className="flex items-center mx-2 my-4 text-sm text-gray-600">
       <Link className="hover:underline" href="/">

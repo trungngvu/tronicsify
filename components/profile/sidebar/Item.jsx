@@ -14,7 +14,7 @@ const Item = ({ item, visible, index }) => {
     <li className="py-2 transition-all duration-300 cursor-pointer text-amazon-blue_light">
       {item.heading == "Sign Out" ? (
         <b className="hover:text-[#fda22c]" onClick={() => signOut()}>
-          Sign Out
+          Đăng xuất
         </b>
       ) : (
         <b
