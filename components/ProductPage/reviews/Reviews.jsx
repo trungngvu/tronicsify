@@ -7,7 +7,6 @@ import Table from "./Table";
 const Reviews = ({ product }) => {
   const { data: session } = useSession();
   const [reviews, setReviews] = useState(product.reviews);
-  // console.log('product review: ',reviews);
   return (
     <div className="w-full p-4 mx-auto mt-4 border rounded-md bg-slate-100 md:w-4/5">
       <h3 className="mb-2 text-2xl font-bold">
@@ -59,7 +58,7 @@ const Reviews = ({ product }) => {
           Đăng nhập để thêm nhận xét
         </button>
       )}
-      {reviews?.length > 0 && <Table reviews={reviews} />}
+      {reviews?.length > 0 && <Table reviews={reviews} productID={product._id} />}
     </div>
   );
 };

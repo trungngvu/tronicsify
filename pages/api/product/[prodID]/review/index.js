@@ -1,15 +1,14 @@
 import nc from "next-connect";
-import db from "../../../../utils/db";
-import Product from "../../../../models/Product";
-import auth from "../../../../middleware/auth";
+import db from "../../../../../utils/db";
+import Product from "../../../../../models/Product";
+import auth from "../../../../../middleware/auth";
 
 const handler = nc().use(auth);
 
 handler.put(async (req, res) => {
   try {
     await db.connectDb();
-    const product = await Product.findById(req.query.id);
-
+    const product = await Product.findById(req.query.prodID);
     if (product) {
       const exist = product.reviews.find(
         (x) => x.reviewBy.toString() == req.user
@@ -32,7 +31,7 @@ handler.put(async (req, res) => {
           }
         );
 
-        const updatedProduct = await Product.findById(req.query.id);
+        const updatedProduct = await Product.findById(req.query.prodID);
         updatedProduct.numberReviews = updatedProduct.reviews.length;
         updatedProduct.rating =
           updatedProduct.reviews.reduce((a, r) => r.rating + a, 0) /

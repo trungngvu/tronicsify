@@ -33,7 +33,7 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, account }) {
       // Handle initial sign in
       if (account && user) {
         token.id = user.id;

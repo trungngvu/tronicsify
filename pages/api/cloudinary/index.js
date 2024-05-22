@@ -1,8 +1,7 @@
 import nc from "next-connect";
 import cloudinary from "cloudinary";
-import bodyParser from "body-parser";
 import fileUpload from "express-fileupload";
-import { imgMiddleware } from "../../../middleware/imgMiddleware";
+import { imgMiddleware, removeTmp } from "../../../middleware/imgMiddleware";
 import fs from "fs";
 
 cloudinary.config({
@@ -34,7 +33,7 @@ handler.post(async (req, res) => {
         for (const file of files) {
             const img = await uploadToCloudinaryHandler(file, path);
             images.push(img);
-            // removeTmp(file.tempFilePath);
+            removeTmp(file.tempFilePath);
         }
         
 
@@ -55,8 +54,6 @@ handler.delete(async (req, res) => {
 });
 
 const uploadToCloudinaryHandler = async (file, path) => {
-    console.log('file adddress: ', file.tempFilePath)
-    
     return new Promise((resolve) => {
         cloudinary.v2.uploader.upload(
             file.tempFilePath,
@@ -65,7 +62,7 @@ const uploadToCloudinaryHandler = async (file, path) => {
             },
             (err, res) => {
                 if (err) {
-                    // removeTmp(file.tempFilePath);
+                    removeTmp(file.tempFilePath);
                     console.log('err',err);
                     return res.status(400).json({ message: "upload image failed." });
                 }

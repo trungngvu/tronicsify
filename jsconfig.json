@@ -18,6 +18,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.js", "**/*.js", "**/*.jsx", "pages/auth/reset/[token].jsx"],
+  "include": ["next-env.d.js", "**/*.js", "**/*.jsx", "pages/auth/reset/[token].jsx", "pages/api/product/[prodID]/[id]"],
   "exclude": ["node_modules"]
 }

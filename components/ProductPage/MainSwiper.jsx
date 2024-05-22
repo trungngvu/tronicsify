@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const MainSwiper = ({ images }) => {
   const [active, setActive] = useState(0);
+  console.log(images);
 
   return (
     <div className="flex flex-col px-2 md:col-span-3 md:flex-row-reverse">
