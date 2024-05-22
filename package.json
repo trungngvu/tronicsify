@@ -29,7 +29,6 @@
     "eslint-config-next": "13.2.3",
     "express-fileupload": "^1.4.0",
     "formik": "^2.2.9",
-    "googleapis": "^112.0.0",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.14.0",
     "mongoose": "^7.0.1",

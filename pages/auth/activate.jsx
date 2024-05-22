@@ -1,6 +1,8 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import Image from "next/image";
+import { getSession } from "next-auth/react";
+import User from "@/models/User";
 
 const Activate = () => {
   return (
@@ -26,16 +28,20 @@ const Activate = () => {
 export default Activate;
 
 export async function getServerSideProps(context) {
-    const session = await getSession(context);
-    if (session && session.user.emailVerified) {
+  const session = await getSession(context);
+  if (session) {
+    const existingUser = await User.findOne({ email: session.user.email });
+
+    if (session.user.emailVerified) {
       return {
         redirect: {
           destination: "/",
         },
       };
     }
-   
-    return {
-      props: {},
-    };
   }
+
+  return {
+    props: {},
+  };
+}

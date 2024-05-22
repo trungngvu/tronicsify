@@ -28,7 +28,7 @@ async function connectDb() {
 
 async function disconnectDb() {
   if (connection.isConnected) {
-    if (process.env.NODE_END === "production") {
+    if (process.env.NODE_ENV === "production") {
       await mongoose.disconnect();
       connection.isConnected = false;
     } else {

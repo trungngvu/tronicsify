@@ -1,5 +1,4 @@
 import { Form, Formik } from "formik";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import LoginInput from "./LoginInput";
@@ -83,7 +82,7 @@ const ResetPage = ({ userId }) => {
       {loading && <DotLoaderSpinner loading={loading} />}
       <div className="flex flex-col w-full px-4 pt-8 pb-16 mx-auto sm:w-3/5 md:w-3/5 lg:w-2/5">
         <div className="flex flex-col p-4 my-4 space-y-4 bg-white border rounded">
-          <h3 className="text-xl font-bold">Reset Password</h3>
+          <h3 className="text-xl font-bold">Đặt lại mật khẩu</h3>
           <Formik
             enableReinitialize
             initialValues={{
