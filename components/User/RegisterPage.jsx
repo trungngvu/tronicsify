@@ -67,18 +67,6 @@ const RegisterPage = ({ providers }) => {
         success: data.message,
       });
       setLoading(false);
-
-      setTimeout(async () => {
-        setLoading(true);
-        let options = {
-          redirect: false,
-          email: email,
-          password: password,
-        };
-
-        const res = await signIn("credentials", options);
-        Router.push("/");
-      }, 2000);
     } catch (error) {
       setLoading(false);
       setUser({

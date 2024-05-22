@@ -57,7 +57,7 @@ handler.delete(async (req, res) => {
 const uploadToCloudinaryHandler = async (file, path) => {
     console.log('file adddress: ', file.tempFilePath)
     
-    return new Promise((reslove) => {
+    return new Promise((resolve) => {
         cloudinary.v2.uploader.upload(
             file.tempFilePath,
             {
@@ -66,10 +66,10 @@ const uploadToCloudinaryHandler = async (file, path) => {
             (err, res) => {
                 if (err) {
                     // removeTmp(file.tempFilePath);
-                    console.log(err);
+                    console.log('err',err);
                     return res.status(400).json({ message: "upload image failed." });
                 }
-                reslove({
+                resolve({
                     url: res.secure_url,
                     public_url: res.public_id,
                 });

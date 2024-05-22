@@ -2,10 +2,8 @@ import { useState } from "react";
 import { usePagination } from "./Pagination";
 import ReviewCard from "./ReviewCard";
 import { Pagination } from "@mui/material";
-import TableHeader from "./TableHeader";
 
 const Table = ({ reviews }) => {
-  // console.log("table review: ", reviews);
   const [page, setPage] = useState(1);
   const PER_PAGE = 3;
   const count = Math.ceil(reviews.length / PER_PAGE);
@@ -18,7 +16,6 @@ const Table = ({ reviews }) => {
 
   return (
     <div className="flex flex-col mt-4">
-      <TableHeader reviews={reviews} />
       <div className="my-2">
         {_DATA.currentData().map((review, i) => (
           <ReviewCard review={review} key={i} />

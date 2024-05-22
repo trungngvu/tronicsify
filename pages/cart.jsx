@@ -28,13 +28,6 @@ export async function getServerSideProps(context) {
       },
     };
   }
-  if (!session.user.emailVerified) {
-    return {
-      redirect: {
-        destination: "/auth/activate",
-      },
-    };
-  }
   return {
     props: {},
   };

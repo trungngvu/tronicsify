@@ -51,9 +51,9 @@ const Checkout = ({ cart }) => {
           <div className="font-bold text-slate-600">CPU</div>
           <Link
             className="text-amazon-orange hover:underline"
-            href={`browse/cpu?processor=${cpu.cpu._id}`}
+            href={`browse/cpu?processor=${cpu?.cpu?._id}`}
           >
-            {cpu.cpu.cpu}
+            {cpu?.cpu?.cpu}
           </Link>
         </div>
       )}
@@ -62,9 +62,9 @@ const Checkout = ({ cart }) => {
           <div className="font-bold text-slate-600">Card đồ họa</div>
           <Link
             className="text-amazon-orange hover:underline"
-            href={`browse/gpu?card=${gpu.gpu._id}`}
+            href={`browse/gpu?card=${gpu?.gpu?._id}`}
           >
-            {gpu.gpu.gpu}
+            {gpu?.gpu?.gpu}
           </Link>
         </div>
       )}

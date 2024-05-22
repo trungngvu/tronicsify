@@ -8,11 +8,12 @@ import enFlag from "../public/assets/images/vietnam.jpg";
 const Footer = () => {
   return (
     <div className="flex flex-col w-full mx-auto">
-      <Link href="#">
-        <div className="flex bg-[#37475a] hover:bg-[#485769] justify-center">
-          <p className="py-4 text-xs text-white">Cuộn lên đầu trang</p>
-        </div>
-      </Link>
+      <div
+        className="flex bg-[#37475a] hover:bg-[#485769] justify-center cursor-pointer"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        <p className="py-4 text-xs text-white">Cuộn lên đầu trang</p>
+      </div>
 
       <div className="flex items-center justify-center py-1 max-md:flex-col bg-amazon-blue_light">
         <Image

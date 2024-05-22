@@ -11,24 +11,18 @@ const Reviews = ({ product }) => {
   return (
     <div className="w-full p-4 mx-auto mt-4 border rounded-md bg-slate-100 md:w-4/5">
       <h3 className="mb-2 text-2xl font-bold">
-        Customer Reviews ({product.reviews?.length})
+        Nhận xét ({product.reviews?.length || 0})
       </h3>
       <div className="grid md:grid-cols-2">
         <div className="flex max-md:items-center md:flex-col md:justify-center">
-          <span className="text-sm font-semibold">Average Rating</span>
+          <span className="text-sm font-semibold">Đánh giá trung bình</span>
           <div className="flex items-center mt-2 font-semibold max-md:ml-auto text-m">
             <Rating
               name="half-rating-react"
               value={product.rating}
-              precision={0.5}
               readOnly
               style={{ color: "#FACF19 " }}
             />
-            <span className="ml-2">
-              {product.rating === 0
-                ? "No review yet."
-                : product.rating?.toFixed(2)}
-            </span>
           </div>
         </div>
         <div className="flex flex-col mt-4">
@@ -49,7 +43,7 @@ const Reviews = ({ product }) => {
                 ></div>
               </div>
               <span className="text-sm font-semibold">
-                {rating.percentage}%
+                {rating.percentage != 'NaN' ? rating.percentage : 0}%
               </span>
             </div>
           ))}
@@ -62,7 +56,7 @@ const Reviews = ({ product }) => {
           onClick={() => signIn()}
           className="w-full px-4 py-2 mt-4 font-semibold rounded bg-amazon-orange"
         >
-          Login to add review
+          Đăng nhập để thêm nhận xét
         </button>
       )}
       {reviews?.length > 0 && <Table reviews={reviews} />}

@@ -152,13 +152,6 @@ export async function getServerSideProps(context) {
       },
     };
   }
-  if (!session.user.emailVerified) {
-    return {
-      redirect: {
-        destination: "/auth/activate",
-      },
-    };
-  }
   db.disconnectDb();
   return {
     props: {

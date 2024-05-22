@@ -19,7 +19,9 @@ export const authOptions = {
         const password = credentials?.password;
         const user = await User.findOne({ email });
         if (user) {
-          return signInUser({ password, user });
+          if (!user.emailVerified)
+            throw new Error("Vui lòng kích hoạt tài khoản của bạn bằng link kích hoạt gửi qua email.");
+          else return signInUser({ password, user });
         } else {
           throw new Error("Tài khoản không tồn tại trong hệ thống.");
         }

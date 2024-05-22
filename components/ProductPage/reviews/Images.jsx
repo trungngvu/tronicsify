@@ -10,7 +10,7 @@ const ImagesReview = ({ images, setImages }) => {
     let files = Array.from(e.target.files);
     files.forEach((img, i) => {
       if (images.length == 3 || i == 2) {
-        setError("Maximum 3 images are allowed.");
+        setError("Thêm được tối đa 3 hình ảnh.");
         return;
       }
       if (
@@ -19,12 +19,12 @@ const ImagesReview = ({ images, setImages }) => {
         img.type !== "image/webp"
       ) {
         setError(
-          `${img.name} format is unsupported! only JPEG, PNG, WEBP are allowed.`
+          `${img.name} ảnh không được hỗ trợ! Chỉ hỗ trợ định dạng JPEG, PNG, WEBP.`
         );
         files = files.filter((item) => item.name !== img.name);
         return;
       } else if (img.size > 1024 * 1024) {
-        setError(`${img.name} size is too large, max 5MB allowed.`);
+        setError(`${img.name} dung lượng ảnh quá lớn (>5MB).`);
         files = files.filter((item) => item.name !== img.name);
       } else {
         setError("");
@@ -47,7 +47,7 @@ const ImagesReview = ({ images, setImages }) => {
   };
 
   return (
-    <div className="mt-5 grid md:grid-cols-4 ">
+    <div className="grid mt-5 md:grid-cols-4 ">
       <div className="flex flex-col justify-center">
         <input
           type="file"
@@ -58,18 +58,18 @@ const ImagesReview = ({ images, setImages }) => {
           accept="image/png,image/jpeg,image/webp"
         />
         <button
-          className="bg-amazon-blue_light md:w-52 p-2 text-white rounded-md hover:scale-95 transition"
+          className="p-2 text-white transition rounded-md bg-amazon-blue_light md:w-52 hover:scale-95"
           onClick={() => inputRef.current?.click()}
         >
-          Add Images
+          Thêm hình ảnh
         </button>
-        <span className="text-red-500 text-sm mt-2">{error}</span>
+        <span className="mt-2 text-sm text-red-500">{error}</span>
       </div>
       <div className="flex max-md:mt-4 md:col-span-3">
         {images.length > 0 &&
           images.map((img, i) => (
             <span className="relative mx-2" key={i}>
-              <span className=" bg-slate-300 p-1 rounded-full absolute -top-3 -right-2  z-10 shadow-md transition cursor-pointer hover:bg-slate-400">
+              <span className="absolute z-10 p-1 transition rounded-full shadow-md cursor-pointer bg-slate-300 -top-3 -right-2 hover:bg-slate-400">
                 <MinusIcon className="w-4 h-4" onClick={() => removeImg(img)} />
               </span>
               <Image
@@ -77,7 +77,7 @@ const ImagesReview = ({ images, setImages }) => {
                 alt={img}
                 width={100}
                 height={50}
-                className="rounded-md  outline hover:outline-1 hover:outline-offset-2 hover:outline-slate-500 transition cursor-pointer"
+                className="transition rounded-md cursor-pointer outline hover:outline-1 hover:outline-offset-2 hover:outline-slate-500"
               />
             </span>
           ))}

@@ -55,7 +55,7 @@ handler.post(async (req, res) => {
     };
 
     const result = await handleAI(query);
-    db.connectDb;
+    db.connectDb();
     const prods =
       result[1].length > 0
         ? await Product.find({

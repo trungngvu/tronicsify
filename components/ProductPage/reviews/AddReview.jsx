@@ -53,30 +53,28 @@ const AddReview = ({ product, setReviews }) => {
         formData.append("file", img);
       });
       uploaded_images = await uploadImages(formData);
-      console.log(uploaded_images);
-    } else {
-      const { data } = await axios.put(`/api/product/${product._id}/review`, {
-        rating,
-        review,
-        images: uploaded_images,
-      });
-      setReviews(data.reviews);
-      dispatch(
-        showDialog({
-          header: "Thêm đánh giá mới thành công!",
-          msgs: [
-            {
-              msg: "Thêm đánh giá mới thành công.",
-              type: "success",
-            },
-          ],
-        })
-      );
-      setRating(0);
-      setImages([]);
-      setReview("");
-      setLoading(false);
     }
+    const { data } = await axios.put(`/api/product/${product._id}/review`, {
+      rating,
+      review,
+      images: uploaded_images,
+    });
+    setReviews(data.reviews);
+    dispatch(
+      showDialog({
+        header: "Thêm đánh giá mới thành công!",
+        msgs: [
+          {
+            msg: "Thêm đánh giá mới thành công.",
+            type: "success",
+          },
+        ],
+      })
+    );
+    setRating(0);
+    setImages([]);
+    setReview("");
+    setLoading(false);
   };
 
   return (
@@ -88,7 +86,7 @@ const AddReview = ({ product, setReviews }) => {
         name="review"
         value={review}
         onChange={(e) => setReview(e.target.value)}
-        placeholder="Write you review here..."
+        placeholder="Nhập đánh giá của bạn..."
       ></textarea>
       <div className="flex flex-col items-center md:flex-row md:space-x-10">
         <Rating
@@ -96,7 +94,6 @@ const AddReview = ({ product, setReviews }) => {
           name="half-rating-read"
           defaultValue={0}
           value={rating}
-          precision={0.5}
           onChange={(e) => setRating(parseInt(e.target.value))}
           style={{ color: "#FACF19", fontSize: "3rem" }}
         />
@@ -109,7 +106,7 @@ const AddReview = ({ product, setReviews }) => {
               : "bg-gradient-to-r from-amazon-orange to-yellow-300 text-amazon-blue_dark hover:scale-95"
           }`}
         >
-          {loading ? "loading ..." : "Submit Review"}
+          {loading ? "Đang tải lên..." : "Gửi đánh giá"}
         </button>
       </div>
     </div>

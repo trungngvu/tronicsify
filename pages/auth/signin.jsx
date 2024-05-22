@@ -44,7 +44,7 @@ export const getServerSideProps = async (context) => {
     props: {
       providers,
       csrfToken,
-      callbackUrl,
+      callbackUrl: callbackUrl?.includes("activate") ? "/" : callbackUrl,
     },
   };
 };
