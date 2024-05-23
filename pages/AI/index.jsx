@@ -87,7 +87,6 @@ const AIPage = () => {
 export default AIPage;
 
 export async function getServerSideProps(context) {
-  db.connectDb();
   const { query } = context;
   const session = await getSession(context);
   const user = session?.user;

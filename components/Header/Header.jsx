@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { useAppDispatch } from "@/redux/hooks";
 import Head from "next/head";
 import Search from "./Search";
 
@@ -7,9 +6,15 @@ import amazonLogo from "../../public/assets/images/tronicsify.png";
 import AccountButtons from "./AccountButtons";
 import HeaderBottom from "./HeaderBottom";
 import Link from "next/link";
+import { useAppDispatch } from "@/redux/hooks";
+import { useEffect } from "react";
+import { fetchCarts } from "@/utils/cart";
 
 const Header = ({ title }) => {
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchCarts());
+  }, [dispatch]);
 
   return (
     <>

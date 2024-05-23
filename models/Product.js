@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import reviewSchema from "./Review";
 const { ObjectId } = mongoose.Schema;
 
-const productSchema = new mongoose.Schema({
+export const productSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,

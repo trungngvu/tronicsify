@@ -7,7 +7,6 @@ const handler = nc();
 
 handler.get(async (req, res) => {
   try {
-    db.connectDb;
     const { q: query, cat: category } = req.query;
 
     // Define a function for fuzzy search
@@ -59,7 +58,6 @@ handler.get(async (req, res) => {
         console.error("Error occurred:", error);
       });
 
-    db.disconnectDb();
     return res.json({
       result,
     });

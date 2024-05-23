@@ -4,7 +4,6 @@ import Header from "@/components/Header/Header"
 import Product from "@/models/Product"
 import HomeProductSwiper from "@/components/Home/HomeProductSwiper"
 import CategoriesProduct from "@/components/Home/CategoriesProduct/CategoriesProducts"
-import db from "../utils/db"
 
 export default function Home({ products }) {
   return (
@@ -24,8 +23,6 @@ export default function Home({ products }) {
 }
 
 export const getServerSideProps = async context => {
-  db.connectDb()
-
   const categories = ["cpu", "gpu", "ram", "main", "psu", "cooler"]
 
   // Use Promise.all() to fetch products for all categories concurrently
@@ -38,8 +35,6 @@ export const getServerSideProps = async context => {
   // Wait for all promises to resolve using Promise.all()
   const get_products = await Promise.all(productPromises)
   const products = get_products.reduce((acc, curr) => acc.concat(curr), [])
-
-  db.disconnectDb()
   return {
     props: {
       products: JSON.parse(JSON.stringify(products))

@@ -62,16 +62,20 @@ const ReviewCard = ({ review, productID }) => {
               defaultValue={review.rating}
             />
             <div className="flex items-center">
-              {likedByUser ? (
-                <Solid
-                  className="w-6 h-6 mr-1 text-blue-500 cursor-pointer"
-                  onClick={handleLike}
-                />
+              {session?.user?.id ? (
+                likedByUser ? (
+                  <Solid
+                    className="w-6 h-6 mr-1 text-blue-500 cursor-pointer"
+                    onClick={handleLike}
+                  />
+                ) : (
+                  <HandThumbUpIcon
+                    className="w-6 h-6 mr-1 cursor-pointer"
+                    onClick={handleLike}
+                  />
+                )
               ) : (
-                <HandThumbUpIcon
-                  className="w-6 h-6 mr-1 cursor-pointer"
-                  onClick={handleLike}
-                />
+                ""
               )}
               <span>{likes} lượt thích</span>
             </div>
@@ -87,16 +91,20 @@ const ReviewCard = ({ review, productID }) => {
             />
 
             <div className="flex items-center ml-auto ">
-              {likedByUser ? (
-                <Solid
-                  className="w-6 h-6 mr-1 text-blue-500 cursor-pointer"
-                  onClick={handleLike}
-                />
+              {session?.user?.id ? (
+                likedByUser ? (
+                  <Solid
+                    className="w-6 h-6 mr-1 text-blue-500 cursor-pointer"
+                    onClick={handleLike}
+                  />
+                ) : (
+                  <HandThumbUpIcon
+                    className="w-6 h-6 mr-1 cursor-pointer"
+                    onClick={handleLike}
+                  />
+                )
               ) : (
-                <HandThumbUpIcon
-                  className="w-6 h-6 mr-1 cursor-pointer"
-                  onClick={handleLike}
-                />
+                ""
               )}
               <span>{likes} lượt thích</span>
             </div>

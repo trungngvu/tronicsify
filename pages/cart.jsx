@@ -1,17 +1,18 @@
 import Header from "@/components/Header/Header";
 import CartPage from "@/components/CartPage/CartPage";
-import { useAppSelector } from "@/redux/hooks";
+import Empty from "@/components/CartPage/Empty";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { getSession } from "next-auth/react";
 
 const Cart = () => {
-  const cart = useAppSelector((state) => state.cart.cartItems);
+  const carts = useAppSelector((state) => state.cart.carts);
 
-  // console.log('cart > ', cart);
+  console.log("cart > ", carts);
   return (
     <>
       <Header />
       <main className="w-full bg-slate-100">
-        <CartPage cart={cart} />
+        {carts.length === 0 ? <Empty /> : <CartPage cart={carts} />}
       </main>
     </>
   );

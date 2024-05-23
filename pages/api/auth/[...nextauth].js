@@ -2,11 +2,9 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import db from "../../../utils/db";
 import User from "../../../models/User";
 import bcrypt from "bcrypt";
 
-db.connectDb();
 
 export const authOptions = {
   // adapter: MongoDBAdapter(clientPromise),
