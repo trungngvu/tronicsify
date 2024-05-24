@@ -33,7 +33,6 @@ export const productSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true,
   },
   reviews: [reviewSchema],
@@ -56,6 +55,6 @@ export const productSchema = new mongoose.Schema({
 });
 
 const Product =
-  mongoose.models.product || mongoose.model("product", productSchema);
+  mongoose.models.Product || mongoose.model("Product", productSchema);
 
 export default Product;

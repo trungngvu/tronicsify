@@ -4,6 +4,7 @@ import Header from "@/components/Header/Header"
 import Product from "@/models/Product"
 import HomeProductSwiper from "@/components/Home/HomeProductSwiper"
 import CategoriesProduct from "@/components/Home/CategoriesProduct/CategoriesProducts"
+import db from "@/utils/db"
 
 export default function Home({ products }) {
   return (
@@ -33,7 +34,9 @@ export const getServerSideProps = async context => {
   )
 
   // Wait for all promises to resolve using Promise.all()
+  await db.connectDb();
   const get_products = await Promise.all(productPromises)
+  await db.disconnectDb();
   const products = get_products.reduce((acc, curr) => acc.concat(curr), [])
   return {
     props: {

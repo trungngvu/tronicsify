@@ -7,7 +7,7 @@ const handler = nc().use(auth);
 
 handler.put(async (req, res) => {
     try {
-        db.connectDb;
+        await db.connectDb();
         const { id } = req.body;
         const user = await User.findById(req.user);
         let user_addresses = user.address;
@@ -35,7 +35,7 @@ handler.put(async (req, res) => {
             { new: true }
         );
 
-        db.disconnectDb();
+        await db.disconnectDb();
         return res.json({ addresses });
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -44,7 +44,7 @@ handler.put(async (req, res) => {
 
 handler.delete(async (req, res) => {
     try {
-        db.connectDb();
+        await db.connectDb();
         const { id } = req.body;
         const user = await User.findById(req.user);
         await user.updateOne(
@@ -56,7 +56,7 @@ handler.delete(async (req, res) => {
             { new: true }
         );
 
-        db.disconnectDb();
+        await db.disconnectDb();
         return res.json({ addresses: user.address.filter((a) => a._id != id) });
     } catch (error) {
         return res.status(500).json({ message: error.message });

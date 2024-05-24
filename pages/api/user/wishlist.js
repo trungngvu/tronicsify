@@ -7,7 +7,7 @@ const handler = nc().use(auth);
 
 handler.put(async (req, res) => {
     try {
-        db.connectDb;
+       await db.connectDb;
         const { product_id, style } = req.body;
         // console.log("back pay . ", req.body);
         const user = await User.findById(req.user);
@@ -23,7 +23,7 @@ handler.put(async (req, res) => {
                 }
             }
         })
-        db.disconnectDb();
+        await db.disconnectDb();
         return res.status(200).json({ message: "Thêm vào danh sách yêu thích thành công" });
     } catch (error) {
         return res.status(500).json({ message: error.message });

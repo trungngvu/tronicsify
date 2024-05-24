@@ -27,7 +27,7 @@ const Address = ({ user, tab, addressData }) => {
 export default Address
 
 export async function getServerSideProps(context) {
-  db.connectDb()
+  await db.connectDb()
   const { query } = context
   const session = await getSession(context)
   const user = session?.user

@@ -9,7 +9,6 @@ const handler = nc();
 handler.post(async (req, res) => {
   try {
     const { q: query } = req.body;
-
     const formatText = (text) => {
       // Extract MongoDB document IDs
       if (text === "") return "";
@@ -55,12 +54,16 @@ handler.post(async (req, res) => {
     };
 
     const result = await handleAI(query);
+    await db.connectDb();
     const prods =
       result[1].length > 0
         ? await Product.find({
-            _id: { $in: result[1].map((item) => new mongoose.Types.ObjectId(item)) },
+            _id: {
+              $in: result[1].map((item) => new mongoose.Types.ObjectId(item)),
+            },
           }).select("imgs price slug title availability category sub_category")
         : [];
+    await db.disconnectDb();
     return res.json({
       res: result[0],
       prods,

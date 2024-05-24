@@ -7,7 +7,7 @@ const handler = nc().use(auth);
 
 handler.put(async (req, res) => {
     try {
-        db.connectDb;
+        await db.connectDb();
         const { paymentMethod } = req.body;
         // console.log("back pay . ", req.body);
         const user = await User.findById(req.user);
@@ -17,7 +17,7 @@ handler.put(async (req, res) => {
             },
             { returnOriginal: false }
         );
-        db.disconnectDb();
+        await db.disconnectDb();
         return res.json({ paymentMethod: user.defaultPaymentMethod });
     } catch (error) {
         return res.status(500).json({ message: error.message });

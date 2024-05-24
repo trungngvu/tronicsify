@@ -1,13 +1,16 @@
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { createCart } from "@/utils/cart";
 import { useAppDispatch } from "@/redux/hooks";
+import { useRouter } from "next/router";
 
 const Empty = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handleCreateCart = (newCart) => {
     dispatch(createCart(newCart));
   };
+
   return (
     <div className="flex flex-col items-center py-6 mx-4 mt-6 space-y-4 bg-white border rounded">
       <ShoppingBagIcon className="w-20 h-20" />

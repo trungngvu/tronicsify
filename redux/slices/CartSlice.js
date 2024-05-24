@@ -9,13 +9,8 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart(state, action) {
-      const index = state.carts.findIndex(
-        (cart) => cart._id === action.payload._id
-      );
-      if (index !== -1) {
-        state.carts[index].push(action.payload);
-      }
+    addCart(state, action) {
+      state.carts.push(action.payload);
     },
     updateCart(state, action) {
       const index = state.carts.findIndex(
@@ -37,7 +32,7 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, updateCart, setCarts, removeCart, setActiveCart } =
+export const { addCart, updateCart, setCarts, removeCart, setActiveCart } =
   cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -697,7 +697,7 @@ export async function getServerSideProps(context) {
     return styleRegex;
   }
   // --------------------------------------------------
-  db.connectDb();
+  await db.connectDb();
 
   let filteredProcessors;
   if (core || thread || clock) {
@@ -735,7 +735,7 @@ export async function getServerSideProps(context) {
   console.log(sum_queries);
 
   let products = await Product.find(sum_queries)
-    .select("-description -long_specs -short_specs -warranty -updatedAt -url")
+    .select("-description -long_specs -short_specs -warranty -updatedAt -url -embedding")
     .populate("cpu")
     .populate("gpu")
     .skip(pageSize * (page - 1))

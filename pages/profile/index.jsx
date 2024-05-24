@@ -17,7 +17,7 @@ const Profile = ({ user, tab, orders }) => {
 export default Profile;
 
 export async function getServerSideProps(context) {
-  db.connectDb();
+  await db.connectDb();
   const { query } = context;
   const session = await getSession(context);
   const user = session?.user;

@@ -22,7 +22,7 @@ export default SingleProduct;
 export const getServerSideProps = async (context) => {
   const { query } = context;
   const slug = query.slug;
-  db.connectDb();
+  await db.connectDb();
   let product = await Product.findOne({ slug })
     .populate({
       path: "reviews.reviewBy",
@@ -64,7 +64,7 @@ export const getServerSideProps = async (context) => {
     ).toFixed(1);
   }
 
-  db.disconnectDb();
+  await db.disconnectDb();
 
   return {
     props: {

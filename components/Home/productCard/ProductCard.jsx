@@ -2,12 +2,13 @@ import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hooks";
 
-import { addToCart, updateCart } from "@/redux/slices/CartSlice";
+import { updateCartInDatabase, addProductToCart } from "@/utils/cart";
 import ProductSwiper from "./ProductSwiper";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { HeartIcon, WrenchIcon } from "@heroicons/react/24/outline";
 
 const ProductCard = ({ product }) => {
+  const { carts, activeCartId } = useAppSelector((state) => state.cart);
   const images = product?.imgs;
   if (images && images.length === 0)
     images.push(
@@ -17,7 +18,7 @@ const ProductCard = ({ product }) => {
     );
   const price = product?.price;
   const dispatch = useDispatch();
-  const cart = useAppSelector((state) => state.cart.cartItems);
+  const cart = carts.find((c) => c._id === activeCartId)?.products || [];
 
   const handleCart = (e) => {
     e.preventDefault();
@@ -32,9 +33,9 @@ const ProductCard = ({ product }) => {
     ) {
       const newCart = cart.filter((item) => item.category !== product.category);
       newCart.push(product);
-      dispatch(updateCart(newCart));
+      dispatch(updateCartInDatabase(activeCartId, newCart));
     } else {
-      dispatch(addToCart(product));
+      dispatch(addProductToCart(activeCartId, product));
     }
   };
 

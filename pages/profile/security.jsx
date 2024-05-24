@@ -140,7 +140,7 @@ const Security = ({ user, tab, orders }) => {
 export default Security;
 
 export async function getServerSideProps(context) {
-  db.connectDb();
+  await db.connectDb();
   const { query } = context;
   const session = await getSession(context);
   const tab = query.tab || 0;
@@ -152,7 +152,7 @@ export async function getServerSideProps(context) {
       },
     };
   }
-  db.disconnectDb();
+  await db.disconnectDb();
   return {
     props: {
       user: session?.user,

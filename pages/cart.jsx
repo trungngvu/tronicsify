@@ -1,13 +1,13 @@
 import Header from "@/components/Header/Header";
 import CartPage from "@/components/CartPage/CartPage";
 import Empty from "@/components/CartPage/Empty";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { getSession } from "next-auth/react";
 
 const Cart = () => {
-  const carts = useAppSelector((state) => state.cart.carts);
+  const {carts, activeCartId} = useAppSelector((state) => state.cart);
 
-  console.log("cart > ", carts);
+  console.log("cart > ", carts, activeCartId);
   return (
     <>
       <Header />
