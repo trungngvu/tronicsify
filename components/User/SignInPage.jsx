@@ -120,7 +120,7 @@ const SignInPage = ({ providers, csrfToken, callbackUrl }) => {
                   className="flex items-center w-full gap-2 p-2 mt-3 bg-white border cursor-pointer rounded-xl md:mt-1"
                 >
                   <Image
-                    src={`/../public/assets/images/${provider.id}.png`}
+                    src={`/assets/images/${provider.id}.png`}
                     alt={provider.name}
                     width={28}
                     height={28}
