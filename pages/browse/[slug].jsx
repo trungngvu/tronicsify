@@ -825,9 +825,9 @@ export async function getServerSideProps(context) {
       console.error("Error fetching CPU data:", err);
     }
   }
-  await db.disconnectDb();
 
   const totalProducts = await Product.countDocuments(sum_queries);
+  await db.disconnectDb();
 
   return {
     props: {
