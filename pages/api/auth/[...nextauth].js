@@ -5,7 +5,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import User from "../../../models/User";
 import bcrypt from "bcrypt";
 
-
 export const authOptions = {
   // adapter: MongoDBAdapter(clientPromise),
   // Configure one or more authentication providers

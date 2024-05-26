@@ -8,6 +8,7 @@ const handler = nc();
 handler.get(async (req, res) => {
   try {
     const { q: query, cat: category } = req.query;
+    await db.connectDb();
 
     // Define a function for fuzzy search
     async function fuzzySearch(query) {
@@ -36,9 +37,11 @@ handler.get(async (req, res) => {
         // );
         // let inputs = await tokenizer("I love transformers!");
         // console.log(inputs);
+        await db.disconnectDb();
 
         return results;
       } catch (error) {
+        await db.disconnectDb();
         console.error("Error occurred during fuzzy search:", error);
         return []; // Return empty array in case of error
       }

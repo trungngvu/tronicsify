@@ -21,6 +21,7 @@ export const getServerSideProps = async (context) => {
   const categories = ["cpu", "gpu", "ram", "main", "psu", "cooler"];
 
   // Use Promise.all() to fetch products for all categories concurrently
+  await db.connectDb();
   const productPromises = categories.map((category) =>
     Product.find({ category, imgs: { $ne: [] }, availability: true })
       .limit(10)
@@ -28,7 +29,6 @@ export const getServerSideProps = async (context) => {
   );
 
   // Wait for all promises to resolve using Promise.all()
-  await db.connectDb();
   const get_products = await Promise.all(productPromises);
   await db.disconnectDb();
   const products = get_products.reduce((acc, curr) => acc.concat(curr), []);
