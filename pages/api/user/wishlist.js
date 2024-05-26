@@ -28,7 +28,6 @@ handler.post(async (req, res) => {
     user.wishlist.push({ product: productId });
     await user.save();
     await db.disconnectDb();
-    console.log(user.wishlist.find((prod) => prod.product === productId));
     res
       .status(200)
       .json(

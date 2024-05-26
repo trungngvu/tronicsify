@@ -1,13 +1,9 @@
 import nodemailer from "nodemailer";
 
-const {
-  SENDER_EMAIL_ADDRESS,
-  SENDER_EMAIL_PASSWORD,
-} = process.env;
+const { SENDER_EMAIL_ADDRESS, SENDER_EMAIL_PASSWORD } = process.env;
 
 // send email
 export const sendEmail = (to, url, txt, subject, template) => {
-
   const smtpTransport = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
@@ -26,12 +22,5 @@ export const sendEmail = (to, url, txt, subject, template) => {
     html: template(to, url),
   };
 
-  smtpTransport.sendMail(mailOptions, (err, infos) => {
-    if (err) {
-      console.log("error mail: ", err);
-    } else {
-      ``;
-      console.log("infos mail: ", infos);
-    }
-  });
+  smtpTransport.sendMail(mailOptions);
 };

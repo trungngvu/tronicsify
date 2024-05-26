@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import db from "@/utils/db";
 
 import User from "../../../models/User";
 import bcrypt from "bcrypt";
@@ -14,12 +15,20 @@ export const authOptions = {
       async authorize(credentials, req) {
         const email = credentials?.email;
         const password = credentials?.password;
+        await db.connectDb();
         const user = await User.findOne({ email });
         if (user) {
-          if (!user.emailVerified)
-            throw new Error("Vui lòng kích hoạt tài khoản của bạn bằng link kích hoạt gửi qua email.");
-          else return signInUser({ password, user });
+          if (!user.emailVerified) {
+            await db.disconnectDb();
+            throw new Error(
+              "Vui lòng kích hoạt tài khoản của bạn bằng link kích hoạt gửi qua email."
+            );
+          } else {
+            await db.disconnectDb();
+            return signInUser({ password, user });
+          }
         } else {
+          await db.disconnectDb();
           throw new Error("Tài khoản không tồn tại trong hệ thống.");
         }
       },
@@ -46,6 +55,7 @@ export const authOptions = {
     async signIn({ user, account, profile }) {
       if (account.provider === "google") {
         const email = profile.email;
+        await db.connectDb();
         let existingUser = await User.findOne({ email });
 
         if (!existingUser) {
@@ -58,7 +68,7 @@ export const authOptions = {
             // password: null, // Password not needed for OAuth users
           });
         }
-
+        await db.disconnectDb();
         user.id = existingUser._id.toString();
         user.emailVerified = existingUser.emailVerified;
       }

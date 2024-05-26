@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "@/models/User";
 import Image from "next/image";
+import db from "@/utils/db";
 
 const Activate = () => {
   return (
@@ -27,7 +28,9 @@ export const getServerSideProps = async (context) => {
 
   const token = query.token;
   const user_id = jwt.verify(token, process.env.ACTIVATION_TOKEN_SECRET);
+  await db.connectDb();
   await User.updateOne({ _id: user_id.id }, { emailVerified: true });
+  await db.disconnectDb();
 
   return {
     props: {

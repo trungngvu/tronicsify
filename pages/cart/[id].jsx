@@ -97,6 +97,7 @@ export async function getServerSideProps(context) {
   } catch {
     cart = "404";
   }
+  await db.disconnectDb();
 
   return {
     props: { cart: JSON.parse(JSON.stringify(cart)) },

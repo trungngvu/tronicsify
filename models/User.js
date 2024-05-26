@@ -26,10 +26,6 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    defaultPaymentMethod: {
-      type: String,
-      default: "",
-    },
     address: [
       {
         firstName: {

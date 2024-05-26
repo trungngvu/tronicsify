@@ -9,6 +9,7 @@ const handler = nc().use(auth);
 handler.put(async (req, res) => {
   try {
     const { current_password, new_password } = req.body;
+    await db.connectDb();
     const user = await User.findById(req.user);
     const crypted_password = await bcrypt.hash(new_password, 12);
     // if user login with social media
@@ -31,6 +32,7 @@ handler.put(async (req, res) => {
     await user.updateOne({
       password: crypted_password,
     });
+    await db.disconnectDb();
     return res.status(200).json({ message: "Đổi mật khẩu mới thành công." });
   } catch (error) {
     res.status(500).json({ message: error.message });

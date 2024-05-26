@@ -1,6 +1,7 @@
 import nc from "next-connect";
 import Product from "@/models/Product";
 import auth from "@/middleware/auth";
+import db from "@/utils/db";
 
 const handler = nc().use(auth);
 
@@ -9,6 +10,7 @@ handler.post(async (req, res) => {
   try {
     const { prodID: productId, id: reviewId } = req.query;
     const userId = req.user;
+    await db.connectDb();
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).send("Product not found");
@@ -27,7 +29,7 @@ handler.post(async (req, res) => {
     }
 
     await product.save();
-
+    await db.disconnectDb();
     return res
       .status(200)
       .json({ likes: review.likes.length, likedByUser: !alreadyLiked });

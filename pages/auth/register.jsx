@@ -13,7 +13,7 @@ const Register = ({ providers }) => {
 
 export default Register;
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async () => {
   const providers = await getProviders();
 
   return {
