@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 const { SENDER_EMAIL_ADDRESS, SENDER_EMAIL_PASSWORD } = process.env;
 
 // send email
-export const sendEmail = (to, url, txt, subject, template) => {
+export const sendEmail = async (to, url, txt, subject, template) => {
   const smtpTransport = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
@@ -21,6 +21,15 @@ export const sendEmail = (to, url, txt, subject, template) => {
     subject: subject,
     html: template(to, url),
   };
-
-  smtpTransport.sendMail(mailOptions);
+  await new Promise((resolve, reject) => {
+    smtpTransport.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        console.log(info);
+        resolve(info);
+      }
+    });
+  });
 };

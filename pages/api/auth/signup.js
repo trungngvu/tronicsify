@@ -46,7 +46,7 @@ handler.post(async (req, res) => {
 
         const url = `${process.env.BASE_URL}/auth/activate/${activation_token}`;
 
-        sendEmail(email, url,"", "Kích hoạt tài khoản tronicsify.com", activateEmailTemplate);
+        await sendEmail(email, url,"", "Kích hoạt tài khoản tronicsify.com", activateEmailTemplate);
 
         await db.disconnectDb();
         res.json({ message: "Hãy kiểm tra thư xác nhận trong email của bạn."})
