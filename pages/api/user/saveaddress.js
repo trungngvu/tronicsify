@@ -8,7 +8,7 @@ const handler = nc().use(auth);
 handler.post( async (req, res) => {     
     try {
         db.connectDb;
-        const {address, user_id } = req.body;
+        const {address } = req.body;
         const user = await User.findById(req.user);
         // console.log('user > ', user, 'user.address > ', user.address)
         await user.updateOne({

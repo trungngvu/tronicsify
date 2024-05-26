@@ -5,6 +5,9 @@ import { persistor, store } from "../redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { SessionProvider } from "next-auth/react";
 import AskAIButton from "@/components/Header/AskAI";
+import DialogModal from "@/components/dialogModal";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 export default function App({
@@ -16,7 +19,10 @@ export default function App({
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <div className={inter.className}>
+            <DialogModal />
+            <Header title="Tronicsify" />
             <Component {...pageProps} />
+            <Footer />
             <div className="fixed z-50 bottom-7 right-5">
               <AskAIButton />
             </div>

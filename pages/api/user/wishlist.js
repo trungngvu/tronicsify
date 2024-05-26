@@ -2,32 +2,89 @@ import nc from "next-connect";
 import db from "../../../utils/db";
 import User from "../../../models/User";
 import auth from "../../../middleware/auth";
+import mongoose from "mongoose";
 
 const handler = nc().use(auth);
 
-handler.put(async (req, res) => {
-    try {
-       await db.connectDb;
-        const { product_id, style } = req.body;
-        // console.log("back pay . ", req.body);
-        const user = await User.findById(req.user);
-        const exist = user.whishlist.find((x) => x.product == product_id && x.style == style);
-        if(exist) {
-            return res.status(400).json({ message: "Sản phẩm đã có trong danh sách yêu thích" })
-        }
-        await user.updateOne({
-            $push:{
-                whishlist: {
-                    product: product_id,
-                    style,
-                }
-            }
-        })
-        await db.disconnectDb();
-        return res.status(200).json({ message: "Thêm vào danh sách yêu thích thành công" });
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
+// Add to wishlist endpoint
+handler.post(async (req, res) => {
+  const { productId } = req.body;
+
+  if (
+    !mongoose.Types.ObjectId.isValid(req.user) ||
+    !mongoose.Types.ObjectId.isValid(productId)
+  ) {
+    return res.status(400).send("Invalid user or product ID");
+  }
+
+  await db.connectDb();
+  try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      await db.disconnectDb();
+      return res.status(404).send("User not found");
     }
+
+    user.wishlist.push({ product: productId });
+    await user.save();
+    await db.disconnectDb();
+    console.log(user.wishlist.find((prod) => prod.product === productId));
+    res
+      .status(200)
+      .json(
+        user.wishlist.find((prod) => prod.product.toString() === productId)
+      );
+  } catch (error) {
+    await db.disconnectDb();
+    res.status(500).send("Server error");
+  }
+});
+
+// Remove from wishlist endpoint
+handler.delete(async (req, res) => {
+  const { productId } = req.body;
+
+  if (
+    !mongoose.Types.ObjectId.isValid(req.user) ||
+    !mongoose.Types.ObjectId.isValid(productId)
+  ) {
+    return res.status(400).send("Invalid user or product ID");
+  }
+  await db.connectDb();
+  try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      await db.disconnectDb();
+      return res.status(404).send("User not found");
+    }
+
+    user.wishlist = user.wishlist.filter(
+      (item) => item.product.toString() !== productId
+    );
+    await user.save();
+    await db.disconnectDb();
+    res.status(200).json(user.wishlist);
+  } catch (error) {
+    await db.disconnectDb();
+    res.status(500).send("Server error");
+  }
+});
+
+handler.get(async (req, res) => {
+  await db.connectDb();
+  try {
+    const user = await User.findById(req.user);
+    await db.disconnectDb();
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).json(user.wishlist);
+  } catch (error) {
+    await db.disconnectDb();
+    console.log(error);
+    res.status(500).send("Server error");
+  }
 });
 
 export default handler;

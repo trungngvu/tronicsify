@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    whishlist: [
+    wishlist: [
       {
         product: {
           type: ObjectId,

@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header/Header";
 import ProductPage from "@/components/ProductPage/ProductPage";
 import db from "@/utils/db";
 import Product from "@/models/Product";
@@ -7,13 +5,9 @@ import User from "@/models/User";
 
 const SingleProduct = ({ product }) => {
   return (
-    <>
-      <Header title={product.name} />
-      <main className="w-full bg-white">
-        <ProductPage product={product} />
-      </main>
-      <Footer />
-    </>
+    <main className="w-full bg-white">
+      <ProductPage product={product} />
+    </main>
   );
 };
 

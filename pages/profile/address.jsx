@@ -43,7 +43,6 @@ export async function getServerSideProps(context) {
   const addressData = await User.findById(user?.id)
     .select("address")
     .lean()
-  // console.log('add > ', addressData)
   return {
     props: {
       user: {

@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header/Header";
 import SignInPage from "@/components/User/SignInPage";
 
 import { getProviders, getCsrfToken, getSession } from "next-auth/react";
@@ -8,17 +6,13 @@ const SignIn = ({ providers, csrfToken, callbackUrl }) => {
   providers = Object.values(providers);
 
   return (
-    <>
-      <Header />
-      <main className="w-full h-auto bg-slate-100">
-        <SignInPage
-          providers={providers}
-          csrfToken={csrfToken}
-          callbackUrl={callbackUrl}
-        />
-      </main>
-      <Footer />
-    </>
+    <main className="w-full h-auto bg-slate-100">
+      <SignInPage
+        providers={providers}
+        csrfToken={csrfToken}
+        callbackUrl={callbackUrl}
+      />
+    </main>
   );
 };
 

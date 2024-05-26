@@ -2,13 +2,13 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const Checkout = ({ cart }) => {
-  const cpu = cart.find((item) => item.category === "cpu");
-  const gpu = cart.find((item) => item.category === "gpu");
+  const cpu = cart?.find((item) => item.category === "cpu");
+  const gpu = cart?.find((item) => item.category === "gpu");
   const ram = cart
-    .filter((item) => item.category === "ram")
+    ?.filter((item) => item.category === "ram")
     ?.reduce((acc, item) => acc + item.capacity, 0);
   const disk = cart
-    .filter((item) => item.category === "disk")
+    ?.filter((item) => item.category === "disk")
     ?.reduce((acc, item) => acc + item.capacity, 0);
   const [wattage, setWattage] = useState(0);
 
@@ -51,7 +51,7 @@ const Checkout = ({ cart }) => {
           <div className="font-bold text-slate-600">CPU</div>
           <Link
             className="text-amazon-orange hover:underline"
-            href={`browse/cpu?processor=${cpu?.cpu?._id}`}
+            href={`/browse/cpu?processor=${cpu?.cpu?._id}`}
           >
             {cpu?.cpu?.cpu}
           </Link>
@@ -62,7 +62,7 @@ const Checkout = ({ cart }) => {
           <div className="font-bold text-slate-600">Card đồ họa</div>
           <Link
             className="text-amazon-orange hover:underline"
-            href={`browse/gpu?card=${gpu?.gpu?._id}`}
+            href={`/browse/gpu?card=${gpu?.gpu?._id}`}
           >
             {gpu?.gpu?.gpu}
           </Link>

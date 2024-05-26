@@ -13,6 +13,10 @@ const CartSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "User",
     },
+    sharable: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

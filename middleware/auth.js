@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
   });
 
   if (token) {
-    // sing in
+    // sign in
     req.user = token.sub;
     next();
   } else {

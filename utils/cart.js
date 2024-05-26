@@ -4,6 +4,7 @@ import {
   updateCart,
   setCarts,
   setActiveCart,
+  removeCart,
 } from "@/redux/slices/CartSlice";
 
 const API_URL = "/api/cart"; // Replace with your API URL
@@ -18,13 +19,33 @@ export const createCart = (cart) => async (dispatch) => {
   }
 };
 
-
 export const addProductToCart = (cartId, product) => async (dispatch) => {
   try {
     const response = await axios.post(`${API_URL}/${cartId}`, product);
+    console.log(response.data);
     dispatch(updateCart(response.data)); // Update the Redux state with the updated cart
   } catch (error) {
-    console.error('Failed to add product to cart', error);
+    console.error("Failed to add product to cart", error);
+  }
+};
+
+export const deleteCart = (cartId) => async (dispatch) => {
+  try {
+    await axios.delete(`${API_URL}/${cartId}`);
+    dispatch(removeCart(cartId));
+  } catch (error) {
+    console.error("Failed to delete cart", error);
+  }
+};
+
+export const toggleSharable = (cartId) => async (dispatch) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/${cartId}`
+    );
+    dispatch(updateCart(response.data));
+  } catch (error) {
+    console.error("Failed to toggle sharable field", error);
   }
 };
 
@@ -42,7 +63,6 @@ export const updateCartInDatabase = (cartId, cartItems) => async (dispatch) => {
 export const fetchCarts = () => async (dispatch) => {
   try {
     const response = await axios.get(API_URL);
-    console.log(response)
     dispatch(setCarts(response.data));
   } catch (error) {
     console.error("Failed to fetch carts", error);

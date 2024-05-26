@@ -1,96 +1,18 @@
 import { Rating } from "@mui/material";
-import { useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
+import { HeartIcon as SolidHeart } from "@heroicons/react/24/solid";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { addToCart, updateCart } from "../../../redux/slices/CartSlice";
-import { useSession, signIn } from "next-auth/react";
-import { showDialog } from "@/redux/slices/DialogSlice";
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { addWishToDB, removeWishFromDB } from "@/utils/wish";
 
 const Infos = ({ product }) => {
-  const { data: session } = useSession();
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { cartItems: cart } = useAppSelector((state) => state.cart);
-
-  const addToCartHandler = async () => {
-    setLoading(true);
-    if (!router.query.size) {
-      setError("Please Select a size");
-      setLoading(false);
-      return;
-    }
-    const { data } = await axios.get(
-      `/api/product/${product._id}?style=${product.style}&size=${router.query.size}`
-    );
-
-    if (qty > data.quantity) {
-      setError(
-        "the Quantity you have choosed is more than in stock. Try lower the Qty"
-      );
-      setLoading(false);
-    } else if (data.quantity < 1) {
-      setError("this Product is out of stock!");
-      setLoading(false);
-      return;
-    } else {
-      let _uid = `${product._id}_${product.style}_${router.query.size}`;
-      let exist = cart.find((p) => p._uid === _uid);
-      if (exist) {
-        let newCart = cart.map((p) => {
-          if (p._uid == exist._uid) {
-            return { ...p, qty: qty };
-          }
-          return p;
-        });
-        dispatch(updateCart(newCart));
-        setError("");
-        setLoading(false);
-      } else {
-        dispatch(addToCart({ ...data, qty, size: data.size, _uid }));
-        setError("");
-        setLoading(false);
-      }
-    }
-  };
-
-  const handleWishlist = async () => {
-    try {
-      if (!session) {
-        return signIn();
-      }
-      const { data } = await axios.put("/api/user/wishlist", {
-        product_id: product._id,
-      });
-      dispatch(
-        showDialog({
-          header: "Thành công",
-          msgs: [
-            {
-              msg: data.message,
-              type: "success",
-            },
-          ],
-        })
-      );
-    } catch (error) {
-      dispatch(
-        showDialog({
-          header: "Lỗi",
-          msgs: [
-            {
-              msg: error.response.data.message,
-              type: "error",
-            },
-          ],
-        })
-      );
-    }
+  const wishlist = useAppSelector((state) => state.wish.wishes);
+  const included = wishlist.find((prod) => prod.product === product._id);
+  const handleWishlist = () => {
+    if (included) {
+      dispatch(removeWishFromDB(product._id));
+    } else dispatch(addWishToDB(product._id));
   };
 
   const updateAt = new Date(product.updatedAt);
@@ -154,32 +76,22 @@ const Infos = ({ product }) => {
           href={product.url}
           target="_blank"
         >
-          {loading ? (
-            <>
-              <ArrowPathIcon className="w-8 h-8" />
-              <span className="text-xl font-semibold">Loading...</span>
-            </>
-          ) : (
-            <>
-              <ShoppingBagIcon className="w-8 h-8" />
-              <span className="text-xl font-semibold uppercase ">
-                Chuyển đến trang sản phẩm
-              </span>
-            </>
-          )}
+          <ShoppingBagIcon className="w-8 h-8" />
+          <span className="text-xl font-semibold uppercase ">
+            Chuyển đến trang sản phẩm
+          </span>
         </Link>
         <button
           onClick={() => handleWishlist()}
           className="flex items-center p-2 space-x-2 transition duration-500 ease-in-out rounded bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
         >
-          <HeartIcon className="w-8 h-8" />
+          {included ? (
+            <SolidHeart className="w-8 h-8 text-red-500" />
+          ) : (
+            <HeartIcon className="w-8 h-8" />
+          )}
           <span>Yêu thích</span>
         </button>
-      </div>
-      <div className="m-2">
-        {error && (
-          <span className="mt-2 font-semibold text-red-500">{error}</span>
-        )}
       </div>
     </div>
   );

@@ -24,7 +24,6 @@ handler.post(async (req, res) => {
       id: user._id.toString(),
     });
     const url = `${process.env.BASE_URL}/auth/reset/${userId}`;
-    console.log(url);
     sendEmail(
       email,
       url,

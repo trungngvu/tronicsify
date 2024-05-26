@@ -6,12 +6,12 @@ import {
 import { useState, useEffect } from "react";
 
 const ConstrainCheck = ({ cart }) => {
-  const psu = cart.find((item) => item.category === "psu");
-  const cpu = cart.find((item) => item.category === "cpu");
-  const ram = cart.filter((item) => item.category === "ram");
-  const main = cart.find((item) => item.category === "main");
-  const ramCheck = ram.find((ram) => ram.ram != main?.ram);
-  const pcCase = cart.find((item) => item.category === "case");
+  const psu = cart?.find((item) => item.category === "psu");
+  const cpu = cart?.find((item) => item.category === "cpu");
+  const ram = cart?.filter((item) => item.category === "ram");
+  const main = cart?.find((item) => item.category === "main");
+  const ramCheck = ram?.find((ram) => ram.ram != main?.ram);
+  const pcCase = cart?.find((item) => item.category === "case");
   const [wattage, setWattage] = useState(0);
 
   useEffect(() => {
@@ -52,11 +52,11 @@ const ConstrainCheck = ({ cart }) => {
           {`(>${Math.round(wattage * 1.2)}W)`}.
         </div>
       )}
-      {cpu && main && cpu.cpu.socket.replace(/FCLGA/g, "") != main.socket && (
+      {cpu && main && cpu.cpu?.socket?.replace(/FCLGA/g, "") != main.socket && (
         <div className="flex text-red-500">
           <ExclamationCircleIcon className="inline w-6 mr-1" />
           Socket CPU và bo mạch chủ không tương thích{" "}
-          {`(${cpu.cpu.socket.replace(/FCLGA/g, "LGA ")} ≠ ${
+          {`(${cpu?.cpu?.socket?.replace(/FCLGA/g, "LGA ")} ≠ ${
             /^\d+$/.test(main.socket) ? "LGA" : ""
           } ${main.socket})`}
           .
@@ -78,7 +78,11 @@ const ConstrainCheck = ({ cart }) => {
       )}
       {!(psu && psu?.wattage < wattage) &&
         !(psu && psu?.wattage < wattage * 1.2 && psu?.wattage > wattage) &&
-        !(cpu && main && cpu.cpu.socket.replace(/FCLGA/g, "") != main.socket) &&
+        !(
+          cpu &&
+          main &&
+          cpu?.cpu?.socket?.replace(/FCLGA/g, "") != main.socket
+        ) &&
         !(main && pcCase && main?.size != pcCase.size) &&
         !(main && ram.length > 0 && !!ramCheck) && (
           <div className="flex text-green-500">

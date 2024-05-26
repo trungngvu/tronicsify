@@ -3,29 +3,20 @@ import { HandThumbUpIcon as Solid } from "@heroicons/react/24/solid";
 import { Rating } from "@mui/material";
 import { Image as Img } from "antd";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-const ReviewCard = ({ review, productID }) => {
-  const { data: session } = useSession();
-
+const ReviewCard = ({ review, productID, userID }) => {
   const { name, image } = review.reviewBy;
-  const [likes, setLikes] = useState(review.likes.length);
-  const [likedByUser, setLikedByUser] = useState(false);
-
+  const [likedByUser, setLikedByUser] = useState(review.likes.includes(userID));
   useEffect(() => {
-    if (session?.user?.id) {
-      setLikedByUser(review.likes.includes(session.user.id));
-    }
-  }, [session, review.likes]);
-
+    setLikedByUser(review.likes.includes(userID));
+  }, [review.likes, userID]);
   const handleLike = async () => {
     try {
       const response = await axios.post(
         `/api/product/${productID}/review/${review._id}/like`
       );
-      setLikes(response.data.likes);
       setLikedByUser(response.data.likedByUser);
     } catch (error) {
       console.error("Error liking the review", error);
@@ -62,7 +53,7 @@ const ReviewCard = ({ review, productID }) => {
               defaultValue={review.rating}
             />
             <div className="flex items-center">
-              {session?.user?.id ? (
+              {userID ? (
                 likedByUser ? (
                   <Solid
                     className="w-6 h-6 mr-1 text-blue-500 cursor-pointer"
@@ -77,7 +68,12 @@ const ReviewCard = ({ review, productID }) => {
               ) : (
                 ""
               )}
-              <span>{likes} lượt thích</span>
+              <span>
+                {review.likes.length +
+                  Number(likedByUser) -
+                  Number(review.likes.includes(userID))}{" "}
+                lượt thích
+              </span>
             </div>
           </div>
         </div>
@@ -91,7 +87,7 @@ const ReviewCard = ({ review, productID }) => {
             />
 
             <div className="flex items-center ml-auto ">
-              {session?.user?.id ? (
+              {userID ? (
                 likedByUser ? (
                   <Solid
                     className="w-6 h-6 mr-1 text-blue-500 cursor-pointer"
@@ -106,7 +102,12 @@ const ReviewCard = ({ review, productID }) => {
               ) : (
                 ""
               )}
-              <span>{likes} lượt thích</span>
+              <span>
+                {review.likes.length +
+                  Number(likedByUser) -
+                  Number(review.likes.includes(userID))}{" "}
+                lượt thích
+              </span>
             </div>
           </div>
           <div className="flex flex-col md:flex-row">

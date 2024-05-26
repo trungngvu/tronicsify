@@ -1,14 +1,28 @@
 import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 
 import { updateCartInDatabase, addProductToCart } from "@/utils/cart";
 import ProductSwiper from "./ProductSwiper";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { HeartIcon, WrenchIcon } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
+import { showDialog } from "@/redux/slices/DialogSlice";
+import { addWishToDB, removeWishFromDB } from "@/utils/wish";
 
 const ProductCard = ({ product }) => {
   const { carts, activeCartId } = useAppSelector((state) => state.cart);
+  const wishlist = useAppSelector((state) => state.wish.wishes);
+  const dispatch = useAppDispatch();
+  const included = wishlist.find((prod) => prod.product === product._id);
+  const handleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (included) {
+      dispatch(removeWishFromDB(product._id));
+    } else dispatch(addWishToDB(product._id));
+  };
+  const { data: session } = useSession();
+
   const images = product?.imgs;
   if (images && images.length === 0)
     images.push(
@@ -17,21 +31,36 @@ const ProductCard = ({ product }) => {
       }.jpg`
     );
   const price = product?.price;
-  const dispatch = useDispatch();
   const cart = carts.find((c) => c._id === activeCartId)?.products || [];
 
   const handleCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!activeCartId) {
+      dispatch(
+        showDialog({
+          header: "Bạn chưa thêm cấu hình nào",
+          msgs: [
+            {
+              msg: 'Truy cập "Xây dựng cấu hình" để thêm cấu hình mới ngay!',
+              type: "error",
+            },
+          ],
+        })
+      );
+      return;
+    }
     if (!!cart?.find((item) => item._id === product._id)) {
-      const newCart = cart.filter((item) => item._id !== product._id);
-      dispatch(updateCart(newCart));
+      const newCart = cart?.filter((item) => item._id !== product._id);
+      dispatch(updateCartInDatabase(activeCartId, newCart));
     } else if (
       !!cart?.find((item) => item.category === product.category) &&
       product.category !== "disk" &&
       product.category !== "ram"
     ) {
-      const newCart = cart.filter((item) => item.category !== product.category);
+      const newCart = cart?.filter(
+        (item) => item.category !== product.category
+      );
       newCart.push(product);
       dispatch(updateCartInDatabase(activeCartId, newCart));
     } else {
@@ -43,32 +72,39 @@ const ProductCard = ({ product }) => {
     <div className="flex flex-col relative w-[215px] rounded p-1">
       <Link href={`/product/${product.slug}`} className="relative">
         <ProductSwiper images={images} />
-        <div className="absolute z-10 right-1 bottom-1">
-          <div className="flex flex-row gap-2">
-            <button className="flex items-center p-2 space-x-2 duration-500 ease-in-out rounded hover:text-red-500 transition-200 text-slate-500 bg-opacity-10 bg-amazon-blue_light max-md:mt-3">
-              <HeartIcon className="fill-current w-7 h-7 " />
-            </button>
-            {(product.cpu ||
-              product.gpu ||
-              (product.socket && product.size && product.ram) ||
-              (product.ram && product.capacity) ||
-              product.wattage ||
-              (product.capacity && product.category === "disk") ||
-              product.category === "cooler" ||
-              (product.size && product.category === "case")) && (
+        {session && (
+          <div className="absolute z-10 right-1 bottom-1">
+            <div className="flex flex-row gap-2">
               <button
-                className={`flex items-center p-2 space-x-2 duration-500 ease-in-out rounded ${
-                  cart?.find((item) => item._id === product._id)
-                    ? "text-amazon-orange"
-                    : "text-slate-500"
-                } hover:text-amazon-orange transition-200  bg-opacity-10 bg-amazon-blue_light max-md:mt-3`}
-                onClick={handleCart}
+                onClick={handleWishlist}
+                className={`flex items-center p-2 space-x-2 duration-500 ease-in-out rounded hover:text-red-500 transition-200 ${
+                  included ? "text-red-500" : "text-slate-500"
+                } bg-opacity-10 bg-amazon-blue_light max-md:mt-3`}
               >
-                <WrenchIcon className="fill-current w-7 h-7 " />
+                <HeartIcon className="fill-current w-7 h-7 " />
               </button>
-            )}
+              {(product.cpu ||
+                product.gpu ||
+                (product.socket && product.size && product.ram) ||
+                (product.ram && product.capacity) ||
+                product.wattage ||
+                (product.capacity && product.category === "disk") ||
+                product.category === "cooler" ||
+                (product.size && product.category === "case")) && (
+                <button
+                  className={`flex items-center p-2 space-x-2 duration-500 ease-in-out rounded ${
+                    cart?.find((item) => item._id === product._id)
+                      ? "text-amazon-orange"
+                      : "text-slate-500"
+                  } hover:text-amazon-orange transition-200  bg-opacity-10 bg-amazon-blue_light max-md:mt-3`}
+                  onClick={handleCart}
+                >
+                  <WrenchIcon className="fill-current w-7 h-7 " />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </Link>
       <div className="mt-2 truncate">
         <Link href={`/product/${product.slug}`}>

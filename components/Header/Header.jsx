@@ -9,12 +9,19 @@ import Link from "next/link";
 import { useAppDispatch } from "@/redux/hooks";
 import { useEffect } from "react";
 import { fetchCarts } from "@/utils/cart";
+import { fetchWishlistFromDB } from "@/utils/wish";
+import { useSession } from "next-auth/react";
 
 const Header = ({ title }) => {
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
+
   useEffect(() => {
-    dispatch(fetchCarts());
-  }, [dispatch]);
+    if (session) {
+      dispatch(fetchCarts());
+      dispatch(fetchWishlistFromDB());
+    }
+  }, [dispatch, session]);
 
   return (
     <>

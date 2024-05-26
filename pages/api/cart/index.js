@@ -13,6 +13,10 @@ handler.post(async (req, res) => {
   try {
     const cart = new Cart({ user: userId, products });
     await cart.save();
+    await cart.populate({
+      path: "products",
+      populate: [{ path: "cpu" }, { path: "gpu" }],
+    });
     await db.disconnectDb();
     res.status(201).json(cart);
   } catch (error) {
@@ -27,7 +31,11 @@ handler.get(async (req, res) => {
   await db.connectDb();
 
   try {
-    const carts = await Cart.find({ user: userId });
+    const carts = await Cart.find({ user: userId }).populate({
+      path: "products",
+      populate: [{ path: "cpu" }, { path: "gpu" }],
+    });
+
     await db.disconnectDb();
     res.status(200).json(carts);
   } catch (error) {

@@ -3,7 +3,6 @@ import GPUCategory from "@/models/GPU_category";
 import CPUCategory from "@/models/CPU_category";
 
 import db from "@/utils/db";
-import Header from "@/components/Header/Header";
 import ProductCard from "@/components/Home/productCard/ProductCard";
 import { ChevronRightIcon, FunnelIcon } from "@heroicons/react/24/solid";
 
@@ -189,73 +188,105 @@ const Browse = ({
   };
 
   return (
-    <>
-      {/* {loading && <DotLoaderSpinner loading={loading} />} */}
-      <Header title={"Browse Products"} />
-      <div className="gap-2 p-1 mx-auto max-w-screen-2xl bg-slate-100 md:p-6">
-        <div>
-          <div className="flex items-center text-sm">
-            <Link className="hover:underline" href="/">
-              Trang chủ
-            </Link>
+    <div className="gap-2 p-1 mx-auto max-w-screen-2xl bg-slate-100 md:p-6">
+      <div>
+        <div className="flex items-center text-sm">
+          <Link className="hover:underline" href="/">
+            Trang chủ
+          </Link>
 
-            <ChevronRightIcon className="w-4 h-4 mx-1 " />
-            <span className="text-slate-700">
-              {categoryName(router.query.slug)}
-            </span>
-          </div>
+          <ChevronRightIcon className="w-4 h-4 mx-1 " />
+          <span className="text-slate-700">
+            {categoryName(router.query.slug)}
+          </span>
         </div>
+      </div>
 
-        <div className="relative grid grid-cols-5 gap-1 mt-4 md:gap-5">
-          <div className="flex flex-col col-span-5 md:col-span-1 md:items-center">
-            <button
-              onClick={() => {
-                router.push(
-                  `${router.pathname.split("[slug]")[0]}/${router.query.slug}`
-                );
-              }}
-              className={`flex items-center justify-center w-56 md:w-full py-2 rounded transition-all duration-300 bg-amazon-blue_light text-white hover:scale-95 border-amazon-blue_dark`}
-            >
-              <FunnelIcon className="w-4 h-4 mr-3" />
-              Đặt lại bộ lọc ({Object.keys(router.query).length - 1})
-            </button>
-            {router.query.slug === "disk" && (
-              <>
-                <SliderRangeFilter
-                  scale={(val) => 2 ** val}
-                  title="Dung lượng"
-                  range={[7, 15]}
-                  valueLabelFormat={(value) => {
-                    if (value > 1000) {
-                      return Math.floor(value / 1000) + "TB";
-                    } else {
-                      return value + "GB";
-                    }
-                  }}
-                  onChange={ramCapHandler}
-                  defaultValue={
-                    router.query.ram_cap
-                      ?.split("_")
-                      .map((val) => Math.log2(val)) || [7, 15]
+      <div className="relative grid grid-cols-5 gap-1 mt-4 md:gap-5">
+        <div className="flex flex-col col-span-5 md:col-span-1 md:items-center">
+          <button
+            onClick={() => {
+              router.push(
+                `${router.pathname.split("[slug]")[0]}/${router.query.slug}`
+              );
+            }}
+            className={`flex items-center justify-center w-56 md:w-full py-2 rounded transition-all duration-300 bg-amazon-blue_light text-white hover:scale-95 border-amazon-blue_dark`}
+          >
+            <FunnelIcon className="w-4 h-4 mr-3" />
+            Đặt lại bộ lọc ({Object.keys(router.query).length - 1})
+          </button>
+          {router.query.slug === "disk" && (
+            <>
+              <SliderRangeFilter
+                scale={(val) => 2 ** val}
+                title="Dung lượng"
+                range={[7, 15]}
+                valueLabelFormat={(value) => {
+                  if (value > 1000) {
+                    return Math.floor(value / 1000) + "TB";
+                  } else {
+                    return value + "GB";
                   }
-                />
-                <BrandsFilter
-                  filter={{ title: "Loại ổ cứng", key: "sub_category" }}
-                  brands={[{ name: "ssd" }, { name: "hdd" }]}
-                  brandHandler={sub_categoryHandler}
-                  replaceQuery={replaceQuery}
-                />
-              </>
-            )}
-            {router.query.slug === "cooler" && (
+                }}
+                onChange={ramCapHandler}
+                defaultValue={
+                  router.query.ram_cap
+                    ?.split("_")
+                    .map((val) => Math.log2(val)) || [7, 15]
+                }
+              />
               <BrandsFilter
-                filter={{ title: "Loại tản nhiệt", key: "sub_category" }}
-                brands={[{ name: "air" }, { name: "aio" }]}
+                filter={{ title: "Loại ổ cứng", key: "sub_category" }}
+                brands={[{ name: "ssd" }, { name: "hdd" }]}
                 brandHandler={sub_categoryHandler}
                 replaceQuery={replaceQuery}
               />
-            )}
-            {router.query.slug === "case" && (
+            </>
+          )}
+          {router.query.slug === "cooler" && (
+            <BrandsFilter
+              filter={{ title: "Loại tản nhiệt", key: "sub_category" }}
+              brands={[{ name: "air" }, { name: "aio" }]}
+              brandHandler={sub_categoryHandler}
+              replaceQuery={replaceQuery}
+            />
+          )}
+          {router.query.slug === "case" && (
+            <BrandsFilter
+              filter={{ title: "Kích cỡ", key: "size" }}
+              brands={[
+                { name: "E-ATX" },
+                { name: "M-ATX" },
+                { name: "ATX" },
+                { name: "ITX" },
+              ]}
+              brandHandler={sizeHandler}
+              replaceQuery={replaceQuery}
+            />
+          )}
+
+          {router.query.slug === "main" && (
+            <>
+              <CategoriesFilter
+                title="Socket"
+                categories={["Intel", "AMD"]}
+                subCategories={[
+                  { brand: "Intel", socket: "LGA 1150" },
+                  { brand: "Intel", socket: "LGA 1151" },
+                  { brand: "Intel", socket: "LGA 1155" },
+                  { brand: "Intel", socket: "LGA 1200" },
+                  { brand: "Intel", socket: "LGA 1700" },
+                  { brand: "Intel", socket: "LGA 2011" },
+                  { brand: "Intel", socket: "LGA 2066" },
+
+                  { brand: "AMD", socket: "AM4" },
+                  { brand: "AMD", socket: "AM5" },
+                  { brand: "AMD", socket: "sTR5" },
+                  { brand: "AMD", socket: "sTRX4" },
+                ]}
+                categoryHandler={socketHandler}
+                replaceQuery={replaceQuery}
+              />
               <BrandsFilter
                 filter={{ title: "Kích cỡ", key: "size" }}
                 brands={[
@@ -267,212 +298,172 @@ const Browse = ({
                 brandHandler={sizeHandler}
                 replaceQuery={replaceQuery}
               />
-            )}
-
-            {router.query.slug === "main" && (
-              <>
-                <CategoriesFilter
-                  title="Socket"
-                  categories={["Intel", "AMD"]}
-                  subCategories={[
-                    { brand: "Intel", socket: "LGA 1150" },
-                    { brand: "Intel", socket: "LGA 1151" },
-                    { brand: "Intel", socket: "LGA 1155" },
-                    { brand: "Intel", socket: "LGA 1200" },
-                    { brand: "Intel", socket: "LGA 1700" },
-                    { brand: "Intel", socket: "LGA 2011" },
-                    { brand: "Intel", socket: "LGA 2066" },
-
-                    { brand: "AMD", socket: "AM4" },
-                    { brand: "AMD", socket: "AM5" },
-                    { brand: "AMD", socket: "sTR5" },
-                    { brand: "AMD", socket: "sTRX4" },
-                  ]}
-                  categoryHandler={socketHandler}
-                  replaceQuery={replaceQuery}
-                />
-                <BrandsFilter
-                  filter={{ title: "Kích cỡ", key: "size" }}
-                  brands={[
-                    { name: "E-ATX" },
-                    { name: "M-ATX" },
-                    { name: "ATX" },
-                    { name: "ITX" },
-                  ]}
-                  brandHandler={sizeHandler}
-                  replaceQuery={replaceQuery}
-                />
-              </>
-            )}
-            {router.query.slug === "ram" && (
-              <>
-                <SliderRangeFilter
-                  scale={(val) => 2 ** val}
-                  title="Dung lượng"
-                  range={[2, 8]}
-                  valueLabelFormat={(value) => `${value} GB`}
-                  onChange={ramCapHandler}
-                  defaultValue={
-                    router.query.ram_cap
-                      ?.split("_")
-                      .map((val) => Math.log2(val)) || [2, 8]
-                  }
-                />
-                <CategoriesFilter
-                  title="Bus"
-                  categories={["DDR3", "DDR4", "DDR5"]}
-                  subCategories={[
-                    { brand: "DDR3", bus: "1333 MHz" },
-                    { brand: "DDR3", bus: "1600 MHz" },
-
-                    { brand: "DDR4", bus: "2133 MHz" },
-                    { brand: "DDR4", bus: "2400 MHz" },
-                    { brand: "DDR4", bus: "2666 MHz" },
-                    { brand: "DDR4", bus: "3000 MHz" },
-                    { brand: "DDR4", bus: "3200 MHz" },
-                    { brand: "DDR4", bus: "3600 MHz" },
-                    { brand: "DDR4", bus: "4000 MHz" },
-                    { brand: "DDR4", bus: "4800 MHz" },
-                    { brand: "DDR4", bus: "6000 MHz" },
-                    { brand: "DDR4", bus: "6200 MHz" },
-
-                    { brand: "DDR5", bus: "4800 MHz" },
-                    { brand: "DDR5", bus: "5200 MHz" },
-                    { brand: "DDR5", bus: "5600 MHz" },
-                    { brand: "DDR5", bus: "6000 MHz" },
-                    { brand: "DDR5", bus: "6200 MHz" },
-                    { brand: "DDR5", bus: "6400 MHz" },
-                    { brand: "DDR5", bus: "7200 MHz" },
-                  ]}
-                  categoryHandler={busHandler}
-                  replaceQuery={replaceQuery}
-                />
-                <BrandsFilter
-                  filter={{ title: "Thế hệ", key: "line" }}
-                  brands={[
-                    { name: "DDR3" },
-                    { name: "DDR4" },
-                    { name: "DDR5" },
-                  ]}
-                  brandHandler={lineHandler}
-                  replaceQuery={replaceQuery}
-                />
-              </>
-            )}
-            {router.query.slug === "psu" && (
-              <>
-                <SliderRangeFilter
-                  title="Công suất"
-                  range={[250, 1000]}
-                  onChange={wattageHandler}
-                  step={10}
-                  valueLabelFormat={(value) => `${value}W`}
-                  defaultValue={router.query.wattage?.split("_") || [250, 1000]}
-                />
-              </>
-            )}
-            <BrandsFilter
-              filter={{ title: "Thương hiệu", key: "brand" }}
-              brands={brands}
-              brandHandler={brandHandler}
-              replaceQuery={replaceQuery}
-            />
-            {router.query.slug === "gpu" && (
-              <>
-                <CategoriesFilter
-                  title="Nhân đồ họa"
-                  categories={brands.map((brand) => brand.name)}
-                  subCategories={graphics}
-                  categoryHandler={cardHandler}
-                  replaceQuery={replaceQuery}
-                />
-                <BrandsFilter
-                  filter={{ title: "Nhà sản xuất", key: "manufacturer" }}
-                  defaultState={false}
-                  brands={manufacturers}
-                  brandHandler={manufacturerHandler}
-                  replaceQuery={replaceQuery}
-                />
-              </>
-            )}
-            {router.query.slug === "cpu" && (
-              <>
-                <BrandsFilter
-                  filter={{ title: "Dòng CPU", key: "line" }}
-                  brands={[
-                    { name: "Core i9" },
-                    { name: "Core i7" },
-                    { name: "Core i5" },
-                    { name: "Core i3" },
-                    { name: "Ryzen Threadripper" },
-                    { name: "Ryzen 9" },
-                    { name: "Ryzen 7" },
-                    { name: "Ryzen 5" },
-                    { name: "Ryzen 3" },
-                    { name: "Athlon" },
-                    { name: "Pentium" },
-                  ]}
-                  brandHandler={lineHandler}
-                  replaceQuery={replaceQuery}
-                />
-                <CategoriesFilter
-                  title="Bộ vi xử lý"
-                  categories={brands.map((brand) => brand.name)}
-                  subCategories={processors}
-                  categoryHandler={processorHandler}
-                  replaceQuery={replaceQuery}
-                />
-                <SliderRangeFilter
-                  title="Số nhân"
-                  range={[2, 64]}
-                  onChange={coreHandler}
-                  defaultValue={router.query.core?.split("_") || [2, 64]}
-                />
-                <SliderRangeFilter
-                  title="Số luồng"
-                  range={[2, 192]}
-                  onChange={threadHandler}
-                  defaultValue={router.query.thread?.split("_") || [2, 192]}
-                />
-                <SliderRangeFilter
-                  title="Xung nhịp"
-                  range={[2.4, 6.2]}
-                  step={0.1}
-                  valueLabelFormat={(value) => `${value} GHz`}
-                  onChange={clockHandler}
-                  defaultValue={router.query.clock?.split("_") || [2.4, 6.2]}
-                />
-              </>
-            )}
-          </div>
-
-          <div className="flex flex-col content-start col-span-5 md:col-span-4">
-            <HeadingFilter
-              priceHandler={priceHandler}
-              multiPriceHandler={multiPriceHandler}
-              ratingHandler={ratingHandler}
-              sortHandler={sortHandler}
-              replaceQuery={replaceQuery}
-              stockHandler={stockHandler}
-            />
-            <div className="flex flex-wrap items-start gap-4 mt-6">
-              {products.map((product) => (
-                <ProductCard product={product} key={product._id} />
-              ))}
-            </div>
-            <div className="flex items-end justify-end w-full my-4">
-              <Pagination
-                count={paginationCount}
-                variant="outlined"
-                defaultPage={Number(router.query.page) || 1}
-                onChange={pageHandler}
-                size="large"
+            </>
+          )}
+          {router.query.slug === "ram" && (
+            <>
+              <SliderRangeFilter
+                scale={(val) => 2 ** val}
+                title="Dung lượng"
+                range={[2, 8]}
+                valueLabelFormat={(value) => `${value} GB`}
+                onChange={ramCapHandler}
+                defaultValue={
+                  router.query.ram_cap
+                    ?.split("_")
+                    .map((val) => Math.log2(val)) || [2, 8]
+                }
               />
-            </div>
+              <CategoriesFilter
+                title="Bus"
+                categories={["DDR3", "DDR4", "DDR5"]}
+                subCategories={[
+                  { brand: "DDR3", bus: "1333 MHz" },
+                  { brand: "DDR3", bus: "1600 MHz" },
+
+                  { brand: "DDR4", bus: "2133 MHz" },
+                  { brand: "DDR4", bus: "2400 MHz" },
+                  { brand: "DDR4", bus: "2666 MHz" },
+                  { brand: "DDR4", bus: "3000 MHz" },
+                  { brand: "DDR4", bus: "3200 MHz" },
+                  { brand: "DDR4", bus: "3600 MHz" },
+                  { brand: "DDR4", bus: "4000 MHz" },
+                  { brand: "DDR4", bus: "4800 MHz" },
+                  { brand: "DDR4", bus: "6000 MHz" },
+                  { brand: "DDR4", bus: "6200 MHz" },
+
+                  { brand: "DDR5", bus: "4800 MHz" },
+                  { brand: "DDR5", bus: "5200 MHz" },
+                  { brand: "DDR5", bus: "5600 MHz" },
+                  { brand: "DDR5", bus: "6000 MHz" },
+                  { brand: "DDR5", bus: "6200 MHz" },
+                  { brand: "DDR5", bus: "6400 MHz" },
+                  { brand: "DDR5", bus: "7200 MHz" },
+                ]}
+                categoryHandler={busHandler}
+                replaceQuery={replaceQuery}
+              />
+              <BrandsFilter
+                filter={{ title: "Thế hệ", key: "line" }}
+                brands={[{ name: "DDR3" }, { name: "DDR4" }, { name: "DDR5" }]}
+                brandHandler={lineHandler}
+                replaceQuery={replaceQuery}
+              />
+            </>
+          )}
+          {router.query.slug === "psu" && (
+            <>
+              <SliderRangeFilter
+                title="Công suất"
+                range={[250, 1000]}
+                onChange={wattageHandler}
+                step={10}
+                valueLabelFormat={(value) => `${value}W`}
+                defaultValue={router.query.wattage?.split("_") || [250, 1000]}
+              />
+            </>
+          )}
+          <BrandsFilter
+            filter={{ title: "Thương hiệu", key: "brand" }}
+            brands={brands}
+            brandHandler={brandHandler}
+            replaceQuery={replaceQuery}
+          />
+          {router.query.slug === "gpu" && (
+            <>
+              <CategoriesFilter
+                title="Nhân đồ họa"
+                categories={brands.map((brand) => brand.name)}
+                subCategories={graphics}
+                categoryHandler={cardHandler}
+                replaceQuery={replaceQuery}
+              />
+              <BrandsFilter
+                filter={{ title: "Nhà sản xuất", key: "manufacturer" }}
+                defaultState={false}
+                brands={manufacturers}
+                brandHandler={manufacturerHandler}
+                replaceQuery={replaceQuery}
+              />
+            </>
+          )}
+          {router.query.slug === "cpu" && (
+            <>
+              <BrandsFilter
+                filter={{ title: "Dòng CPU", key: "line" }}
+                brands={[
+                  { name: "Core i9" },
+                  { name: "Core i7" },
+                  { name: "Core i5" },
+                  { name: "Core i3" },
+                  { name: "Ryzen Threadripper" },
+                  { name: "Ryzen 9" },
+                  { name: "Ryzen 7" },
+                  { name: "Ryzen 5" },
+                  { name: "Ryzen 3" },
+                  { name: "Athlon" },
+                  { name: "Pentium" },
+                ]}
+                brandHandler={lineHandler}
+                replaceQuery={replaceQuery}
+              />
+              <CategoriesFilter
+                title="Bộ vi xử lý"
+                categories={brands.map((brand) => brand.name)}
+                subCategories={processors}
+                categoryHandler={processorHandler}
+                replaceQuery={replaceQuery}
+              />
+              <SliderRangeFilter
+                title="Số nhân"
+                range={[2, 64]}
+                onChange={coreHandler}
+                defaultValue={router.query.core?.split("_") || [2, 64]}
+              />
+              <SliderRangeFilter
+                title="Số luồng"
+                range={[2, 192]}
+                onChange={threadHandler}
+                defaultValue={router.query.thread?.split("_") || [2, 192]}
+              />
+              <SliderRangeFilter
+                title="Xung nhịp"
+                range={[2.4, 6.2]}
+                step={0.1}
+                valueLabelFormat={(value) => `${value} GHz`}
+                onChange={clockHandler}
+                defaultValue={router.query.clock?.split("_") || [2.4, 6.2]}
+              />
+            </>
+          )}
+        </div>
+
+        <div className="flex flex-col content-start col-span-5 md:col-span-4">
+          <HeadingFilter
+            priceHandler={priceHandler}
+            multiPriceHandler={multiPriceHandler}
+            ratingHandler={ratingHandler}
+            sortHandler={sortHandler}
+            replaceQuery={replaceQuery}
+            stockHandler={stockHandler}
+          />
+          <div className="flex flex-wrap items-start gap-4 mt-6">
+            {products.map((product) => (
+              <ProductCard product={product} key={product._id} />
+            ))}
+          </div>
+          <div className="flex items-end justify-end w-full my-4">
+            <Pagination
+              count={paginationCount}
+              variant="outlined"
+              defaultPage={Number(router.query.page) || 1}
+              onChange={pageHandler}
+              size="large"
+            />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -732,10 +723,11 @@ export async function getServerSideProps(context) {
     ...socket,
     ...size,
   };
-  console.log(sum_queries);
 
   let products = await Product.find(sum_queries)
-    .select("-description -long_specs -short_specs -warranty -updatedAt -url -embedding")
+    .select(
+      "-description -long_specs -short_specs -warranty -updatedAt -url -embedding"
+    )
     .populate("cpu")
     .populate("gpu")
     .skip(pageSize * (page - 1))

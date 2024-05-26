@@ -22,9 +22,12 @@ export const cartSlice = createSlice({
     },
     setCarts(state, action) {
       state.carts = action.payload;
+      if (!state.activeCartId && action.payload?.length > 0)
+        state.activeCartId = action.payload[0]._id;
     },
     removeCart(state, action) {
       state.carts = state.carts.filter((cart) => cart._id !== action.payload);
+      if (state.carts.length === 0) state.activeCartId = null;
     },
     setActiveCart(state, action) {
       state.activeCartId = action.payload; // Set the active cart ID

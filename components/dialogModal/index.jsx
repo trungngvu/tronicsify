@@ -2,11 +2,9 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { hideDialog, selectDialog } from "@/redux/slices/DialogSlice";
-import { useDispatch } from "react-redux";
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
@@ -14,7 +12,7 @@ import {
 
 export default function DialogModal() {
   const dialog = useAppSelector(selectDialog);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleClose = () => {
     dispatch(hideDialog());
   };
@@ -40,7 +38,7 @@ export default function DialogModal() {
         maxWidth={"xs"}
       >
         <DialogTitle
-          className={`${
+          className={`font-bold ${
             typeModal == "error"
               ? "bg-red-500 text-white"
               : "bg-green-500 text-slate-800"
@@ -50,24 +48,22 @@ export default function DialogModal() {
           {dialog.header}
         </DialogTitle>
         <DialogContent className="mt-4">
-          <DialogContentText id="alert-dialog-description">
-            {dialog.msgs.length > 0 &&
-              dialog.msgs.map((item, i) => (
-                <p className="flex items-center mb-2" key={i}>
-                  {typeModal == "error" ? (
-                    <ExclamationTriangleIcon className="w-6 h-6 fill-red-500" />
-                  ) : (
-                    <CheckCircleIcon className="w-6 h-6 fill-green-500" />
-                  )}
-                  <span className="ml-2">{item.msg}</span>
-                </p>
-              ))}
-          </DialogContentText>
+          {dialog.msgs.length > 0 &&
+            dialog.msgs.map((item, i) => (
+              <p className="flex items-center mb-2" key={i}>
+                {typeModal == "error" ? (
+                  <ExclamationTriangleIcon className="w-6 h-6 fill-red-500" />
+                ) : (
+                  <CheckCircleIcon className="w-6 h-6 fill-green-500" />
+                )}
+                <span className="ml-2">{item.msg}</span>
+              </p>
+            ))}
         </DialogContent>
         <DialogActions>
           {/* <Button onClick={handleClose}>Disagree</Button> */}
           <Button onClick={handleClose} autoFocus>
-            Ok
+            OK
           </Button>
         </DialogActions>
       </Dialog>

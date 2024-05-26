@@ -1,28 +1,22 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header/Header";
 import jwt from "jsonwebtoken";
 import User from "@/models/User";
 import Image from "next/image";
 
-const Activate = ({ userId }) => {
+const Activate = () => {
   return (
-    <>
-      <Header />
-      <main className="w-full h-[65vh] bg-slate-100 flex flex-col items-center justify-center">
-        <div className="text-xl font-bold text-center">
-          Kích hoạt tài khoản thành công. <br/>
-          Hãy đăng nhập tài khoản để sử dụng hệ thống
-        </div>
-        <Image
-          src="/assets/images/mail.png"
-          width={200}
-          alt="mail"
-          height={200}
-          className="rounded-xl"
-        />
-      </main>
-      <Footer />
-    </>
+    <main className="w-full h-[65vh] bg-slate-100 flex flex-col items-center justify-center">
+      <div className="text-xl font-bold text-center">
+        Kích hoạt tài khoản thành công. <br />
+        Hãy đăng nhập tài khoản để sử dụng hệ thống
+      </div>
+      <Image
+        src="/assets/images/mail.png"
+        width={200}
+        alt="mail"
+        height={200}
+        className="rounded-xl"
+      />
+    </main>
   );
 };
 

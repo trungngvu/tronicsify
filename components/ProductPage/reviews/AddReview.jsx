@@ -1,4 +1,3 @@
-import DialogModal from "@/components/dialogModal";
 import { useAppDispatch } from "@/redux/hooks";
 import { showDialog } from "@/redux/slices/DialogSlice";
 import { uploadImages } from "@/request/upload";
@@ -59,6 +58,7 @@ const AddReview = ({ product, setReviews }) => {
       review,
       images: uploaded_images,
     });
+    console.log(data);
     setReviews(data.reviews);
     dispatch(
       showDialog({
@@ -79,7 +79,6 @@ const AddReview = ({ product, setReviews }) => {
 
   return (
     <div className="flex flex-col">
-      <DialogModal />
       <ImagesReview images={images} setImages={setImages} />
       <textarea
         className="mt-4 p-3 w-full rounded-md bg-white h-[200px] border border-slate-200 outline-none resize-none"

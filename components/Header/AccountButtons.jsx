@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
 
 const AccountButtons = () => {
-  const cart = useAppSelector((state) => state.cart.cartItems);
+  const { carts, activeCartId } = useAppSelector((state) => state.cart);
   const { data: session } = useSession();
 
   return (
@@ -17,7 +17,7 @@ const AccountButtons = () => {
       {/* account Icon in Mobile */}
       <div className=" md:hidden">
         <Link className="flex items-center" href="/auth/signin">
-          <p className="text-sm">Sign in</p>
+          <p className="text-sm">Đăng nhập</p>
           <ChevronRightIcon className="h-3 " />
           <UserIcon className="h-6" />
         </Link>
@@ -84,7 +84,8 @@ const AccountButtons = () => {
           <div className="relative pt-2 pr-2">
             <WrenchScrewdriverIcon className="h-10" />
             <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 font-semibold rounded-full bg-amazon-orange text-amazon-blue_dark">
-              {cart?.length}
+              {carts?.find((cart) => cart._id === activeCartId)?.products
+                .length || 0}
             </span>
           </div>
           <p className="hidden w-20 mt-2 text-sm font-bold md:inline">
