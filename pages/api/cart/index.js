@@ -42,6 +42,7 @@ handler.get(async (req, res) => {
     await db.disconnectDb();
     return res.status(200).json(carts);
   } catch (error) {
+    console.log(error);
     await db.disconnectDb();
     return res.status(500).json({ message: "Failed to retrieve carts", error });
   }
