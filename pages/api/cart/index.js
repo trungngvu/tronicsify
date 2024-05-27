@@ -2,6 +2,8 @@ import nc from "next-connect";
 import auth from "@/middleware/auth";
 import Cart from "@/models/Cart";
 import db from "@/utils/db";
+import GPUCategory from "@/models/GPU_category";
+import CPUCategory from "@/models/CPU_category";
 
 const handler = nc().use(auth);
 
@@ -34,6 +36,7 @@ handler.get(async (req, res) => {
     const carts = await Cart.find({ user: userId }).populate({
       path: "products",
       populate: [{ path: "cpu" }, { path: "gpu" }],
+      select: "imgs price slug title availability category sub_category",
     });
 
     await db.disconnectDb();
