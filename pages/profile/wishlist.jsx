@@ -42,9 +42,10 @@ export async function getServerSideProps(context) {
 
   let wishlist = [];
   try {
-    const user = await User.findById(session?.user.id).populate(
-      "wishlist.product"
-    );
+    const user = await User.findById(session?.user.id).populate({
+      path: "wishlist.product",
+      model: Product,
+    });
     await db.disconnectDb();
     wishlist = user.wishlist;
   } catch (error) {

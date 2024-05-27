@@ -18,7 +18,12 @@ handler.post(async (req, res) => {
     await cart.save();
     await cart.populate({
       path: "products",
-      populate: [{ path: "cpu" }, { path: "gpu" }],
+      model: Product,
+      populate: [
+        { path: "cpu", model: CPUCategory },
+        { path: "gpu", model: GPUCategory },
+      ],
+      select: "imgs price slug title availability category sub_category",
     });
     await db.disconnectDb();
     return res.status(201).json(cart);
@@ -36,7 +41,11 @@ handler.get(async (req, res) => {
   try {
     const carts = await Cart.find({ user: userId }).populate({
       path: "products",
-      populate: [{ path: "cpu" }, { path: "gpu" }],
+      model: Product,
+      populate: [
+        { path: "cpu", model: CPUCategory },
+        { path: "gpu", model: GPUCategory },
+      ],
       select: "imgs price slug title availability category sub_category",
     });
 

@@ -17,7 +17,11 @@ handler.put(async (req, res) => {
     const cart = await Cart.findByIdAndUpdate(id, { products }, { new: true });
     await cart.populate({
       path: "products",
-      populate: [{ path: "cpu" }, { path: "gpu" }],
+      model: Product,
+      populate: [
+        { path: "cpu", model: CPUCategory },
+        { path: "gpu", model: GPUCategory },
+      ],
     });
     await db.disconnectDb();
     return res.status(200).json(cart);
@@ -44,13 +48,21 @@ handler.post(async (req, res) => {
     await cart.save();
     await cart.populate({
       path: "products",
-      populate: [{ path: "cpu" }, { path: "gpu" }],
+      model: Product,
+      populate: [
+        { path: "cpu", model: CPUCategory },
+        { path: "gpu", model: GPUCategory },
+      ],
+      select: "imgs price slug title availability category sub_category",
     });
+
     await db.disconnectDb();
     return res.status(200).json(cart);
   } catch (error) {
     await db.disconnectDb();
-    return res.status(500).json({ message: "Failed to add product to cart", error });
+    return res
+      .status(500)
+      .json({ message: "Failed to add product to cart", error });
   }
 });
 
@@ -73,13 +85,20 @@ handler.patch(async (req, res) => {
     await cart.save();
     await cart.populate({
       path: "products",
-      populate: [{ path: "cpu" }, { path: "gpu" }],
+      model: Product,
+      populate: [
+        { path: "cpu", model: CPUCategory },
+        { path: "gpu", model: GPUCategory },
+      ],
+      select: "imgs price slug title availability category sub_category",
     });
     await db.disconnectDb();
     return res.status(200).json(cart);
   } catch (error) {
     await db.disconnectDb();
-    return res.status(500).json({ message: "Failed to toggle sharable field", error });
+    return res
+      .status(500)
+      .json({ message: "Failed to toggle sharable field", error });
   }
 });
 handler.delete(async (req, res) => {

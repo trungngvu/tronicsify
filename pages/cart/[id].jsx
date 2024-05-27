@@ -92,7 +92,11 @@ export async function getServerSideProps(context) {
     cart = await Cart.findById(id)
       .populate({
         path: "products",
-        populate: [{ path: "cpu" }, { path: "gpu" }],
+        model: Product,
+        populate: [
+          { path: "cpu", model: CPUCategory },
+          { path: "gpu", model: GPUCategory },
+        ],
       })
       .populate("user");
     if (!cart) cart = "404";

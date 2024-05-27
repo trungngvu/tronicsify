@@ -728,8 +728,8 @@ export async function getServerSideProps(context) {
     .select(
       "-description -long_specs -short_specs -warranty -updatedAt -url -embedding"
     )
-    .populate("cpu")
-    .populate("gpu")
+    .populate({ path: "cpu", model: CPUCategory })
+    .populate({ path: "gpu", model: GPUCategory })
     .skip(pageSize * (page - 1))
     .limit(pageSize)
     .sort(sort)
