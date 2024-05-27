@@ -8,7 +8,6 @@ import View from "@/components/CartPage/View";
 import Checkout from "@/components/CartPage/Checkout";
 import { Avatar } from "@mui/material";
 import ConstrainCheck from "@/components/CartPage/ConstrainCheck";
-import Footer from "@/components/Footer";
 
 const Sharing = ({ cart }) => {
   return (
@@ -101,7 +100,8 @@ export async function getServerSideProps(context) {
       .populate("user");
     if (!cart) cart = "404";
     else if (!cart.sharable) cart = "401";
-  } catch {
+  } catch (e) {
+    console.log(e);
     cart = "404";
   }
   await db.disconnectDb();
