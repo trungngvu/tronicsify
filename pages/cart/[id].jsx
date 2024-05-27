@@ -2,6 +2,7 @@ import Cart from "@/models/Cart";
 import Product from "@/models/Product";
 import GPUCategory from "@/models/GPU_category";
 import CPUCategory from "@/models/CPU_category";
+import User from "@/models/User";
 import db from "@/utils/db";
 import Image from "next/image";
 import View from "@/components/CartPage/View";
@@ -97,11 +98,10 @@ export async function getServerSideProps(context) {
           { path: "gpu", model: GPUCategory },
         ],
       })
-      .populate("user");
+      .populate({ path: "user", model: User });
     if (!cart) cart = "404";
     else if (!cart.sharable) cart = "401";
   } catch (e) {
-    console.log(e);
     cart = "404";
   }
   await db.disconnectDb();
