@@ -33,6 +33,7 @@ handler.post(async (req, res) => {
       .json(
         user.wishlist.find((prod) => prod.product.toString() === productId)
       );
+    await db.disconnectDb();
   } catch (error) {
     await db.disconnectDb();
     res.status(500).send("Server error");
@@ -77,8 +78,8 @@ handler.get(async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
     res.status(200).json(user.wishlist);
+    await db.disconnectDb();
   } catch (error) {
     await db.disconnectDb();
     console.log(error);

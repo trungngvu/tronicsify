@@ -16,9 +16,8 @@ handler.put(async (req, res) => {
       path: "products",
       populate: [{ path: "cpu" }, { path: "gpu" }],
     });
-    await db.disconnectDb();
-
     res.status(200).json(cart);
+    await db.disconnectDb();
   } catch (error) {
     await db.disconnectDb();
     res.status(500).json({ message: "Failed to update cart", error });
@@ -44,8 +43,8 @@ handler.post(async (req, res) => {
       path: "products",
       populate: [{ path: "cpu" }, { path: "gpu" }],
     });
-    await db.disconnectDb();
     res.status(200).json(cart);
+    await db.disconnectDb();
   } catch (error) {
     await db.disconnectDb();
     res.status(500).json({ message: "Failed to add product to cart", error });
@@ -73,8 +72,8 @@ handler.patch(async (req, res) => {
       path: "products",
       populate: [{ path: "cpu" }, { path: "gpu" }],
     });
-    await db.disconnectDb();
     res.status(200).json(cart);
+    await db.disconnectDb();
   } catch (error) {
     await db.disconnectDb();
     res.status(500).json({ message: "Failed to toggle sharable field", error });
