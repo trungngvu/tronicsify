@@ -19,9 +19,12 @@ export const wishSlice = createSlice({
     setWishes(state, action) {
       state.wishes = action.payload;
     },
+    resetWish(state, action) {
+      state = initialState;
+    },
   },
 });
 
-export const { addWish, removeWish, setWishes } = wishSlice.actions;
+export const { addWish, removeWish, setWishes, resetWish } = wishSlice.actions;
 
 export default wishSlice.reducer;

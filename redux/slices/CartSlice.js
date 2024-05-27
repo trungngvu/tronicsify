@@ -32,10 +32,19 @@ export const cartSlice = createSlice({
     setActiveCart(state, action) {
       state.activeCartId = action.payload; // Set the active cart ID
     },
+    resetCart(state, action) {
+      state = initialState;
+    },
   },
 });
 
-export const { addCart, updateCart, setCarts, removeCart, setActiveCart } =
-  cartSlice.actions;
+export const {
+  addCart,
+  updateCart,
+  setCarts,
+  removeCart,
+  setActiveCart,
+  resetCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -6,10 +6,13 @@ import {
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { resetCart } from "@/redux/slices/CartSlice";
+import { resetWish } from "@/redux/slices/WishSlice";
 
 const AccountButtons = () => {
   const { carts, activeCartId } = useAppSelector((state) => state.cart);
+  const dispatch = useAppDispatch();
   const { data: session } = useSession();
 
   return (
@@ -50,7 +53,11 @@ const AccountButtons = () => {
                   </div>
                 </Link>
                 <button
-                  onClick={() => signOut()}
+                  onClick={() => {
+                    signOut();
+                    dispatch(resetCart());
+                    dispatch(resetWish());
+                  }}
                   className="button-orange px-2 py-[0.3rem] text-sm text-gray-900"
                 >
                   Đăng xuất

@@ -1,5 +1,8 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { signOut } from "next-auth/react";
+import { resetCart } from "@/redux/slices/CartSlice";
+import { resetWish } from "@/redux/slices/WishSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLongRightIcon } from "@heroicons/react/24/solid";
@@ -8,12 +11,20 @@ import { useRouter } from "next/router";
 
 const Item = ({ item, visible, index }) => {
   const [show, setShow] = useState(visible);
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   return (
     <li className="py-2 transition-all duration-300 cursor-pointer text-amazon-blue_light">
       {item.heading == "Sign Out" ? (
-        <b className="hover:text-[#fda22c]" onClick={() => signOut()}>
+        <b
+          className="hover:text-[#fda22c]"
+          onClick={() => {
+            signOut();
+            dispatch(resetCart());
+            dispatch(resetWish());
+          }}
+        >
           Đăng xuất
         </b>
       ) : (
