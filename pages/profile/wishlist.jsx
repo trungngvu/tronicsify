@@ -2,6 +2,7 @@ import Layout from "@/components/profile/layout/Layout";
 import db from "@/utils/db";
 import { getSession } from "next-auth/react";
 import User from "@/models/User";
+import Product from "@/models/Product";
 import ProductCard from "@/components/Home/productCard/ProductCard";
 
 const Profile = ({ user, tab, wishlist }) => {

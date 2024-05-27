@@ -1,4 +1,7 @@
 import Cart from "@/models/Cart";
+import Product from "@/models/Product";
+import GPUCategory from "@/models/GPU_category";
+import CPUCategory from "@/models/CPU_category";
 import db from "@/utils/db";
 import Image from "next/image";
 import View from "@/components/CartPage/View";

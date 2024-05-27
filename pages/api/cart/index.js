@@ -2,6 +2,7 @@ import nc from "next-connect";
 import auth from "@/middleware/auth";
 import Cart from "@/models/Cart";
 import db from "@/utils/db";
+import Product from "@/models/Product";
 import GPUCategory from "@/models/GPU_category";
 import CPUCategory from "@/models/CPU_category";
 
