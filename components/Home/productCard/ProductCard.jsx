@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
       }.jpg`
     );
   const price = product?.price;
-  const cart = carts.find((c) => c._id === activeCartId)?.products || [];
+  const cart = carts?.find((c) => c._id === activeCartId)?.products || [];
 
   const handleCart = (e) => {
     e.preventDefault();
