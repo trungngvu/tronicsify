@@ -5,7 +5,6 @@ import Infos from "./productInfos";
 import Specs from "./productInfos/specs";
 import MainSwiper from "./MainSwiper";
 import Reviews from "./reviews/Reviews";
-import SimilarSwiper from "./SimilarSwiper";
 
 const ProductPage = ({ product }) => {
   return (
@@ -28,9 +27,6 @@ const ProductPage = ({ product }) => {
       </div>
       <Specs product={product} />
 
-      <div className="w-full p-2 mx-auto mt-2 border rounded-lg md:w-4/5">
-        <SimilarSwiper title="Sản phẩm tương tự" />
-      </div>
       <Reviews product={product} />
     </div>
   );
