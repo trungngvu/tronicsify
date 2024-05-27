@@ -18,10 +18,10 @@ handler.post(async (req, res) => {
       populate: [{ path: "cpu" }, { path: "gpu" }],
     });
     await db.disconnectDb();
-    res.status(201).json(cart);
+    return res.status(201).json(cart);
   } catch (error) {
     await db.disconnectDb();
-    res.status(500).json({ message: "Failed to create cart", error });
+    return res.status(500).json({ message: "Failed to create cart", error });
   }
 });
 
@@ -37,10 +37,10 @@ handler.get(async (req, res) => {
     });
 
     await db.disconnectDb();
-    res.status(200).json(carts);
+    return res.status(200).json(carts);
   } catch (error) {
     await db.disconnectDb();
-    res.status(500).json({ message: "Failed to retrieve carts", error });
+    return res.status(500).json({ message: "Failed to retrieve carts", error });
   }
 });
 

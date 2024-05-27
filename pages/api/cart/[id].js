@@ -16,11 +16,11 @@ handler.put(async (req, res) => {
       path: "products",
       populate: [{ path: "cpu" }, { path: "gpu" }],
     });
-    res.status(200).json(cart);
     await db.disconnectDb();
+    return res.status(200).json(cart);
   } catch (error) {
     await db.disconnectDb();
-    res.status(500).json({ message: "Failed to update cart", error });
+    return res.status(500).json({ message: "Failed to update cart", error });
   }
 });
 
@@ -43,11 +43,11 @@ handler.post(async (req, res) => {
       path: "products",
       populate: [{ path: "cpu" }, { path: "gpu" }],
     });
-    res.status(200).json(cart);
     await db.disconnectDb();
+    return res.status(200).json(cart);
   } catch (error) {
     await db.disconnectDb();
-    res.status(500).json({ message: "Failed to add product to cart", error });
+    return res.status(500).json({ message: "Failed to add product to cart", error });
   }
 });
 
@@ -72,11 +72,11 @@ handler.patch(async (req, res) => {
       path: "products",
       populate: [{ path: "cpu" }, { path: "gpu" }],
     });
-    res.status(200).json(cart);
     await db.disconnectDb();
+    return res.status(200).json(cart);
   } catch (error) {
     await db.disconnectDb();
-    res.status(500).json({ message: "Failed to toggle sharable field", error });
+    return res.status(500).json({ message: "Failed to toggle sharable field", error });
   }
 });
 handler.delete(async (req, res) => {
@@ -93,10 +93,10 @@ handler.delete(async (req, res) => {
     }
 
     await db.disconnectDb();
-    res.status(200).json({ message: "Cart deleted successfully" });
+    return res.status(200).json({ message: "Cart deleted successfully" });
   } catch (error) {
     await db.disconnectDb();
-    res.status(500).json({ message: "Failed to delete cart", error });
+    return res.status(500).json({ message: "Failed to delete cart", error });
   }
 });
 export default handler;
