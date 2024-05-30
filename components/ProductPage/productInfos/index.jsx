@@ -1,18 +1,68 @@
 import { Rating } from "@mui/material";
 import Link from "next/link";
-import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
-import { HeartIcon as SolidHeart } from "@heroicons/react/24/solid";
+import {
+  HeartIcon,
+  ShoppingBagIcon,
+  WrenchIcon,
+} from "@heroicons/react/24/outline";
+import {
+  HeartIcon as SolidHeart,
+  WrenchIcon as SolidWrench,
+} from "@heroicons/react/24/solid";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addWishToDB, removeWishFromDB } from "@/utils/wish";
+import { updateCartInDatabase, addProductToCart } from "@/utils/cart";
+import { useSession } from "next-auth/react";
+import { showDialog } from "@/redux/slices/DialogSlice";
 
 const Infos = ({ product }) => {
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
   const wishlist = useAppSelector((state) => state.wish.wishes);
+  const { carts, activeCartId } = useAppSelector((state) => state.cart);
+  const cart = carts?.find((c) => c._id === activeCartId)?.products || [];
+
   const included = wishlist.find((prod) => prod.product === product._id);
+  const inCart = cart?.find((item) => item._id === product._id);
+
   const handleWishlist = () => {
     if (included) {
       dispatch(removeWishFromDB(product._id));
     } else dispatch(addWishToDB(product._id));
+  };
+  const handleCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!activeCartId) {
+      dispatch(
+        showDialog({
+          header: "Bạn chưa thêm cấu hình nào",
+          msgs: [
+            {
+              msg: 'Truy cập "Xây dựng cấu hình" để thêm cấu hình mới ngay!',
+              type: "error",
+            },
+          ],
+        })
+      );
+      return;
+    }
+    if (!!cart?.find((item) => item._id === product._id)) {
+      const newCart = cart?.filter((item) => item._id !== product._id);
+      dispatch(updateCartInDatabase(activeCartId, newCart));
+    } else if (
+      !!cart?.find((item) => item.category === product.category) &&
+      product.category !== "disk" &&
+      product.category !== "ram"
+    ) {
+      const newCart = cart?.filter(
+        (item) => item.category !== product.category
+      );
+      newCart.push(product);
+      dispatch(updateCartInDatabase(activeCartId, newCart));
+    } else {
+      dispatch(addProductToCart(activeCartId, product));
+    }
   };
 
   const updateAt = new Date(product.updatedAt);
@@ -65,7 +115,7 @@ const Infos = ({ product }) => {
         <div className="text-xl font-extrabold text-yellow-600">
           {product.price.toLocaleString()}₫
         </div>
-        {product.warranty && (
+        {product.warranty && product.warranty !== "None" && (
           <div className="p-1 bg-slate-100">Bảo hành: {product.warranty}</div>
         )}
       </div>
@@ -81,17 +131,32 @@ const Infos = ({ product }) => {
             Chuyển đến trang sản phẩm
           </span>
         </Link>
-        <button
-          onClick={() => handleWishlist()}
-          className="flex items-center p-2 space-x-2 transition duration-500 ease-in-out rounded bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
-        >
-          {included ? (
-            <SolidHeart className="w-8 h-8 text-red-500" />
-          ) : (
-            <HeartIcon className="w-8 h-8" />
-          )}
-          <span>Yêu thích</span>
-        </button>
+        {session && (
+          <>
+            <button
+              onClick={handleWishlist}
+              className="flex items-center p-2 space-x-2 transition duration-500 ease-in-out rounded bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
+            >
+              {included ? (
+                <SolidHeart className="w-8 h-8 text-red-500" />
+              ) : (
+                <HeartIcon className="w-8 h-8" />
+              )}
+              <span>Yêu thích</span>
+            </button>
+            <button
+              onClick={handleCart}
+              className="flex items-center p-2 space-x-2 transition duration-500 ease-in-out rounded bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
+            >
+              {inCart ? (
+                <SolidWrench className="w-8 h-8 text-amazon-orange" />
+              ) : (
+                <WrenchIcon className="w-8 h-8" />
+              )}
+              <span>Chọn linh kiện</span>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

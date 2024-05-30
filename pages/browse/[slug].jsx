@@ -94,7 +94,7 @@ const Browse = ({
     filter({ clock: `${min}_${max}` });
   };
   const ramCapHandler = (min, max) => {
-    filter({ ram_cap: `${2 ** min}_${2 ** max}` });
+    filter({ capacity: `${2 ** min}_${2 ** max}` });
   };
   const wattageHandler = (min, max) => {
     filter({ wattage: `${min}_${max}` });
@@ -230,7 +230,7 @@ const Browse = ({
                 }}
                 onChange={ramCapHandler}
                 defaultValue={
-                  router.query.ram_cap
+                  router.query.capacity
                     ?.split("_")
                     .map((val) => Math.log2(val)) || [7, 15]
                 }
@@ -309,7 +309,7 @@ const Browse = ({
                 valueLabelFormat={(value) => `${value} GB`}
                 onChange={ramCapHandler}
                 defaultValue={
-                  router.query.ram_cap
+                  router.query.capacity
                     ?.split("_")
                     .map((val) => Math.log2(val)) || [2, 8]
                 }
@@ -498,7 +498,7 @@ export async function getServerSideProps(context) {
   const lineQuery = query.line?.split("_") || [];
   const lineSearchRegex = generateRegexFromKeywordArrays(lineQuery, []);
   // --------------------------------------------------
-  const ramCapQuery = query.ram_cap?.split("_") || [];
+  const ramCapQuery = query.capacity?.split("_") || [];
   // --------------------------------------------------
   const socketQuery = query.socket?.split("_") || "";
   // --------------------------------------------------
@@ -590,7 +590,7 @@ export async function getServerSideProps(context) {
           },
         }
       : {};
-  const ram_cap =
+  const capacity =
     ramCapQuery && ramCapQuery.length > 0
       ? {
           capacity: {
@@ -704,6 +704,8 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const combinedTitleQuery = { $and: [line, ram_bus] };
+
   const sum_queries = {
     category,
     ...subCategory,
@@ -712,18 +714,16 @@ export async function getServerSideProps(context) {
     ...price,
     ...rating,
     ...stock,
-    ...line,
+    ...combinedTitleQuery,
     ...card,
     ...processor,
-    ...ram_cap,
-    ...ram_bus,
+    ...capacity,
     ...filteredProcessors,
     ...wattage,
     ...sub_category,
     ...socket,
     ...size,
   };
-
   let products = await Product.find(sum_queries)
     .select(
       "-description -long_specs -short_specs -warranty -updatedAt -url -embedding"

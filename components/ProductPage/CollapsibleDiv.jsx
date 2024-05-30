@@ -23,7 +23,7 @@ const CollapsibleDiv = ({ maxHeight = 700, children }) => {
             onClick={toggleCollapse}
             className="absolute bottom-0 right-0 px-4 py-2 font-semibold text-blue-500 bg-white"
           >
-            {isExpanded ? "Show Less" : "Show More"}
+            {isExpanded ? "Ẩn bớt" : "Xem thêm"}
           </button>
         )
       ) : (
@@ -31,7 +31,7 @@ const CollapsibleDiv = ({ maxHeight = 700, children }) => {
           onClick={toggleCollapse}
           className="absolute bottom-0 right-0 px-4 py-2 font-semibold text-blue-500 bg-white"
         >
-          {isExpanded ? "Show Less" : "Show More"}
+          {isExpanded ? "Ẩn bớt" : "Xem thêm"}
         </button>
       )}
     </div>

@@ -24,10 +24,8 @@ export const sendEmail = async (to, url, txt, subject, template) => {
   await new Promise((resolve, reject) => {
     smtpTransport.sendMail(mailOptions, (err, info) => {
       if (err) {
-        console.error(err);
         reject(err);
       } else {
-        console.log(info);
         resolve(info);
       }
     });

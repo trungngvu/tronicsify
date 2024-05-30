@@ -23,7 +23,8 @@ handler.post(async (req, res) => {
         { path: "cpu", model: CPUCategory },
         { path: "gpu", model: GPUCategory },
       ],
-      select: "imgs price slug title availability category sub_category",
+      select:
+        "-description -long_specs -short_specs -warranty -updatedAt -url -embedding",
     });
     await db.disconnectDb();
     return res.status(201).json(cart);
@@ -46,7 +47,8 @@ handler.get(async (req, res) => {
         { path: "cpu", model: CPUCategory },
         { path: "gpu", model: GPUCategory },
       ],
-      select: "imgs price slug title availability category sub_category",
+      select:
+        "-description -long_specs -short_specs -warranty -updatedAt -url -embedding",
     });
 
     await db.disconnectDb();
