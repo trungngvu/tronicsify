@@ -666,7 +666,15 @@ export async function getServerSideProps(context) {
 
   const sort =
     sortQuery == ""
-      ? {}
+      ? {
+          cpu: -1,
+          gpu: -1,
+          capacity: -1,
+          socket: -1,
+          size: -1,
+          ram: -1,
+          wattage: -1,
+        }
       : sortQuery == "newest"
       ? { updatedAt: -1 }
       : sortQuery == "topSelling"
