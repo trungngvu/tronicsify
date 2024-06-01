@@ -12,7 +12,17 @@ const HomeProductSwiper = ({ products, category }) => {
   let selectedProducts = products.filter((p) => p.category === category);
   return (
     <div className="z-50 flex flex-col h-auto p-4 mx-4 mb-4 bg-white border rounded">
-      <h4 className="mb-4 text-xl font-bold">{category}</h4>
+      <h4 className="mb-4 text-xl font-bold">
+        {category === "psu"
+          ? "Nguồn máy tính"
+          : category === "cooler"
+          ? "Tản nhiệt"
+          : category === "disk"
+          ? "Ổ cứng"
+          : category === "case"
+          ? "Case máy tính"
+          : category}
+      </h4>
       <Swiper
         slidesPerView={1}
         spaceBetween={10}

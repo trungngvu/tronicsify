@@ -8,7 +8,15 @@ const GridCategory = ({ category, products, gridCols }) => {
     .slice(0, length);
   return (
     <div className="flex flex-col p-2 bg-white border rounded">
-      <h3 className="my-2 font-bold uppercase">{category.replace("-", " ")}</h3>
+      <h3 className="my-2 font-bold uppercase">
+        {category === "cpu"
+          ? "Vi xử lý"
+          : category === "gpu"
+          ? "Card đồ họa"
+          : category === "main"
+          ? "Bo mạch chủ"
+          : category}
+      </h3>
       <div
         className={`h-full grid grid-cols-${gridCols} gap-4 m-1  items-center`}
       >

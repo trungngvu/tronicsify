@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import Image from "next/image";
 
 import { updateCartInDatabase, addProductToCart } from "@/utils/cart";
 import ProductSwiper from "./ProductSwiper";
@@ -68,9 +69,28 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const sellers = [
+    "phongvu",
+    "hacom",
+    "hoangha",
+    "gearvn",
+    "nguyencong",
+    "tnc",
+  ];
+
   return (
     <div className="flex flex-col relative w-[215px] rounded p-1">
       <Link href={`/product/${product.slug}`} className="relative">
+        <div className="absolute top-0 left-0 z-10 p-2 bg-opacity-30 bg-amazon-blue_light">
+          <Image
+            src={`/assets/images/seller/${sellers.find((seller) =>
+              product?.url.includes(seller)
+            )}.png`}
+            alt="seller"
+            width={80}
+            height={20}
+          />
+        </div>
         <ProductSwiper images={images} />
         {session && (
           <div className="absolute z-10 right-1 bottom-1">
@@ -83,14 +103,7 @@ const ProductCard = ({ product }) => {
               >
                 <HeartIcon className="fill-current w-7 h-7 " />
               </button>
-              {(product.cpu ||
-                product.gpu ||
-                (product.socket && product.size && product.ram) ||
-                (product.ram && product.capacity) ||
-                product.wattage ||
-                (product.capacity && product.category === "disk") ||
-                product.category === "cooler" ||
-                (product.size && product.category === "case")) && (
+              {product?.buildable && (
                 <button
                   className={`flex items-center p-2 space-x-2 duration-500 ease-in-out rounded ${
                     cart?.find((item) => item._id === product._id)

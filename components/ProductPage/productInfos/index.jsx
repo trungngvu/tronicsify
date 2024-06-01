@@ -1,5 +1,6 @@
 import { Rating } from "@mui/material";
 import Link from "next/link";
+import Image from "next/image";
 import {
   HeartIcon,
   ShoppingBagIcon,
@@ -65,6 +66,15 @@ const Infos = ({ product }) => {
     }
   };
 
+  const sellers = [
+    "phongvu",
+    "hacom",
+    "hoangha",
+    "gearvn",
+    "nguyencong",
+    "tnc",
+  ];
+
   const updateAt = new Date(product.updatedAt);
 
   return (
@@ -112,7 +122,16 @@ const Infos = ({ product }) => {
       )}
 
       <div className="flex flex-row justify-between p-5 my-5 border border-dashed border-1">
-        <div className="text-xl font-extrabold text-yellow-600">
+        <div className="flex items-center text-xl font-extrabold text-yellow-600">
+          <Image
+            src={`/assets/images/seller/${sellers.find((seller) =>
+              product?.url.includes(seller)
+            )}.png`}
+            alt="seller"
+            width={80}
+            height={20}
+            className="mr-3"
+          />
           {product.price.toLocaleString()}₫
         </div>
         {product.warranty && product.warranty !== "None" && (
@@ -120,7 +139,7 @@ const Infos = ({ product }) => {
         )}
       </div>
 
-      <div className="flex flex-col mt-2 md:flex-row md:space-x-3">
+      <div className="flex flex-col gap-3 mt-2 ">
         <Link
           className="flex items-center justify-center flex-grow p-2 space-x-2 transition duration-300 rounded-full bg-gradient-to-r from-amazon-orange to-yellow-300 text-amazon-blue_dark hover:text-slate-100 hover:from-amazon-blue_light hover:to-slate-500 hover:shadow-md"
           href={product.url}
@@ -132,10 +151,10 @@ const Infos = ({ product }) => {
           </span>
         </Link>
         {session && (
-          <>
+          <div className="flex gap-3">
             <button
               onClick={handleWishlist}
-              className="flex items-center p-2 space-x-2 transition duration-500 ease-in-out rounded bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
+              className="flex items-center justify-center space-x-2 transition duration-500 ease-in-out rounded grow bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
             >
               {included ? (
                 <SolidHeart className="w-8 h-8 text-red-500" />
@@ -146,16 +165,16 @@ const Infos = ({ product }) => {
             </button>
             <button
               onClick={handleCart}
-              className="flex items-center p-2 space-x-2 transition duration-500 ease-in-out rounded bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
+              className="flex items-center justify-center p-2 space-x-2 transition duration-500 ease-in-out rounded grow bg-slate-200 text-amazon-blue_light hover:bg-amazon-blue_light hover:text-slate-100 max-md:mt-3"
             >
-              {inCart ? (
+              {inCart && product?.buildable ? (
                 <SolidWrench className="w-8 h-8 text-amazon-orange" />
               ) : (
                 <WrenchIcon className="w-8 h-8" />
               )}
               <span>Chọn linh kiện</span>
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>

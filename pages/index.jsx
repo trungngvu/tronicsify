@@ -10,15 +10,26 @@ export default function Home({ products }) {
       <CarouselContainer />
       <CategoriesProduct products={products} />
       <div className="relative z-10">
-        <HomeProductSwiper products={products} category="psu" />
         <HomeProductSwiper products={products} category="cooler" />
+        <HomeProductSwiper products={products} category="disk" />
+        <HomeProductSwiper products={products} category="psu" />
+        <HomeProductSwiper products={products} category="case" />
       </div>
     </main>
   );
 }
 
 export const getServerSideProps = async (context) => {
-  const categories = ["cpu", "gpu", "ram", "main", "psu", "cooler"];
+  const categories = [
+    "cpu",
+    "gpu",
+    "ram",
+    "main",
+    "psu",
+    "cooler",
+    "disk",
+    "case",
+  ];
 
   // Use Promise.all() to fetch products for all categories concurrently
   await db.connectDb();

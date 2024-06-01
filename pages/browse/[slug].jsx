@@ -734,7 +734,7 @@ export async function getServerSideProps(context) {
   };
   let products = await Product.find(sum_queries)
     .select(
-      "-description -long_specs -short_specs -warranty -updatedAt -url -embedding"
+      "-description -long_specs -short_specs -warranty -updatedAt -embedding"
     )
     .populate({ path: "cpu", model: CPUCategory })
     .populate({ path: "gpu", model: GPUCategory })
