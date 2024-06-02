@@ -84,7 +84,7 @@ const ProductCard = ({ product }) => {
         <div className="absolute top-0 left-0 z-10 p-2 bg-opacity-30 bg-amazon-blue_light">
           <Image
             src={`/assets/images/seller/${sellers.find((seller) =>
-              product?.url.includes(seller)
+              product?.url?.includes(seller)
             )}.png`}
             alt="seller"
             width={80}

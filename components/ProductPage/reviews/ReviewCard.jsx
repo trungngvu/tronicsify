@@ -8,9 +8,9 @@ import axios from "axios";
 
 const ReviewCard = ({ review, productID, userID }) => {
   const { name, image } = review.reviewBy;
-  const [likedByUser, setLikedByUser] = useState(review.likes.includes(userID));
+  const [likedByUser, setLikedByUser] = useState(review.likes?.includes(userID));
   useEffect(() => {
-    setLikedByUser(review.likes.includes(userID));
+    setLikedByUser(review.likes?.includes(userID));
   }, [review.likes, userID]);
   const handleLike = async () => {
     try {
@@ -71,7 +71,7 @@ const ReviewCard = ({ review, productID, userID }) => {
               <span>
                 {review.likes.length +
                   Number(likedByUser) -
-                  Number(review.likes.includes(userID))}{" "}
+                  Number(review.likes?.includes(userID))}{" "}
                 lượt thích
               </span>
             </div>
@@ -105,7 +105,7 @@ const ReviewCard = ({ review, productID, userID }) => {
               <span>
                 {review.likes.length +
                   Number(likedByUser) -
-                  Number(review.likes.includes(userID))}{" "}
+                  Number(review.likes?.includes(userID))}{" "}
                 lượt thích
               </span>
             </div>

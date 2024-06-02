@@ -125,7 +125,7 @@ const Infos = ({ product }) => {
         <div className="flex items-center text-xl font-extrabold text-yellow-600">
           <Image
             src={`/assets/images/seller/${sellers.find((seller) =>
-              product?.url.includes(seller)
+              product?.url?.includes(seller)
             )}.png`}
             alt="seller"
             width={80}
