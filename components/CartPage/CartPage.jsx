@@ -19,12 +19,12 @@ const CartPage = ({ carts, activeCartId }) => {
   useEffect(() => {
     setPage(activeCartIndex);
   }, [activeCartIndex]);
+  const dispatch = useAppDispatch();
+
   const handleChange = (_, value) => {
     setPage(value);
     dispatch(setActiveCart(carts[value - 1]._id));
   };
-
-  const dispatch = useAppDispatch();
 
   const handleCreateCart = (newCart) => {
     dispatch(createCart(newCart));

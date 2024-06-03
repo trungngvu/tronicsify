@@ -61,7 +61,9 @@ handler.post(async (req, res) => {
             _id: {
               $in: result[1].map((item) => new mongoose.Types.ObjectId(item)),
             },
-          }).select("imgs price slug title availability category sub_category url")
+          }).select(
+            "imgs price slug title availability category sub_category url buildable"
+          )
         : [];
     await db.disconnectDb();
     return res.json({

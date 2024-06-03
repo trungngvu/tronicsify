@@ -7,7 +7,7 @@ import ProductCard from "../Home/productCard/ProductCard";
 
 const SimilarSwiper = ({ title, products }) => {
   return (
-    <div className="p-3 mx-2 my-1 bg-white rounded-md">
+    <div className="p-3 my-1 bg-white rounded-md">
       <h4 className="pb-1 mb-2 font-semibold border-b">{title}</h4>
       <Swiper
         slidesPerView={4}
