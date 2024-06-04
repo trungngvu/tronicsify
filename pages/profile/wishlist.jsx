@@ -14,7 +14,7 @@ const Profile = ({ user, tab, wishlist }) => {
         <div className="flex flex-col content-start justify-center col-span-5 md:col-span-4">
           <div className="flex flex-wrap items-start justify-center gap-4 mt-6">
             {products.map((product) => (
-              <ProductCard product={product} key={product._id} />
+              <ProductCard product={product} key={product?._id} />
             ))}
           </div>
         </div>
