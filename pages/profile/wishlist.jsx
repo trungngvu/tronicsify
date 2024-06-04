@@ -6,14 +6,14 @@ import Product from "@/models/Product";
 import ProductCard from "@/components/Home/productCard/ProductCard";
 
 const Profile = ({ user, tab, wishlist }) => {
-  const products = wishlist.map((prod) => prod.product);
+  const products = wishlist?.map((prod) => prod.product);
   return (
     <Layout user={user} tab={tab}>
       <div className="justify-center text-center">
         <h2 className="mb-6 text-4xl font-bold">Danh sách yêu thích</h2>
         <div className="flex flex-col content-start justify-center col-span-5 md:col-span-4">
           <div className="flex flex-wrap items-start justify-center gap-4 mt-6">
-            {products.map((product) => (
+            {products?.map((product) => (
               <ProductCard product={product} key={product?._id} />
             ))}
           </div>
