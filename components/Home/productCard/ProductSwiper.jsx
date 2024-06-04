@@ -29,7 +29,7 @@ const ProductSwiper = ({ images }) => {
         speed={500}
         modules={[Autoplay]}
       >
-        {images.map((img, i) => (
+        {images?.map((img, i) => (
           <SwiperSlide key={i}>
             <div className="z-10 rounded flex items-center justify-center bg-white w-[220px] h-[250px]">
               <img
