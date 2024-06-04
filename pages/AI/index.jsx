@@ -4,12 +4,16 @@ import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import { CircleLoader } from "react-spinners";
+
+import { useAppDispatch } from "@/redux/hooks";
 import SimilarSwiper from "@/components/ProductPage/SimilarSwiper";
+import { createCart } from "@/utils/cart";
 
 const AIPage = () => {
   const [search, setSearch] = useState("");
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleAI = async () => {
     setLoading(true);
@@ -20,6 +24,10 @@ const AIPage = () => {
       setResponse({ res: "error" });
     }
     setLoading(false);
+  };
+
+  const handleCreateCart = (newCart) => {
+    dispatch(createCart(newCart));
   };
 
   return (
@@ -65,11 +73,18 @@ const AIPage = () => {
               className="bg-white p-5 rounded max-w-[1000px]"
               dangerouslySetInnerHTML={{ __html: response.res }}
             />
-            <div className="w-full p-2 mx-auto mt-2 border rounded-lg md:w-4/5">
+            <div className="flex flex-col w-full p-2 mx-auto mt-2 border rounded-lg md:w-4/5">
               <SimilarSwiper
                 title="Sản phẩm khuyến nghị"
                 products={response.prods}
               />
+              <button
+                onClick={() => handleCreateCart({ products: response.prods })}
+                disabled={loading}
+                className="flex items-center self-end justify-center h-10 px-5 mt-5 text-white transition-transform transform rounded-lg bg-gradient-to-r from-purple-600 to-cyan-600 hover:scale-110"
+              >
+                Tạo cấu hình mới với linh kiện này
+              </button>
             </div>
           </>
         ))}
