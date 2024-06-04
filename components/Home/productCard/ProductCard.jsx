@@ -14,13 +14,13 @@ const ProductCard = ({ product }) => {
   const { carts, activeCartId } = useAppSelector((state) => state.cart);
   const wishlist = useAppSelector((state) => state.wish.wishes);
   const dispatch = useAppDispatch();
-  const included = wishlist.find((prod) => prod.product === product._id);
+  const included = wishlist.find((prod) => prod.product === product?._id);
   const handleWishlist = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (included) {
-      dispatch(removeWishFromDB(product._id));
-    } else dispatch(addWishToDB(product._id));
+      dispatch(removeWishFromDB(product?._id));
+    } else dispatch(addWishToDB(product?._id));
   };
   const { data: session } = useSession();
 
@@ -32,7 +32,7 @@ const ProductCard = ({ product }) => {
       }.jpg`
     );
   const price = product?.price;
-  const cart = carts?.find((c) => c._id === activeCartId)?.products || [];
+  const cart = carts?.find((c) => c?._id === activeCartId)?.products || [];
 
   const handleCart = (e) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="flex flex-col relative w-[215px] rounded p-1">
-      <Link href={`/product/${product.slug}`} className="relative">
+      <Link href={`/product/${product?.slug}`} className="relative">
         <div className="absolute top-0 left-0 z-10 p-2 bg-opacity-30 bg-amazon-blue_light">
           <Image
             src={`/assets/images/seller/${sellers.find((seller) =>
@@ -106,7 +106,7 @@ const ProductCard = ({ product }) => {
               {product?.buildable && (
                 <button
                   className={`flex items-center p-2 space-x-2 duration-500 ease-in-out rounded ${
-                    cart?.find((item) => item._id === product._id)
+                    cart?.find((item) => item._id === product?._id)
                       ? "text-amazon-orange"
                       : "text-slate-500"
                   } hover:text-amazon-orange transition-200  bg-opacity-10 bg-amazon-blue_light max-md:mt-3`}
@@ -120,7 +120,7 @@ const ProductCard = ({ product }) => {
         )}
       </Link>
       <div className="mt-2 truncate">
-        <Link href={`/product/${product.slug}`}>
+        <Link href={`/product/${product?.slug}`}>
           <h3
             style={{
               whiteSpace: "normal",
@@ -130,14 +130,14 @@ const ProductCard = ({ product }) => {
               overflow: "hidden",
             }}
           >
-            {product.title}
+            {product?.title}
           </h3>
         </Link>
         <div>
           <div className="text-lg font-bold text-red-500">
             {price?.toLocaleString()}₫
           </div>
-          {product.availability && (
+          {product?.availability && (
             <div className="flex flex-row text-green-600">
               <CheckIcon className="w-5" /> Sẵn hàng
             </div>
