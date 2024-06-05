@@ -47,7 +47,7 @@ handler.post(async (req, res) => {
     const handleAI = async (search) => {
       const { data } = await axios.post(process.env.AI_ENDPOINT, {
         input: {
-          question: search,
+          query: search,
         },
       });
       return formatText(data.output.content);
