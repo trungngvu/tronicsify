@@ -18,7 +18,7 @@ const AIPage = () => {
   const handleAI = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post("api/ai", { q: search });
+      const { data } = await axios.post("/api/ai", { q: search });
       setResponse(data);
     } catch {
       setResponse({ res: "error" });
