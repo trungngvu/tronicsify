@@ -1,4 +1,4 @@
-// import fs from "fs";
+import fs from "fs";
 
 export const imgMiddleware = async (req, res, next) => {
   try {
@@ -12,14 +12,14 @@ export const imgMiddleware = async (req, res, next) => {
         file.mimetype !== "image/png" &&
         file.mimetype !== "image/webp"
       ) {
-        // removeTmp(file.tempFilePath);
+        removeTmp(file.tempFilePath);
         return res.status(400).json({
           message: "file format is incorrect, only JPEG/PNG/WEBP are allowed",
         });
       }
 
       if (file.size > 1024 * 1024 * 10) {
-        // removeTmp(file.tempFilePath);
+        removeTmp(file.tempFilePath);
         return res
           .status(400)
           .json({ message: "file size is too large maximum 10 mb allowed" });
@@ -31,8 +31,8 @@ export const imgMiddleware = async (req, res, next) => {
   }
 };
 
-// export const removeTmp = (path) => {
-//   fs.unlink(path, (err) => {
-//     if (err) throw err;
-//   });
-// };
+export const removeTmp = (path) => {
+  fs.unlink(path, (err) => {
+    if (err) throw err;
+  });
+};

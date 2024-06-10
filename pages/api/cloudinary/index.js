@@ -1,7 +1,7 @@
 import nc from "next-connect";
 import cloudinary from "cloudinary";
 import fileUpload from "express-fileupload";
-import { imgMiddleware } from "../../../middleware/imgMiddleware";
+import { imgMiddleware, removeTmp } from "../../../middleware/imgMiddleware";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -9,31 +9,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-const uploadToCloudinaryHandler = async (file, path) => {
-  return new Promise((resolve) => {
-    cloudinary.v2.uploader.upload(
-      file.tempFilePath,
-      {
-        folder: path,
-      },
-      (err, res) => {
-        if (err) {
-          // removeTmp(file.tempFilePath);
-          console.log("err", err);
-          return res.status(400).json({ message: "upload image failed." });
-        }
-        resolve({
-          url: res.secure_url,
-          public_url: res.public_id,
-        });
-      }
-    );
-  });
-};
 const handler = nc()
   .use(
     fileUpload({
       useTempFiles: true,
+      tempFileDir: '/tmp/', // Use the writable /tmp directory
     })
   )
   .use(imgMiddleware);
@@ -53,7 +33,7 @@ handler.post(async (req, res) => {
     for (const file of files) {
       const img = await uploadToCloudinaryHandler(file, path);
       images.push(img);
-      // removeTmp(file.tempFilePath);
+      removeTmp(file.tempFilePath);
     }
 
     res.json(images);
@@ -62,6 +42,7 @@ handler.post(async (req, res) => {
   }
 });
 
+export default handler;
 
 handler.delete(async (req, res) => {
   let image_id = req.body.public_id;
@@ -71,5 +52,24 @@ handler.delete(async (req, res) => {
   });
 });
 
-export default handler;
-
+const uploadToCloudinaryHandler = async (file, path) => {
+  return new Promise((resolve) => {
+    cloudinary.v2.uploader.upload(
+      file.tempFilePath,
+      {
+        folder: path,
+      },
+      (err, res) => {
+        if (err) {
+          removeTmp(file.tempFilePath);
+          console.log("err", err);
+          return res.status(400).json({ message: "upload image failed." });
+        }
+        resolve({
+          url: res.secure_url,
+          public_url: res.public_id,
+        });
+      }
+    );
+  });
+};
