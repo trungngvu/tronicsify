@@ -21,6 +21,12 @@ handler.post(async (req, res) => {
       // Remove "id:<mongo_id>" from the text
       let formattedText = text.replace(/id:[0-9a-f]{24}/g, "");
 
+      // Replace **word** with bold text
+      formattedText = formattedText.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+      );
+
       // Replace * with bullet points
       formattedText = formattedText.replace(/\*/g, "&nbsp;&nbsp;&nbsp;•");
 
@@ -33,11 +39,6 @@ handler.post(async (req, res) => {
         return `${formattedValue}₫`;
       });
 
-      // Replace **word** with bold text
-      formattedText = formattedText.replace(
-        /\*\*(.*?)\*\*/g,
-        "<strong>$1</strong>"
-      );
       // Replace \n with <br> for new lines
       formattedText = formattedText.replace(/\n/g, "<br>");
 
