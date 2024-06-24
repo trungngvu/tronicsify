@@ -616,7 +616,15 @@ export async function getServerSideProps(context) {
           },
         }
       : {};
-  const wattage = wattageQuery && wattageQuery !== "" ? {} : {};
+  const wattage =
+    wattageQuery && wattageQuery !== ""
+      ? {
+          wattage: {
+            $gte: Number(wattageQuery[0]) || 0,
+            $lte: Number(wattageQuery[1]) || Infinity,
+          },
+        }
+      : {};
   const core =
     coreQuery && coreQuery !== ""
       ? {
